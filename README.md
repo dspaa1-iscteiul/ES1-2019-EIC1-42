@@ -9,7 +9,7 @@ Membros:<br/>
 Dário Pereira - nº 82745<br/>
 João Mendes - nº 82222<br/>
 Rodrigo Alves - nº 82270<br/>
-Éric Sancha - nº <br/>
+Éric Sancha - nº 83404<br/>
 Afonso Pinto - nº <br/>
 Filipe Santana - nº <br/>
 

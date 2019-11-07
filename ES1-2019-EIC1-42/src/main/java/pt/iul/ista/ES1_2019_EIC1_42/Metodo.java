@@ -15,48 +15,100 @@ public class Metodo {
 	private boolean pmd;
 	private boolean is_feature_envy;
 
-	public int getMethodID() {
-		return methodID;
+	public String getPacote() {
+		return pacote;
 	}
 
-	public String getClasse() {
-		return classe;
-	}
-
-	public String getMethod() {
-		return method;
-	}
-
-	public int getLoc() {
-		return loc;
-	}
-
-	public int getCyclo() {
-		return cyclo;
-	}
-
-	public int getAtfd() {
-		return atfd;
-	}
-
-	public int getLaa() {
-		return laa;
+	public void setPacote(String pacote) {
+		this.pacote = pacote;
 	}
 
 	public boolean isLongMethod() {
 		return is_long_method;
 	}
 
+	public void setLongMethod(boolean is_long_method) {
+		this.is_long_method = is_long_method;
+	}
+
+	public boolean isFeatureEnvy() {
+		return is_feature_envy;
+	}
+
+	public void setFeatureEnvy(boolean is_feature_envy) {
+		this.is_feature_envy = is_feature_envy;
+	}
+
+	public int getMethodID() {
+		return methodID;
+	}
+
+	public void setMethodID(int methodID) {
+		this.methodID = methodID;
+	}
+
+	public String getClasse() {
+		return classe;
+	}
+
+	public void setClasse(String classe) {
+		this.classe = classe;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
+	public int getLoc() {
+		return loc;
+	}
+
+	public void setLoc(int loc) {
+		this.loc = loc;
+	}
+
+	public int getCyclo() {
+		return cyclo;
+	}
+
+	public void setCyclo(int cyclo) {
+		this.cyclo = cyclo;
+	}
+
+	public int getAtfd() {
+		return atfd;
+	}
+
+	public void setAtfd(int atfd) {
+		this.atfd = atfd;
+	}
+
+	public int getLaa() {
+		return laa;
+	}
+
+	public void setLaa(int laa) {
+		this.laa = laa;
+	}
+
 	public boolean isIplasma() {
 		return iplasma;
+	}
+
+	public void setIplasma(boolean iplasma) {
+		this.iplasma = iplasma;
 	}
 
 	public boolean isPmd() {
 		return pmd;
 	}
 
-	public boolean isFeatureEnvy() {
-		return is_feature_envy;
+	public void setPmd(boolean pmd) {
+		this.pmd = pmd;
 	}
 
 }

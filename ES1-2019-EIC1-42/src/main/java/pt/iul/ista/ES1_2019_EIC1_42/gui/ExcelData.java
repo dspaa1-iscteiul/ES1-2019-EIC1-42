@@ -2,15 +2,16 @@ package pt.iul.ista.ES1_2019_EIC1_42.gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
-
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 
 /**
  * Classe para visualizar um ficheiro Excel
@@ -60,10 +61,11 @@ public class ExcelData extends JFrame {
 		excel_panel.add(scrollPane);
 		scrollPane.getViewport().add(table);
 		
-		
-		
 		JPanel info_panel = new JPanel();
 		contentPane.add(info_panel, BorderLayout.SOUTH);
+		
+		excel_panel.setLayout(new GridLayout(1,1));
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		
 	}

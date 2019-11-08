@@ -9,11 +9,28 @@ public class Metodo {
 	private int loc;
 	private int cyclo;
 	private int atfd;
-	private int laa;
+	private double laa;
 	private boolean is_long_method;
 	private boolean iplasma;
 	private boolean pmd;
 	private boolean is_feature_envy;
+
+	public Metodo(int methodID, String pacote, String classe, String method, int loc, int cyclo, int atfd, int laa,
+			boolean is_long_method, boolean iplasma, boolean pmd, boolean is_feature_envy) {
+		super();
+		this.methodID = methodID;
+		this.pacote = pacote;
+		this.classe = classe;
+		this.method = method;
+		this.loc = loc;
+		this.cyclo = cyclo;
+		this.atfd = atfd;
+		this.laa = laa;
+		this.is_long_method = is_long_method;
+		this.iplasma = iplasma;
+		this.pmd = pmd;
+		this.is_feature_envy = is_feature_envy;
+	}
 
 	public String getPacote() {
 		return pacote;
@@ -23,19 +40,19 @@ public class Metodo {
 		this.pacote = pacote;
 	}
 
-	public boolean isLongMethod() {
+	public boolean isIs_long_method() {
 		return is_long_method;
 	}
 
-	public void setLongMethod(boolean is_long_method) {
+	public void setIs_long_method(boolean is_long_method) {
 		this.is_long_method = is_long_method;
 	}
 
-	public boolean isFeatureEnvy() {
+	public boolean isIs_feature_envy() {
 		return is_feature_envy;
 	}
 
-	public void setFeatureEnvy(boolean is_feature_envy) {
+	public void setIs_feature_envy(boolean is_feature_envy) {
 		this.is_feature_envy = is_feature_envy;
 	}
 
@@ -87,11 +104,11 @@ public class Metodo {
 		this.atfd = atfd;
 	}
 
-	public int getLaa() {
+	public double getLaa() {
 		return laa;
 	}
 
-	public void setLaa(int laa) {
+	public void setLaa(double laa) {
 		this.laa = laa;
 	}
 

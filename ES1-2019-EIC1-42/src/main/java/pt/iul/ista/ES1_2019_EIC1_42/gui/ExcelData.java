@@ -52,12 +52,15 @@ public class ExcelData extends JFrame {
 		JPanel excel_panel = new JPanel();
 		contentPane.add(excel_panel, BorderLayout.CENTER);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		excel_panel.add(scrollPane);
-		
 		table = new JTable();
 		excel_panel.add(table);
 		table.setModel(new DataModel());
+		
+		JScrollPane scrollPane = new JScrollPane();
+		excel_panel.add(scrollPane);
+		scrollPane.getViewport().add(table);
+		
+		
 		
 		JPanel info_panel = new JPanel();
 		contentPane.add(info_panel, BorderLayout.SOUTH);

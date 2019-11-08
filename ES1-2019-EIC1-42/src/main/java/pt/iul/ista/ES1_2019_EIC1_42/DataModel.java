@@ -3,6 +3,9 @@ package pt.iul.ista.ES1_2019_EIC1_42;
 import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
+
+import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,14 +30,28 @@ public class DataModel extends AbstractTableModel {
 	private ArrayList<Metodo> metodos;
 	private static DataModel INSTANCE;
 	private Sheet sheet;
-	private DataModel() {
+	
+	public DataModel() {
 		INSTANCE = this;
+		Workbook workbook;
+		try {
+			workbook = WorkbookFactory.create(new File("Long-Method.xlsx"));
+			sheet = workbook.getSheetAt(0);
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void getContent() throws EncryptedDocumentException, InvalidFormatException, IOException {
 		metodos = new ArrayList<Metodo>();
-		Workbook workbook = WorkbookFactory.create(new File("Long-Method.xlsx"));
-		sheet = workbook.getSheetAt(0);
 		DataFormatter dataFormatter = new DataFormatter();
 		int j = 1;
 		while (j <= sheet.getLastRowNum()) {
@@ -59,6 +76,8 @@ public class DataModel extends AbstractTableModel {
 		}
 	}
 
+
+
 	public int getColumnCount() {
 		int last_cell = sheet.getRow(0).getLastCellNum();
 		return last_cell;
@@ -69,18 +88,29 @@ public class DataModel extends AbstractTableModel {
 	}
 
 	public Object getValueAt(int arg0, int arg1) {
+		DataFormatter dataFormatter = new DataFormatter();
 		Cell cell = sheet.getRow(arg0).getCell(arg1);
-		switch(cell.getCellType()) {
-		case Cell.CELL_TYPE_NUMERIC:
-			return cell.getNumericCellValue();
-		case Cell.CELL_TYPE_BOOLEAN:
-			return cell.getBooleanCellValue();
-		case Cell.CELL_TYPE_STRING:
+
+		if(arg0 == 0) {
 			return cell.getStringCellValue();
-		
-			
 		}
-		return null;
+		switch (arg1) {
+		case 0:
+			return (int) cell.getNumericCellValue();
+		case 1:
+		case 2:
+		case 3:
+			return cell.getStringCellValue();
+		case 4:
+		case 5:
+		case 6:
+			return (int) cell.getNumericCellValue();
+		case 7:
+			return Double.parseDouble(dataFormatter.formatCellValue(cell));
+		default:
+			return Boolean.class;
+		}
+	
 	}
 
 

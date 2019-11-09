@@ -54,7 +54,7 @@ public class ExcelData extends JFrame {
 		
 		table = new JTable();
 		excel_panel.add(table);
-		table.setModel(new DataModel());
+		table.setModel(DataModel.getInstance());
 		
 		JScrollPane scrollPane = new JScrollPane();
 		excel_panel.add(scrollPane);

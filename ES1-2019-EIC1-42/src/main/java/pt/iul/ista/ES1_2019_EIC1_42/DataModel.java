@@ -82,7 +82,11 @@ public class DataModel extends AbstractTableModel {
 		}
 		return null;
 	}
-
-
+	
+	public static DataModel getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new DataModel();
+		return INSTANCE;
+	}
 
 }

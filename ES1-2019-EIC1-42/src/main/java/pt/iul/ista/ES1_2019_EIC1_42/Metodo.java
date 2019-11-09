@@ -33,22 +33,6 @@ public class Metodo {
 		this.is_feature_envy = is_feature_envy;
 	}
 
-	public Metodo(int methodID, String pacote, String classe, String method, int loc, int cyclo, int atfd, int laa,
-			boolean is_long_method, boolean iplasma, boolean pmd, boolean is_feature_envy) {
-		super();
-		this.methodID = methodID;
-		this.pacote = pacote;
-		this.classe = classe;
-		this.method = method;
-		this.loc = loc;
-		this.cyclo = cyclo;
-		this.atfd = atfd;
-		this.laa = laa;
-		this.is_long_method = is_long_method;
-		this.iplasma = iplasma;
-		this.pmd = pmd;
-		this.is_feature_envy = is_feature_envy;
-	}
 
 	public String getPacote() {
 		return pacote;

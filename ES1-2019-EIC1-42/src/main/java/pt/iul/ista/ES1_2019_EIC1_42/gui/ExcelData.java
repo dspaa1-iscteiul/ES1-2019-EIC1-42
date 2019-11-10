@@ -3,12 +3,19 @@ package pt.iul.ista.ES1_2019_EIC1_42.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.io.File;
+import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 /**
  * Classe para visualizar um ficheiro Excel
@@ -17,12 +24,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class ExcelData extends JFrame {
 	private File excelfile;
+
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5646410931104674210L;
 	private JPanel contentPane;
+	private JTable table;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public void start() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -41,16 +55,60 @@ public class ExcelData extends JFrame {
 	 */
 	public ExcelData() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(50, 100, 1300, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		fileChooser();
-	}
+	
 	
 	//create JFileChooser
 	
+
+		contentPane.setLayout(new BorderLayout(0, 0));
+		
+		JPanel excel_panel = new JPanel();
+		contentPane.add(excel_panel, BorderLayout.CENTER);
+		
+		table = new JTable() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -1528885477774668184L;
+
+			public String getToolTipText(MouseEvent e) {
+                String tip = null;
+                java.awt.Point p = e.getPoint();
+                int rowIndex = rowAtPoint(p);
+                int colIndex = columnAtPoint(p);
+
+                try {
+                    tip = getValueAt(rowIndex, colIndex).toString();
+                } catch (RuntimeException e1) {
+                    //catch null pointer exception if mouse is over an empty line
+                }
+
+                return tip;
+            }
+		};
+		excel_panel.add(table);
+		excel_panel.setLayout(new GridLayout(1,1));
+		table.setModel(DataModel.getInstance());
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		excel_panel.add(scrollPane);
+		scrollPane.getViewport().add(table);
+		
+		JPanel info_panel = new JPanel();
+		contentPane.add(info_panel, BorderLayout.SOUTH);
+			
+	}
+	
+	public JTable getTable() {
+		return table;
+
+	}
 	public void fileChooser() {
 		JFileChooser filechooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".xlsx", "xlsx", "excel");

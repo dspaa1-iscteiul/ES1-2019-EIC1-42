@@ -8,6 +8,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
 	ExcelDataTest.class,
+	MetodoTest.class,
+	DataModelTest.class,
 })
 
 public class AllTests {

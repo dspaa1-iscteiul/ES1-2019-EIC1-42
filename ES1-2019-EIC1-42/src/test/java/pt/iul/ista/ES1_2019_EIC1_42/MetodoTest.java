@@ -28,7 +28,7 @@ public class MetodoTest {
 	private static final int LAA = 1;
 	private static boolean is_long_method = false;
 	private static boolean iPlasma = false;
-	private static boolean pdm = false;
+	private static boolean pmd = false;
 	private static boolean is_feature_envy = false;
 
 	/**
@@ -36,7 +36,7 @@ public class MetodoTest {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		metodo = new Metodo(METHOD_ID, PACKAGE, CLASS, METHOD, LOC, CYCLO, ATFD, LAA, is_long_method, iPlasma, pdm, is_feature_envy);
+		metodo = new Metodo(METHOD_ID, PACKAGE, CLASS, METHOD, LOC, CYCLO, ATFD, LAA, is_long_method, iPlasma, pmd, is_feature_envy);
 	}
 
 	/**
@@ -51,6 +51,7 @@ public class MetodoTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		metodo = new Metodo(METHOD_ID, PACKAGE, CLASS, METHOD, LOC, CYCLO, ATFD, LAA, is_long_method, iPlasma, pmd, is_feature_envy);
 	}
 
 	/**
@@ -65,7 +66,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testGetPacote() {
-		fail("Not yet implemented");
+		assertEquals(PACKAGE, metodo.getPacote());
 	}
 
 	/**
@@ -73,7 +74,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetPacote() {
-		fail("Not yet implemented");
+		metodo.setPacote("novoPacote");
+		assertEquals(metodo.getPacote(), "novoPacote");
 	}
 
 	/**
@@ -81,7 +83,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testIsLongMethod() {
-		fail("Not yet implemented");
+		assertEquals(is_long_method, metodo.isIs_long_method());
 	}
 
 	/**
@@ -89,7 +91,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetLongMethod() {
-		fail("Not yet implemented");
+		metodo.setIs_long_method(true);
+		assertEquals(metodo.isIs_long_method(), true);
 	}
 
 	/**
@@ -97,7 +100,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testIsFeatureEnvy() {
-		fail("Not yet implemented");
+		assertEquals(metodo.isIs_feature_envy(), is_feature_envy);
 	}
 
 	/**
@@ -105,7 +108,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetFeatureEnvy() {
-		fail("Not yet implemented");
+		metodo.setIs_feature_envy(true);
+		assertEquals(metodo.isIs_feature_envy(), true);
 	}
 
 	/**
@@ -113,7 +117,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testGetMethodID() {
-		fail("Not yet implemented");
+		assertEquals(METHOD_ID, metodo.getMethodID());
 	}
 
 	/**
@@ -121,7 +125,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetMethodID() {
-		fail("Not yet implemented");
+		metodo.setMethodID(9999);
+		assertEquals(metodo.getMethodID(), 9999);
 	}
 
 	/**
@@ -129,7 +134,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testGetClasse() {
-		fail("Not yet implemented");
+		assertEquals(metodo.getClasse(), CLASS);
 	}
 
 	/**
@@ -137,7 +142,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetClasse() {
-		fail("Not yet implemented");
+		metodo.setClasse("TestClass");
+		assertEquals(metodo.getClasse(), "TestClass");
 	}
 
 	/**
@@ -145,7 +151,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testGetMethod() {
-		fail("Not yet implemented");
+		assertEquals(metodo.getMethod(), METHOD);
 	}
 
 	/**
@@ -153,7 +159,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetMethod() {
-		fail("Not yet implemented");
+		metodo.setMethod("Test");
+		assertEquals(metodo.getMethod(), "Test");
 	}
 
 	/**
@@ -161,7 +168,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testGetLoc() {
-		fail("Not yet implemented");
+		assertEquals(metodo.getLoc(), LOC);
 	}
 
 	/**
@@ -169,7 +176,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetLoc() {
-		fail("Not yet implemented");
+		metodo.setLoc(9999);
+		assertEquals(metodo.getLoc(), 9999);
 	}
 
 	/**
@@ -177,7 +185,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testGetCyclo() {
-		fail("Not yet implemented");
+		assertEquals(metodo.getCyclo(), CYCLO);
 	}
 
 	/**
@@ -185,7 +193,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetCyclo() {
-		fail("Not yet implemented");
+		metodo.setCyclo(9999);
+		assertEquals(metodo.getCyclo(), 9999);
 	}
 
 	/**
@@ -193,7 +202,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testGetAtfd() {
-		fail("Not yet implemented");
+		assertEquals(metodo.getAtfd(), ATFD);
 	}
 
 	/**
@@ -201,7 +210,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetAtfd() {
-		fail("Not yet implemented");
+		metodo.setAtfd(9999);
+		assertEquals(metodo.getAtfd(), 9999);
 	}
 
 	/**
@@ -209,7 +219,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testGetLaa() {
-		fail("Not yet implemented");
+		assertEquals(metodo.getLaa(), LAA, 0.01);
 	}
 
 	/**
@@ -217,7 +227,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetLaa() {
-		fail("Not yet implemented");
+		metodo.setLaa(999.9);
+		assertEquals(metodo.getLaa(), 999.9, 0.01);
 	}
 
 	/**
@@ -225,7 +236,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testIsIplasma() {
-		fail("Not yet implemented");
+		assertEquals(metodo.isIplasma(), iPlasma);
 	}
 
 	/**
@@ -233,7 +244,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetIplasma() {
-		fail("Not yet implemented");
+		metodo.setIplasma(true);
+		assertEquals(metodo.isIplasma(), true);
 	}
 
 	/**
@@ -241,7 +253,7 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testIsPmd() {
-		fail("Not yet implemented");
+		assertEquals(metodo.isPmd(),pmd);
 	}
 
 	/**
@@ -249,7 +261,8 @@ public class MetodoTest {
 	 */
 	@Test
 	public void testSetPmd() {
-		fail("Not yet implemented");
+		metodo.setPmd(true);
+		assertEquals(metodo.isPmd(), true);
 	}
 
 }

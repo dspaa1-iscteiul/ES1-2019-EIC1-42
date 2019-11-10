@@ -87,13 +87,20 @@ public class DataModel extends AbstractTableModel {
 		return sheet.getLastRowNum();
 	}
 
+	@Override
+	public String getColumnName(int arg0) {
+		Cell cell = sheet.getRow(0).getCell(arg0);
+		
+		return cell.getStringCellValue();
+	}
+
 	public Object getValueAt(int arg0, int arg1) {
 		DataFormatter dataFormatter = new DataFormatter();
+		arg0++;
 		Cell cell = sheet.getRow(arg0).getCell(arg1);
-
-		if(arg0 == 0) {
-			return cell.getStringCellValue();
-		}
+//		if(arg0 == 0) {
+//			return cell.getStringCellValue();
+//		}
 		switch (arg1) {
 		case 0:
 			return (int) cell.getNumericCellValue();
@@ -108,7 +115,7 @@ public class DataModel extends AbstractTableModel {
 		case 7:
 			return Double.parseDouble(dataFormatter.formatCellValue(cell));
 		default:
-			return Boolean.class;
+			return cell.getBooleanCellValue();
 		}
 	
 	}

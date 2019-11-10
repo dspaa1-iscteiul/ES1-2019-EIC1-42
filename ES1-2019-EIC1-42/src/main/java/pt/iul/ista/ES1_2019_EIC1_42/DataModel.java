@@ -4,19 +4,13 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
-import static org.apache.poi.ss.usermodel.Cell.CELL_TYPE_BOOLEAN;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  * Classe para gerir os dados que são importados do ficheiro Excel e são
@@ -27,12 +21,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class DataModel extends AbstractTableModel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4220550076295049347L;
 	private ArrayList<Metodo> metodos;
 	private static DataModel INSTANCE;
 	private Sheet sheet;
 	
-	public DataModel() {
-		INSTANCE = this;
+	private DataModel() {
+//		INSTANCE = this;
 		Workbook workbook;
 		try {
 			workbook = WorkbookFactory.create(new File("Long-Method.xlsx"));

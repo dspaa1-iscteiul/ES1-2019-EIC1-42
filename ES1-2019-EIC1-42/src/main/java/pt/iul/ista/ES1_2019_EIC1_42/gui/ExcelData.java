@@ -64,11 +64,22 @@ public class ExcelData extends JFrame {
 		scrollPane.getViewport().add(table);
 		
 		
-		
+
 		JPanel info_panel = new JPanel();
 		contentPane.add(info_panel, BorderLayout.SOUTH);
 		
 		
 	}
 
+	public JPanel getContentPane() {
+		return contentPane;
+	}
+
+	public void setContentPane(JPanel contentPane) {
+		this.contentPane = contentPane;
+	}
+
+	public JTable getTable() {
+		return table;
+	}
 }

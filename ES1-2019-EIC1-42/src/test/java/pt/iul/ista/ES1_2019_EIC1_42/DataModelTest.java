@@ -5,18 +5,41 @@ package pt.iul.ista.ES1_2019_EIC1_42;
 
 import static org.junit.Assert.*;
 
+import java.awt.Frame;
+import java.io.IOException;
+
+import javax.swing.table.AbstractTableModel;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import pt.iul.ista.ES1_2019_EIC1_42.gui.ExcelData;
+
 /**
  * @author dariop
  *
  */
 public class DataModelTest {
-
+	
+	private DataModel table;
+	
+	/**
+	 * Tests the class as a whole. 
+	 * Test focused on the correct initialization of DataModelTest object
+	*/
+	
+	@Test
+	public void ConstructorTest() {
+		table = new DataModel();		
+		assertTrue(table.getColumnCount() != 0);
+		assertTrue(table.getRowCount() != 0);
+	}
+	
 	/**
 	 * @throws java.lang.Exception
 	 */

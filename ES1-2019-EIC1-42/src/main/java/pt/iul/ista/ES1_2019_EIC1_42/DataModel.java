@@ -29,7 +29,7 @@ public class DataModel extends AbstractTableModel {
 	private static DataModel INSTANCE;
 	private Sheet sheet;
 	
-	DataModel() {
+	private DataModel() {
 //		INSTANCE = this;
 		Workbook workbook;
 		try {

@@ -35,7 +35,7 @@ public class DataModelTest {
 	
 	@Test
 	public void ConstructorTest() {
-		table = new DataModel();		
+		table = DataModel.getInstance();		
 		assertTrue(table.getColumnCount() != 0);
 		assertTrue(table.getRowCount() != 0);
 	}

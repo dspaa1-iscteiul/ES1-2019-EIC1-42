@@ -2,6 +2,7 @@ package pt.iul.ista.ES1_2019_EIC1_42.gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -25,7 +26,7 @@ public class ExcelData extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public void start() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -54,7 +55,9 @@ public class ExcelData extends JFrame {
 		
 		table = new JTable();
 		excel_panel.add(table);
+		excel_panel.setLayout(new GridLayout(1,1));
 		table.setModel(new DataModel());
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		excel_panel.add(scrollPane);

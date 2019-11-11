@@ -40,6 +40,7 @@ public class ExcelData extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					fileChooser();
 					ExcelData frame = new ExcelData();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -59,11 +60,6 @@ public class ExcelData extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		fileChooser();
-	
-	
-	//create JFileChooser
-	
 
 		contentPane.setLayout(new BorderLayout(0, 0));
 		

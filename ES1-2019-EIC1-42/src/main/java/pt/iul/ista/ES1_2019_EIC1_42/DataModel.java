@@ -28,6 +28,7 @@ public class DataModel extends AbstractTableModel {
 	private ArrayList<Metodo> metodos;
 	private static DataModel INSTANCE;
 	private Sheet sheet;
+	private File excel;
 	
 	private DataModel() {
 //		INSTANCE = this;
@@ -74,7 +75,21 @@ public class DataModel extends AbstractTableModel {
 		}
 	}
 
-
+	public void setExcel(File excel) {
+		this.excel=excel;
+		try {
+			getContent();
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public int getColumnCount() {
 		int last_cell = sheet.getRow(0).getLastCellNum();

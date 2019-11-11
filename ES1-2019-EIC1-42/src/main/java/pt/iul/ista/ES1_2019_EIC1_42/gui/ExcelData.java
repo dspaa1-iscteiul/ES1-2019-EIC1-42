@@ -40,7 +40,6 @@ public class ExcelData extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					fileChooser();
 					ExcelData frame = new ExcelData();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -105,12 +104,6 @@ public class ExcelData extends JFrame {
 		return table;
 
 	}
-	public void fileChooser() {
-		JFileChooser filechooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(".xlsx", "xlsx", "excel");
-		filechooser.setFileFilter(filter);
-		filechooser.showOpenDialog(null);	
-		excelfile = filechooser.getSelectedFile();
-	}
+	
 
 }

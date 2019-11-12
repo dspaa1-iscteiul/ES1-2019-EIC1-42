@@ -113,16 +113,6 @@ public class DataModel extends AbstractTableModel {
 		}
 	}
 
-	public File fileChooser() {
-		JFileChooser filechooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel File", "xlsx", "excel");
-		filechooser.setAcceptAllFileFilterUsed(false);
-		filechooser.setFileFilter(filter);
-		filechooser.showOpenDialog(null);
-		File excelfile = filechooser.getSelectedFile();
-		return excelfile;
-	}
-
 	public Object getValueAt(int arg0, int arg1) {
 		if (sheet != null) {
 			DataFormatter dataFormatter = new DataFormatter();
@@ -158,6 +148,16 @@ public class DataModel extends AbstractTableModel {
 		if (INSTANCE == null)
 			INSTANCE = new DataModel();
 		return INSTANCE;
+	}
+	
+	public File fileChooser() {
+		JFileChooser filechooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel File", "xlsx", "excel");
+		filechooser.setAcceptAllFileFilterUsed(false);
+		filechooser.setFileFilter(filter);
+		filechooser.showOpenDialog(null);
+		File excelfile = filechooser.getSelectedFile();
+		return excelfile;
 	}
 
 }

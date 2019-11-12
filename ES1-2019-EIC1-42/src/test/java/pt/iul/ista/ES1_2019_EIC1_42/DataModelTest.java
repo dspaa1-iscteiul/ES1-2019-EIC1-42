@@ -115,5 +115,15 @@ public class DataModelTest {
 	public void testGetInstance() {
 		fail("Not yet implemented");
 	}
+	
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.DataModel#fileChooser()}.
+	 */
+	@Test
+	public void testFileChooser() {
+		
+	}
+	
+	
 
 }

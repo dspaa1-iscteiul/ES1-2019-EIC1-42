@@ -2,16 +2,12 @@ package pt.iul.ista.ES1_2019_EIC1_42.gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.io.File;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
 import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
 
 import javax.swing.JScrollPane;
@@ -23,9 +19,6 @@ import javax.swing.JTable;
  *
  */
 public class ExcelData extends JFrame {
-	private File excelfile;
-
-
 	/**
 	 * 
 	 */

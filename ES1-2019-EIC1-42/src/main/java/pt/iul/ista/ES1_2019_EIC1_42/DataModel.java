@@ -35,7 +35,7 @@ public class DataModel extends AbstractTableModel {
 		addFile();
 	}
 	
-	/*
+	/**
 	 * Abre o filechooser para escolher o ficheiro Excel
 	 */
 	

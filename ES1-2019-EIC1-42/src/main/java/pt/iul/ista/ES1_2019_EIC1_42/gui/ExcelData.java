@@ -55,6 +55,9 @@ public class ExcelData extends JFrame {
 
 	}
 
+	/**
+	 * Inicializa o painel onde vão ficar os componentes.
+	 */
 	private void initContentPanel() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(50, 100, 1300, 600);
@@ -67,6 +70,9 @@ public class ExcelData extends JFrame {
 		contentPane.add(excel_panel, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Inicializa a tabela.
+	 */
 	private void initTable() {
 		table = new JTable() {
 			/**
@@ -99,6 +105,10 @@ public class ExcelData extends JFrame {
 		scrollPane.getViewport().add(table);
 	}
 
+	/**
+	 * 
+	 * @return a JTable que guarda os dados do Excel
+	 */
 	public JTable getTable() {
 		return table;
 

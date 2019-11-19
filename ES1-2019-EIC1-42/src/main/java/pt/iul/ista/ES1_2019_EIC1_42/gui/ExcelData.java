@@ -15,6 +15,7 @@ import javax.swing.JTable;
 
 /**
  * Classe para visualizar um ficheiro Excel
+ * 
  * @author dariop
  *
  */
@@ -23,7 +24,7 @@ public class ExcelData extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 5646410931104674210L;
-	private JPanel contentPane;
+	private JPanel contentPane, excel_panel;
 	private JTable table;
 
 	/**
@@ -41,23 +42,32 @@ public class ExcelData extends JFrame {
 			}
 		});
 	}
-	
 
 	/**
 	 * Create the frame.
 	 */
 	public ExcelData() {
+		initContentPanel();
+		initTable();
+
+		JPanel info_panel = new JPanel();
+		contentPane.add(info_panel, BorderLayout.SOUTH);
+
+	}
+
+	private void initContentPanel() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(50, 100, 1300, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
-
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
-		JPanel excel_panel = new JPanel();
+		setContentPane(contentPane);
+		excel_panel = new JPanel();
+		excel_panel.setLayout(new GridLayout(1, 1));
 		contentPane.add(excel_panel, BorderLayout.CENTER);
-		
+	}
+
+	private void initTable() {
 		table = new JTable() {
 			/**
 			 * 
@@ -65,38 +75,33 @@ public class ExcelData extends JFrame {
 			private static final long serialVersionUID = -1528885477774668184L;
 
 			public String getToolTipText(MouseEvent e) {
-                String tip = null;
-                java.awt.Point p = e.getPoint();
-                int rowIndex = rowAtPoint(p);
-                int colIndex = columnAtPoint(p);
+				String tip = null;
+				java.awt.Point p = e.getPoint();
+				int rowIndex = rowAtPoint(p);
+				int colIndex = columnAtPoint(p);
 
-                try {
-                    tip = getValueAt(rowIndex, colIndex).toString();
-                } catch (RuntimeException e1) {
-                    //catch null pointer exception if mouse is over an empty line
-                }
+				try {
+					tip = getValueAt(rowIndex, colIndex).toString();
+				} catch (RuntimeException e1) {
+					// catch null pointer exception if mouse is over an empty line
+				}
 
-                return tip;
-            }
+				return tip;
+			}
 		};
 		excel_panel.add(table);
-		excel_panel.setLayout(new GridLayout(1,1));
+
 		table.setModel(DataModel.getInstance());
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		excel_panel.add(scrollPane);
 		scrollPane.getViewport().add(table);
-		
-		JPanel info_panel = new JPanel();
-		contentPane.add(info_panel, BorderLayout.SOUTH);
-			
 	}
-	
+
 	public JTable getTable() {
 		return table;
 
 	}
-	
 
 }

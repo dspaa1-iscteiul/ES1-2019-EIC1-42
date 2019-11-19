@@ -1,5 +1,10 @@
 package pt.iul.ista.ES1_2019_EIC1_42;
 
+/**
+ * Classe que representa uma regra que foi definida pelo utilizador
+ * @author dariop
+ *
+ */
 public class Regra {
 
 	private Metrica metrica_1, metrica_2;
@@ -7,7 +12,8 @@ public class Regra {
 	private Logic_And_Or logico;
 	private String nome;
 
-	public Regra(String nome, Metrica metrica_1, Metrica metrica_2, Number valor_1, Number valor_2, Logic_And_Or logico) {
+	public Regra(String nome, Metrica metrica_1, Metrica metrica_2, Number valor_1, Number valor_2,
+			Logic_And_Or logico) {
 		this.nome = nome;
 		this.metrica_1 = metrica_1;
 		this.metrica_2 = metrica_2;
@@ -103,7 +109,11 @@ public class Regra {
 			return false;
 		return true;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "Regra '" + nome + "' [" + metrica_1 + ">" + valor_1 + " " + logico.name() + " " + metrica_2 + ">"
+				+ valor_2 + "]";
+	}
 
 }

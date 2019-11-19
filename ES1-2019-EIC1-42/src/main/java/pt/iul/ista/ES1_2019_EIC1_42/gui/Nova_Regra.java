@@ -18,12 +18,12 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextField;
 
 /**
- * Dialogo para definir as regras e limites (thresholds)
+ * Dialogo para definir uma nova regras e os limites (thresholds)
  * 
  * @author dariop
  *
  */
-public class Conf_Regras extends JDialog {
+public class Nova_Regra extends JDialog {
 
 	/**
 	 * 
@@ -43,7 +43,7 @@ public class Conf_Regras extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Conf_Regras dialog = new Conf_Regras();
+			Nova_Regra dialog = new Nova_Regra();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -54,7 +54,7 @@ public class Conf_Regras extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Conf_Regras() {
+	public Nova_Regra() {
 		initPanel();
 		initComponents();
 	}
@@ -153,11 +153,11 @@ public class Conf_Regras extends JDialog {
 		});
 
 	}
-	
+
 	/**
-	 * Verifica se o campo Nome foi preenchido corretamente pelo utilizador,
-	 * cria um nova regra e adiciona ao Set de regras da classe Comparador_de_Qualidade,
-	 * se essa regra ainda não existir lá.
+	 * Verifica se o campo Nome foi preenchido corretamente pelo utilizador, cria um
+	 * nova regra e adiciona ao Set de regras da classe Comparador_de_Qualidade, se
+	 * essa regra ainda não existir lá.
 	 */
 	protected void salvarRegra() {
 		if (nome.getText().trim().equals(""))
@@ -165,16 +165,26 @@ public class Conf_Regras extends JDialog {
 					JOptionPane.ERROR_MESSAGE);
 		else {
 			try {
-			Regra r = new Regra(nome.getText(), (Metrica) metrics_1.getSelectedItem(),
-					(Metrica) metrics_2.getSelectedItem(), (Number) spinner_metric_1.getValue(),
-					(Number) spinner_metric_2.getValue(), (Logic_And_Or) logic_1.getSelectedItem());
-			if (!Comparador_de_Qualidade.getInstance().addRegra(r))
-				JOptionPane.showMessageDialog(this, "A regra já existe!", "Regra já existe", JOptionPane.ERROR_MESSAGE);
+				Regra r = new Regra(nome.getText(), (Metrica) metrics_1.getSelectedItem(),
+						(Metrica) metrics_2.getSelectedItem(), (Number) spinner_metric_1.getValue(),
+						(Number) spinner_metric_2.getValue(), (Logic_And_Or) logic_1.getSelectedItem());
+				if (!Comparador_de_Qualidade.getInstance().addRegra(r))
+					JOptionPane.showMessageDialog(this, "A regra já existe!", "Regra já existe",
+							JOptionPane.ERROR_MESSAGE);
+				else {
+					String[] options = new String[] { "Sim", "Não" };
+					int ok = JOptionPane.showOptionDialog(this,
+							"Regra criada com sucesso! Queres testar a fiabilidade dessa regra, em comparação com as outras?",
+							"Regra criada", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+							options[0]);
+					if (ok == JOptionPane.YES_OPTION) {
+						Comparador_de_Qualidade.getInstance().open();
+					}
+				}
 			} catch (ClassCastException e) {
 				JOptionPane.showMessageDialog(this, "Erro ao criar nova regra!", "ClassCastException",
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
-
 	}
 }

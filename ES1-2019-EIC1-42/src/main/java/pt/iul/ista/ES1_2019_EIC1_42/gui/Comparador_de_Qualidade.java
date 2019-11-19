@@ -12,6 +12,11 @@ import javax.swing.border.EmptyBorder;
 
 import pt.iul.ista.ES1_2019_EIC1_42.Regra;
 
+/**
+ * Classe para visualizar graficamente as regras comparativamente
+ * @author dariop
+ *
+ */
 public class Comparador_de_Qualidade extends JDialog {
 
 	/**
@@ -28,7 +33,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	public static void main(String[] args) {
 		try {
 			Comparador_de_Qualidade dialog = new Comparador_de_Qualidade();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -39,6 +44,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Create the dialog.
 	 */
 	private Comparador_de_Qualidade() {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		regras = new HashSet<Regra>();
 		setBounds(100, 100, 450, 300);
 		setModalityType(ModalityType.APPLICATION_MODAL);
@@ -62,6 +68,11 @@ public class Comparador_de_Qualidade extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+	
+	public void open() {
+		System.out.println(regras);
+		setVisible(true);
 	}
 	
 	public boolean addRegra(Regra r) {

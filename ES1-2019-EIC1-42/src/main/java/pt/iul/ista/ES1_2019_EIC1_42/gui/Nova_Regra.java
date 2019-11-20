@@ -105,10 +105,10 @@ public class Nova_Regra extends JDialog {
 		metrics_2.setSelectedIndex(1);
 		contentPanel.add(metrics_2);
 
-		JLabel label_maior_que_1 = new JLabel(">");
-		label_maior_que_1.setBounds(375, 82, 30, 20);
-		label_maior_que_1.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPanel.add(label_maior_que_1);
+		final JLabel label_menor_que = new JLabel(">");
+		label_menor_que.setBounds(375, 82, 30, 20);
+		label_menor_que.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPanel.add(label_menor_que);
 
 		spinner_metric_2 = new JSpinner();
 		spinner_metric_2.setBounds(405, 82, 70, 20);
@@ -144,10 +144,12 @@ public class Nova_Regra extends JDialog {
 					metrics_1.setSelectedIndex(0);
 					metrics_2.setSelectedIndex(1);
 					spinner_metric_2.setModel(new SpinnerNumberModel(0, 0, null, 1));
+					label_menor_que.setText(">");
 				} else if (type.getSelectedIndex() == 1) {
 					metrics_1.setSelectedIndex(2);
 					metrics_2.setSelectedIndex(3);
 					spinner_metric_2.setModel(new SpinnerNumberModel(0, 0, 1, 0.1));
+					label_menor_que.setText("<");
 				}
 			}
 		});

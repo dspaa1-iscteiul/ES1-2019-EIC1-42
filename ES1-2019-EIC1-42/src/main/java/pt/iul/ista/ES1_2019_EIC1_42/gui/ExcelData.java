@@ -95,7 +95,6 @@ public class ExcelData extends JFrame {
 				return tip;
 			}
 		};
-		excel_panel.add(table);
 
 		table.setModel(DataModel.getInstance());
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

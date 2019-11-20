@@ -2,6 +2,8 @@ package pt.iul.ista.ES1_2019_EIC1_42.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,13 +12,19 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
+import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
+import pt.iul.ista.ES1_2019_EIC1_42.Metodo;
+import pt.iul.ista.ES1_2019_EIC1_42.Metrica;
 import pt.iul.ista.ES1_2019_EIC1_42.Regra;
 
 /**
- * Classe para visualizar graficamente as regras comparativamente
- * @author dariop
- *
- */
+	* Classe para visualizar graficamente as regras comparativamente
+	* 
+	* @author dariop
+	* @author fmpts
+	*
+*/
 public class Comparador_de_Qualidade extends JDialog {
 
 	/**
@@ -25,7 +33,14 @@ public class Comparador_de_Qualidade extends JDialog {
 	private static final long serialVersionUID = 489999421652308781L;
 	private static Comparador_de_Qualidade INSTANCE;
 	private Set<Regra> regras; 
+	private HashMap<Regra,ArrayList<Boolean>> regrasValues;
 	private final JPanel contentPanel = new JPanel();
+	private ArrayList<Boolean> longMethodValues;
+	private ArrayList<Boolean> featureEnvyValues;
+	private ArrayList<Integer> locValues;
+	private ArrayList<Integer> cycloValues;
+	private ArrayList<Integer> atfdValues;
+	private ArrayList<Double> laaValues;
 
 	/**
 	 * Launch the application.
@@ -83,6 +98,150 @@ public class Comparador_de_Qualidade extends JDialog {
 		if (INSTANCE == null)
 			INSTANCE = new Comparador_de_Qualidade();
 		return INSTANCE;
+	}
+
+
+	/**
+	 * Collects Rules results for each method - Boolean ArrayList
+	 */
+	public void getRegrasValues() {
+		for (Regra regra : this.regras) {
+			if ((regra.getMetrica_1() == Metrica.LOC && regra.getMetrica_2() == Metrica.CYCLO)
+					|| (regra.getMetrica_1() == Metrica.CYCLO && regra.getMetrica_2() == Metrica.LOC)) {
+				verifyLongMethodRuleStructure(regra);
+
+			} else if ((regra.getMetrica_1() == Metrica.ATFD && regra.getMetrica_2() == Metrica.LAA)
+					|| (regra.getMetrica_1() == Metrica.LAA && regra.getMetrica_2() == Metrica.ATFD)) {
+				verifyFeatureEnvyRuleStructure(regra);
+
+			}
+		}
+
+	}
+
+	/**
+	 * Verifies LongMethod Rule structure
+	 * @param regra 
+	 */
+	public void verifyLongMethodRuleStructure(Regra regra) {
+		if (regra.getMetrica_1() == Metrica.LOC && regra.getMetrica_2() == Metrica.CYCLO) {
+			verifyLongMethodRegraLogicValue(regra.getValor_1(), regra.getValor_2(), regra.getLogico(), regra);
+
+		} else if (regra.getMetrica_1() == Metrica.CYCLO && regra.getMetrica_2() == Metrica.LOC) {
+			verifyLongMethodRegraLogicValue(regra.getValor_2(), regra.getValor_1(), regra.getLogico(), regra);
+
+		}
+	}
+
+	/**
+	 * Verifies LongMethod Rule Logic Condition. Adds Boolean Results to HashMap
+	 * @param LOCValue
+	 * @param CYCLOValue
+	 * @param logico     
+	 * 
+	 */
+	public void verifyLongMethodRegraLogicValue(Number LOCValue, Number CYCLOValue, Logic_And_Or logico, Regra regra) {
+		ArrayList<Boolean> longMethodRuleValues = new ArrayList<Boolean>();
+		if (logico == Logic_And_Or.AND) {
+			longMethodRuleValues = generateLongMethodRegraValuesAnd(LOCValue, CYCLOValue,longMethodRuleValues);
+		} else if (logico == Logic_And_Or.OR) {
+			longMethodRuleValues = generateLongMethodRegraValuesOr(LOCValue, CYCLOValue,longMethodRuleValues);
+		}
+		this.regrasValues.put(regra, longMethodRuleValues);
+	}
+
+	/**
+	 * Generates LongMethod Rule Values based on And Condition
+	 * @param LOCValue
+	 * @param CYCLOValue
+	 * @param longMethodRuleValues
+	 * @return longMethodRuleValues
+	 * 
+	 */
+	public ArrayList<Boolean> generateLongMethodRegraValuesAnd(Number LOCValue,Number CYCLOValue,ArrayList<Boolean> longMethodRuleValues) {
+		for(int i=0;i<this.locValues.size();i++) {
+			longMethodRuleValues.add(((this.locValues.get(i) > (Integer) LOCValue) && (this.cycloValues.get(i) > (Integer) CYCLOValue)));
+		}
+		return longMethodRuleValues;
+		
+	}
+
+	/**
+	 * Generates LongMethod Rule Values based on Or Condition
+	 * @param LOCValue
+	 * @param CYCLOValue
+	 * @param longMethodRuleValues
+	 * @return longMethodRuleValues
+	 */
+	public ArrayList<Boolean> generateLongMethodRegraValuesOr(Number LOCValue, Number CYCLOValue, ArrayList<Boolean> longMethodRuleValues) {
+		for(int i=0;i<this.locValues.size();i++) {
+			longMethodRuleValues.add(((this.locValues.get(i) > (Integer) LOCValue) || (this.cycloValues.get(i) > (Integer) CYCLOValue)));
+		}
+		return longMethodRuleValues;
+	}
+
+	/**
+	 * Verifies FeatureEnvy Rule structure
+	 * @param regra 
+	 */
+	public void verifyFeatureEnvyRuleStructure(Regra regra) {
+		if (regra.getMetrica_1() == Metrica.ATFD && regra.getMetrica_2() == Metrica.LAA) {
+			verifyFeatureEnvyRegraLogicValue(regra.getValor_1(), regra.getValor_2(), regra.getLogico(), regra);
+
+		} else if (regra.getMetrica_1() == Metrica.LAA && regra.getMetrica_2() == Metrica.ATFD) {
+			verifyFeatureEnvyRegraLogicValue(regra.getValor_2(), regra.getValor_1(), regra.getLogico(), regra);
+
+		}
+	}
+	
+	/**
+	 * Verifies FeatureEnvy Rule Logic Condition. Adds Boolean Results to HashMap
+	 * @param ATFDValue
+	 * @param LAAValue
+	 * @param logico 
+	 * @param regra    
+	 * 
+	 */
+	public void verifyFeatureEnvyRegraLogicValue(Number ATFDValue, Number LAAValue, Logic_And_Or logico, Regra regra) {
+		ArrayList<Boolean> featureEnvyRuleValues = new ArrayList<Boolean>();
+		if (logico == Logic_And_Or.AND) {
+			featureEnvyRuleValues = generateFeatureEnvyRegraValuesAnd(ATFDValue, LAAValue,featureEnvyRuleValues);
+		} else if (logico == Logic_And_Or.OR) {
+			featureEnvyRuleValues = generateFeatureEnvyRegraValuesOr(ATFDValue, LAAValue,featureEnvyRuleValues);
+		}
+		this.regrasValues.put(regra, featureEnvyRuleValues);
+	}
+	
+	/**
+	 * Generates FeatureEnvy Rule Values based on And Condition
+	 * @param ATFDValue
+	 * @param LAAValue
+	 * @param featureEnvyRuleValues
+	 * @return featureEnvyRuleValues
+	 * 
+	 */
+	public ArrayList<Boolean> generateFeatureEnvyRegraValuesAnd(Number ATFDValue,Number LAAValue,ArrayList<Boolean> featureEnvyRuleValues) {
+		for(int i=0;i<this.locValues.size();i++) {
+			featureEnvyRuleValues.add(((this.atfdValues.get(i) > (Integer) ATFDValue) && (this.laaValues.get(i) < (Double) LAAValue)));
+		}
+		return featureEnvyRuleValues;
+		
+	}
+	
+	/**
+	 * Generates FeatureEnvy Rule Values based on Or Condition
+	 * @param ATFDValue
+	 * @param LAAValue
+	 * @param featureEnvyRuleValues
+	 * @return featureEnvyRuleValues
+	 * 
+	 */
+	public ArrayList<Boolean> generateFeatureEnvyRegraValuesOr(Number ATFDValue,Number LAAValue,ArrayList<Boolean> featureEnvyRuleValues) {
+		for(int i=0;i<this.locValues.size();i++) {
+			featureEnvyRuleValues.add(((this.atfdValues.get(i) > (Integer) ATFDValue) || (this.laaValues.get(i) < (Double) LAAValue)));
+		}
+		return featureEnvyRuleValues;
+		
 	}
 
 }

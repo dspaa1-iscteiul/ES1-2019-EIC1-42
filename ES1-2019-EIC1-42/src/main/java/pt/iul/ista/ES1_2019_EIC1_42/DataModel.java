@@ -159,4 +159,10 @@ public class DataModel extends AbstractTableModel {
 		return excelfile;
 	}
 
+	public ArrayList<Metodo> getMetodos() {
+		return metodos;
+	}
+	
+	
+
 }

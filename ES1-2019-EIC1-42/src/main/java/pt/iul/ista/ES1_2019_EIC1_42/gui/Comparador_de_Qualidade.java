@@ -23,6 +23,7 @@ import pt.iul.ista.ES1_2019_EIC1_42.Regra;
 	* 
 	* @author dariop
 	* @author fmpts
+	* @author rmdca
 	*
 */
 public class Comparador_de_Qualidade extends JDialog {

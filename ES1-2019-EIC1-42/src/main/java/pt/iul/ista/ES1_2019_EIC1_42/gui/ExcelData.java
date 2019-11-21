@@ -12,6 +12,9 @@ import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 /**
  * Classe para visualizar um ficheiro Excel
@@ -26,6 +29,13 @@ public class ExcelData extends JFrame {
 	private static final long serialVersionUID = 5646410931104674210L;
 	private JPanel contentPane, excel_panel;
 	private JTable table;
+	private JMenuBar menuBar;
+	private JMenu mnFicheiro;
+	private JMenu mnAjuda;
+	private JMenuItem mntmImportarExcel;
+	private JMenuItem mntmNovaRegra;
+	private JMenuItem mntmComparador;
+	private JMenuItem mntmSobre;
 
 	/**
 	 * Launch the application.
@@ -61,6 +71,27 @@ public class ExcelData extends JFrame {
 	private void initContentPanel() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(50, 100, 1300, 600);
+		
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		mnFicheiro = new JMenu("Ficheiro");
+		menuBar.add(mnFicheiro);
+		
+		mntmImportarExcel = new JMenuItem("Importar Excel");
+		mnFicheiro.add(mntmImportarExcel);
+		
+		mntmNovaRegra = new JMenuItem("Nova Regra");
+		mnFicheiro.add(mntmNovaRegra);
+		
+		mntmComparador = new JMenuItem("Comparador");
+		mnFicheiro.add(mntmComparador);
+		
+		mnAjuda = new JMenu("Ajuda");
+		menuBar.add(mnAjuda);
+		
+		mntmSobre = new JMenuItem("Sobre");
+		mnAjuda.add(mntmSobre);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -101,7 +132,7 @@ public class ExcelData extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 		excel_panel.add(scrollPane);
-		scrollPane.getViewport().add(table);
+		scrollPane.setViewportView(table);
 	}
 
 	/**

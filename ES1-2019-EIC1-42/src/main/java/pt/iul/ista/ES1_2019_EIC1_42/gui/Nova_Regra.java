@@ -38,25 +38,14 @@ public class Nova_Regra extends JDialog {
 	private JTextField nome;
 	private JComboBox<String> type;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			Nova_Regra dialog = new Nova_Regra();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the dialog.
 	 */
 	public Nova_Regra() {
-		initPanel();
 		initComponents();
+		initPanel();
+		
 	}
 
 	/**
@@ -70,6 +59,8 @@ public class Nova_Regra extends JDialog {
 		contentPanel.setBounds(0, 0, 480, 180);
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		setVisible(true);
 	}
 
 	/**

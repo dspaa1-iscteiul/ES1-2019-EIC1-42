@@ -148,6 +148,10 @@ public class DataModel extends AbstractTableModel {
 			INSTANCE = new DataModel();
 		return INSTANCE;
 	}
+	public static DataModel newInstance() {
+		INSTANCE = new DataModel();
+		return INSTANCE;
+	}
 	
 	public File fileChooser() {
 		JFileChooser filechooser = new JFileChooser();

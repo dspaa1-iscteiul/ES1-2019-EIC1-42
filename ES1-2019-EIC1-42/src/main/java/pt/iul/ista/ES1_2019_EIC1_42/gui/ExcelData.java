@@ -3,6 +3,8 @@ package pt.iul.ista.ES1_2019_EIC1_42.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
@@ -36,6 +38,7 @@ public class ExcelData extends JFrame {
 	private JMenuItem mntmNovaRegra;
 	private JMenuItem mntmComparador;
 	private JMenuItem mntmSobre;
+	
 
 	/**
 	 * Launch the application.
@@ -81,11 +84,38 @@ public class ExcelData extends JFrame {
 		mntmImportarExcel = new JMenuItem("Importar Excel");
 		mnFicheiro.add(mntmImportarExcel);
 		
+		mntmImportarExcel.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				table.setModel(DataModel.newInstance());
+				
+			}
+			
+		});
+		
 		mntmNovaRegra = new JMenuItem("Nova Regra");
 		mnFicheiro.add(mntmNovaRegra);
 		
+		mntmNovaRegra.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				new Nova_Regra();
+				
+			}
+			
+		});
+		
 		mntmComparador = new JMenuItem("Comparador");
 		mnFicheiro.add(mntmComparador);
+		
+		mntmComparador.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				Comparador_de_Qualidade.getInstance().open();
+				
+			}
+			
+		});
 		
 		mnAjuda = new JMenu("Ajuda");
 		menuBar.add(mnAjuda);

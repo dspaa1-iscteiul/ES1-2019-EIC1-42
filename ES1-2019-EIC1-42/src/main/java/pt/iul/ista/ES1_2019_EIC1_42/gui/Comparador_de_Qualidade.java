@@ -27,18 +27,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	private Set<Regra> regras; 
 	private final JPanel contentPanel = new JPanel();
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			Comparador_de_Qualidade dialog = new Comparador_de_Qualidade();
-			
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+
 
 	/**
 	 * Create the dialog.

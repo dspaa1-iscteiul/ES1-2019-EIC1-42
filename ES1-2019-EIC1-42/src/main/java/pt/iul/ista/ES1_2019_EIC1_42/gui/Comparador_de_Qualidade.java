@@ -263,19 +263,29 @@ public class Comparador_de_Qualidade extends JDialog {
 	}
 
 	public void addIplasmaValues() {
-
+		ArrayList<Metodo> metodos = DataModel.getInstance().getMetodos();
+		for(Metodo m: metodos)
+			iplasmaValues.add(m.isIplasma());
 	}
 
 	public void addFeatureEnvyValues() {
+		ArrayList<Metodo> metodos = DataModel.getInstance().getMetodos();
+		for(Metodo m: metodos)
+			featureEnvyValues.add(m.isIs_feature_envy());
 
 	}
 
 	public void addLongMethodValues() {
+		ArrayList<Metodo> metodos = DataModel.getInstance().getMetodos();
+		for(Metodo m: metodos)
+			longMethodValues.add(m.isIs_long_method());
 
 	}
 
 	public void addPMDValues() {
-
+		ArrayList<Metodo> metodos = DataModel.getInstance().getMetodos();
+		for(Metodo m: metodos)
+			pmdValues.add(m.isPmd());
 	}
 
 }

@@ -263,23 +263,35 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	}
 
+	/**
+	 * Collects Iplasma Values - Boolean Arraylist
+	 */
 	public void addIplasmaValues() {
 		for(Metodo m: metodos)
 			iplasmaValues.add(m.isIplasma());
 	}
 
+	/**
+	 * Collects FeatureEnvy Values - Boolean Arraylist
+	 */
 	public void addFeatureEnvyValues() {
 		for(Metodo m: metodos)
 			featureEnvyValues.add(m.isIs_feature_envy());
 
 	}
 
+	/**
+	 * Collects LongMethod Values - Boolean Arraylist
+	 */
 	public void addLongMethodValues() {
 		for(Metodo m: metodos)
 			longMethodValues.add(m.isIs_long_method());
 
 	}
 
+	/**
+	 * Collects PMD Values - Boolean Arraylist
+	 */
 	public void addPMDValues() {
 		for(Metodo m: metodos)
 			pmdValues.add(m.isPmd());

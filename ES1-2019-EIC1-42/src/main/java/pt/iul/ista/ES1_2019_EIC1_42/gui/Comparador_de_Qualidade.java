@@ -37,10 +37,10 @@ public class Comparador_de_Qualidade extends JDialog {
 	private HashMap<Regra, ArrayList<Boolean>> regrasValues;
 	private final JPanel contentPanel = new JPanel();
 	private ArrayList<Metodo> metodos =  DataModel.getInstance().getMetodos();
-	private ArrayList<Boolean> longMethodValues;
-	private ArrayList<Boolean> featureEnvyValues;
-	private ArrayList<Boolean> pmdValues;
-	private ArrayList<Boolean> iplasmaValues;
+	private ArrayList<Boolean> longMethodValues = new ArrayList<Boolean> ();
+	private ArrayList<Boolean> featureEnvyValues = new ArrayList<Boolean> ();
+	private ArrayList<Boolean> pmdValues = new ArrayList<Boolean> ();
+	private ArrayList<Boolean> iplasmaValues = new ArrayList<Boolean> ();
 	private ArrayList<Integer> locValues;
 	private ArrayList<Integer> cycloValues;
 	private ArrayList<Integer> atfdValues;

@@ -41,10 +41,10 @@ public class Comparador_de_Qualidade extends JDialog {
 	private ArrayList<Boolean> featureEnvyValues = new ArrayList<Boolean> ();
 	private ArrayList<Boolean> pmdValues = new ArrayList<Boolean> ();
 	private ArrayList<Boolean> iplasmaValues = new ArrayList<Boolean> ();
-	private ArrayList<Integer> locValues;
-	private ArrayList<Integer> cycloValues;
-	private ArrayList<Integer> atfdValues;
-	private ArrayList<Double> laaValues;
+	private ArrayList<Integer> locValues = new ArrayList<Integer>();
+	private ArrayList<Integer> cycloValues = new ArrayList<Integer>();
+	private ArrayList<Integer> atfdValues = new ArrayList<Integer>();
+	private ArrayList<Double> laaValues = new ArrayList<Double>();
 
 	/**
 	 * Launch the application.
@@ -296,5 +296,120 @@ public class Comparador_de_Qualidade extends JDialog {
 		for(Metodo m: metodos)
 			pmdValues.add(m.isPmd());
 	}
+	
+	/**
+	 * Collects DataModel LOC, CYCLO, ATFD, LAA Values
+	 */
+	public void getDataModelValues() {
+		ArrayList<Metodo> metodos = this.metodos;
+		for (int i = 0; i < metodos.size(); i++) {
+			getLocValues(metodos.get(i));
+			getCycloValues(metodos.get(i));
+			getAtfdValues(metodos.get(i));
+			getLaaValues(metodos.get(i));
+		}
+
+	}
+	
+	
+	/**
+	 * Collects LOC Values - Integer Arraylist
+	 * @param metodo 
+	 */
+	public void getLocValues(Metodo metodo) {
+		this.locValues.add(metodo.getLoc());
+	}
+
+	/**
+	 * Collects CYCLO Values - Integer ArrayList
+	 * @param metodo 
+	 */
+	public void getCycloValues(Metodo metodo) {
+		this.cycloValues.add(metodo.getCyclo());
+	}
+
+	/**
+	 * Collects ATFD Values - Integer ArrayList
+	 * @param metodo 
+	 */
+	public void getAtfdValues(Metodo metodo) {
+		this.atfdValues.add(metodo.getAtfd());
+	}
+
+	/**
+	 * Collects LAA Values - Double ArrayList
+	 * @param metodo 
+	 */
+	public void getLaaValues(Metodo metodo) {
+		this.laaValues.add(metodo.getLaa());
+	}
+
+	public ArrayList<Boolean> getLongMethodValues() {
+		return longMethodValues;
+	}
+
+	public void setLongMethodValues(ArrayList<Boolean> longMethodValues) {
+		this.longMethodValues = longMethodValues;
+	}
+
+	public ArrayList<Boolean> getFeatureEnvyValues() {
+		return featureEnvyValues;
+	}
+
+	public void setFeatureEnvyValues(ArrayList<Boolean> featureEnvyValues) {
+		this.featureEnvyValues = featureEnvyValues;
+	}
+
+	public ArrayList<Boolean> getPmdValues() {
+		return pmdValues;
+	}
+
+	public void setPmdValues(ArrayList<Boolean> pmdValues) {
+		this.pmdValues = pmdValues;
+	}
+
+	public ArrayList<Boolean> getIplasmaValues() {
+		return iplasmaValues;
+	}
+
+	public void setIplasmaValues(ArrayList<Boolean> iplasmaValues) {
+		this.iplasmaValues = iplasmaValues;
+	}
+
+	public ArrayList<Integer> getLocValues() {
+		return locValues;
+	}
+
+	public void setLocValues(ArrayList<Integer> locValues) {
+		this.locValues = locValues;
+	}
+
+	public ArrayList<Integer> getCycloValues() {
+		return cycloValues;
+	}
+
+	public void setCycloValues(ArrayList<Integer> cycloValues) {
+		this.cycloValues = cycloValues;
+	}
+
+	public ArrayList<Integer> getAtfdValues() {
+		return atfdValues;
+	}
+
+	public void setAtfdValues(ArrayList<Integer> atfdValues) {
+		this.atfdValues = atfdValues;
+	}
+
+	public ArrayList<Double> getLaaValues() {
+		return laaValues;
+	}
+
+	public void setLaaValues(ArrayList<Double> laaValues) {
+		this.laaValues = laaValues;
+	}
+	
+
+	
+	
 
 }

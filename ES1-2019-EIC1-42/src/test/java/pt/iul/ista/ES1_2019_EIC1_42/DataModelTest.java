@@ -8,6 +8,10 @@ import static org.junit.Assert.*;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,8 +24,8 @@ import org.junit.Test;
  */
 public class DataModelTest {
 
-	private DataModel table;
-
+	private static DataModel ntable;
+	private static DataModel table;
 	/**
 	 * Tests the class as a whole. Test focused on the correct initialization of
 	 * DataModelTest object
@@ -29,6 +33,23 @@ public class DataModelTest {
 
 	@Test
 	public void ConstructorTest() {
+		assertTrue(table.getColumnCount() >= 0);
+		assertTrue(table.getRowCount() >= 0);
+	}
+	
+	
+	@Test
+	public void ConstructorTest_null() {
+		assertTrue(ntable.getColumnCount() == 0);
+		assertTrue(ntable.getRowCount() == 0);
+	}
+
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 		new Thread(new Runnable() {
 
 			public void run() {
@@ -43,17 +64,8 @@ public class DataModelTest {
 
 			}
 		}).start();
-		table = DataModel.getInstance();
-
-		assertTrue(table.getColumnCount() >= 0);
-		assertTrue(table.getRowCount() >= 0);
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+		ntable = DataModel.getInstance();
+		table = DataModel.newInstance();
 	}
 
 	/**
@@ -82,16 +94,49 @@ public class DataModelTest {
 	 */
 	@Test
 	public void testGetContent() {
-		fail("Not yet implemented");
+		try {
+			table.getContent();
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
-
+	
+	@Test
+	public void testGetContent_null() {
+		try {
+			ntable.getContent();
+		} catch (EncryptedDocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	/**
 	 * Test method for
 	 * {@link pt.iul.ista.ES1_2019_EIC1_42.DataModel#getColumnCount()}.
 	 */
 	@Test
 	public void testGetColumnCount() {
-		fail("Not yet implemented");
+		assertTrue(table.getColumnCount() >= 0);
+	}
+	
+	@Test
+	public void testGetColumnCount_null() {
+		assertTrue(ntable.getColumnCount() == 0);
 	}
 
 	/**
@@ -99,7 +144,12 @@ public class DataModelTest {
 	 */
 	@Test
 	public void testGetRowCount() {
-		fail("Not yet implemented");
+		assertTrue(table.getRowCount() >= 0);
+	}
+	
+	@Test
+	public void testGetRowCount_null() {
+		assertTrue(ntable.getRowCount() == 0);
 	}
 
 	/**
@@ -107,33 +157,65 @@ public class DataModelTest {
 	 * {@link pt.iul.ista.ES1_2019_EIC1_42.DataModel#getColumnName(int)}.
 	 */
 	@Test
-	public void testGetColumnNameInt() {
-		fail("Not yet implemented");
+	public void testGetColumnName() {
+		assertTrue(table.getColumnName(0) != null);
 	}
-
+	
+	
+	@Test
+	public void testGetColumnName_null() {
+		assertTrue(ntable.getColumnName(0) == "");
+	}
+	
+	
 	/**
 	 * Test method for
 	 * {@link pt.iul.ista.ES1_2019_EIC1_42.DataModel#getValueAt(int, int)}.
 	 */
 	@Test
 	public void testGetValueAt() {
-		fail("Not yet implemented");
+		assertTrue(table.getValueAt(0, 0) != null);
 	}
+	
+	@Test
+	public void testGetValueAt_case3() {
+		assertTrue(table.getValueAt(0, 3) != null);
+	}
+	
+	@Test
+	public void testGetValueAt_case6() {
+		assertTrue(table.getValueAt(0, 6) != null);
+	}
+	
+	@Test
+	public void testGetValueAt_case7() {
+		assertTrue(table.getValueAt(0, 7) != null);
+	}
+	
+	@Test
+	public void testGetValueAt_casedefault() {
+		assertTrue(table.getValueAt(0, 8) != null);
+	}
+	
+	@Test
+	public void testGetValueAt_null() {
+		assertTrue(ntable.getValueAt(0, 0) == "");
+	}
+
 
 	/**
 	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.DataModel#getInstance()}.
 	 */
 	@Test
 	public void testGetInstance() {
-		fail("Not yet implemented");
+		assertTrue(table.getInstance() != null);
 	}
 
 	/**
 	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.DataModel#fileChooser()}.
 	 */
 	@Test
-	public void testFileChooser() {
-
+	public void testFileChooser_null() {
 		new Thread(new Runnable() {
 
 			public void run() {
@@ -148,8 +230,7 @@ public class DataModelTest {
 
 			}
 		}).start();
-
-		assertNull(DataModel.getInstance().fileChooser());
+		assertNull(ntable.fileChooser());
 	}
 
 }

@@ -148,6 +148,10 @@ public class DataModel extends AbstractTableModel {
 			INSTANCE = new DataModel();
 		return INSTANCE;
 	}
+	public static DataModel newInstance() {
+		INSTANCE = new DataModel();
+		return INSTANCE;
+	}
 	
 	public File fileChooser() {
 		JFileChooser filechooser = new JFileChooser();
@@ -158,11 +162,5 @@ public class DataModel extends AbstractTableModel {
 		File excelfile = filechooser.getSelectedFile();
 		return excelfile;
 	}
-
-	public ArrayList<Metodo> getMetodos() {
-		return metodos;
-	}
-	
-	
 
 }

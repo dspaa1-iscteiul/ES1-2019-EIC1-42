@@ -39,21 +39,21 @@ public class ExcelData extends JFrame {
 	private JMenuItem mntmComparador;
 	private JMenuItem mntmSobre;
 
-	/**
-	 * Launch the application.
-	 */
-	public void start() {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ExcelData frame = new ExcelData();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public void start() {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					ExcelData frame = new ExcelData();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.

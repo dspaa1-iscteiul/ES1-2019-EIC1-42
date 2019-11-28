@@ -23,8 +23,10 @@ public class ExcelDataTest {
 	@Test
 	public void ConstructorTest() {
 		frame = new ExcelData();
-		frame.start();
+		frame.setVisible(true);
+//		frame.start();
 		assertTrue(frame.getContentPane() != null);
 		assertTrue(frame.getTable() != null);
+		frame.setVisible(false);
 	}
 }

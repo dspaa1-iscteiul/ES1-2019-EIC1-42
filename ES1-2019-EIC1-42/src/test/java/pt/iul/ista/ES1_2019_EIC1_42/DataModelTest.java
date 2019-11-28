@@ -12,8 +12,6 @@ import java.io.IOException;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,25 +24,8 @@ public class DataModelTest {
 
 	private static DataModel ntable;
 	private static DataModel table;
-	/**
-	 * Tests the class as a whole. Test focused on the correct initialization of
-	 * DataModelTest object
-	 */
-
-	@Test
-	public void ConstructorTest() {
-		assertTrue(table.getColumnCount() >= 0);
-		assertTrue(table.getRowCount() >= 0);
-	}
 	
 	
-	@Test
-	public void ConstructorTest_null() {
-		assertTrue(ntable.getColumnCount() == 0);
-		assertTrue(ntable.getRowCount() == 0);
-	}
-
-
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -71,22 +52,26 @@ public class DataModelTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Before
 	public void setUp() throws Exception {
 	}
-
+	
 	/**
-	 * @throws java.lang.Exception
+	 * Tests the class as a whole. Test focused on the correct initialization of
+	 * DataModelTest object
 	 */
-	@After
-	public void tearDown() throws Exception {
+
+	@Test
+	public void ConstructorTest() {
+		assertTrue(table.getColumnCount() >= 0);
+		assertTrue(table.getRowCount() >= 0);
+	}
+	
+	
+	@Test
+	public void ConstructorTest_null() {
+		assertTrue(ntable.getColumnCount() == 0);
+		assertTrue(ntable.getRowCount() == 0);
 	}
 
 	/**

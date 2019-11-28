@@ -11,7 +11,8 @@ public class App
     public static void main( String[] args )
     {
     	ExcelData a = new ExcelData();
-    	a.start();
+    	a.setVisible(true);
+//    	a.start();
         System.out.println( "Hello World!" );
     }
 }

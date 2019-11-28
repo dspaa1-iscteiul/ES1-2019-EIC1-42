@@ -38,7 +38,8 @@ public class DataModelTest {
 	}
 	
 	
-	@Test	public void ConstructorTest_null() {
+	@Test
+	public void ConstructorTest_null() {
 		assertTrue(ntable.getColumnCount() == 0);
 		assertTrue(ntable.getRowCount() == 0);
 	}

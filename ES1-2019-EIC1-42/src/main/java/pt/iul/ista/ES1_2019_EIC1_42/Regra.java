@@ -115,5 +115,7 @@ public class Regra {
 		return "Regra '" + nome + "' [" + metrica_1 + ">" + valor_1 + " " + logico.name() + " " + metrica_2 + ">"
 				+ valor_2 + "]";
 	}
+	
+	 
 
 }

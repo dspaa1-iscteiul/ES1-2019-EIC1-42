@@ -180,4 +180,17 @@ public class Nova_Regra extends JDialog {
 			}
 		}
 	}
+	
+	public JComboBox<Metrica> getMetrics_1(){
+		return metrics_1;
+	}
+	
+	public JButton getSave() {
+		return save;
+	}
+	
+	public JTextField getNome() {
+		return nome;
+	}
+	
 }

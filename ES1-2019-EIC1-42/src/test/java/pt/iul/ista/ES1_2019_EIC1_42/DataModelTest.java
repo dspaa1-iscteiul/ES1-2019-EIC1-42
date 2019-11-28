@@ -208,7 +208,7 @@ public class DataModelTest {
 	 */
 	@Test
 	public void testGetInstance() {
-		assertTrue(table.getInstance() != null);
+		assertTrue(DataModel.getInstance() != null);
 	}
 
 	/**

@@ -64,7 +64,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	private Comparador_de_Qualidade() {
+	public Comparador_de_Qualidade() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		regras = new HashSet<Regra>();
 		setBounds(100, 100, 450, 300);

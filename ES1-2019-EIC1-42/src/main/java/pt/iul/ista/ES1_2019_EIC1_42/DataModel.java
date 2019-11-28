@@ -162,5 +162,8 @@ public class DataModel extends AbstractTableModel {
 		File excelfile = filechooser.getSelectedFile();
 		return excelfile;
 	}
-
+	
+	public ArrayList<Metodo> getMetodos() {
+				return metodos;
+		}
 }

@@ -116,6 +116,10 @@ public class Comparador_de_Qualidade extends JDialog {
 	public boolean addRegra(Regra r) {
 		return regras.add(r);
 	}
+	
+	public Set<Regra> getRegras() {
+		return regras;
+	}
 
 	public static Comparador_de_Qualidade getInstance() {
 		if (INSTANCE == null)

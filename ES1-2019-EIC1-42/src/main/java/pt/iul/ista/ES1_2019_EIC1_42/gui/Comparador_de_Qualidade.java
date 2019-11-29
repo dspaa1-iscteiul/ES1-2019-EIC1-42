@@ -455,9 +455,14 @@ public class Comparador_de_Qualidade extends JDialog {
 					calculateIndicadoresLongMethodRegras(regra, DCI, DII, ADCI, ADII));
 		}
 	}
-
 	/**
 	 * Calcula indicadores de qualidade Long Method Regras Utilizador
+	 * @param regra
+	 * @param DCI
+	 * @param DII
+	 * @param ADCI
+	 * @param ADII
+	 * @return indicadores
 	 */
 	public ArrayList<Integer> calculateIndicadoresLongMethodRegras(Regra regra, int DCI, int DII, int ADCI, int ADII) {
 		ArrayList<Integer> indicadores = new ArrayList<Integer>();
@@ -500,6 +505,12 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	/**
 	 * Calcula indicadores de qualidade Feature Envy Regras Utilizador
+	 * @param regra
+	 * @param DCI
+	 * @param DII
+	 * @param ADCI
+	 * @param ADII
+	 * @return indicadores
 	 */
 	public ArrayList<Integer> calculateIndicadoresFeatureEnvyRegras(Regra regra, int DCI, int DII, int ADCI, int ADII) {
 		ArrayList<Integer> indicadores = new ArrayList<Integer>();

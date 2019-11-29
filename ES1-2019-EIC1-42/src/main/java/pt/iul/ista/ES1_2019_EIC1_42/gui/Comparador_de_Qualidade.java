@@ -6,9 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -19,6 +16,8 @@ import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
 import pt.iul.ista.ES1_2019_EIC1_42.Metodo;
 import pt.iul.ista.ES1_2019_EIC1_42.Metrica;
 import pt.iul.ista.ES1_2019_EIC1_42.Regra;
+import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
+
 import javax.swing.JTabbedPane;
 
 /**
@@ -36,7 +35,8 @@ public class Comparador_de_Qualidade extends JDialog {
 	 */
 	private static final long serialVersionUID = 489999421652308781L;
 	private static Comparador_de_Qualidade INSTANCE;
-	private Set<Regra> regras;
+//	private Set<Regra> regras;
+	private ArrayList<Regra> regras;
 	private HashMap<Regra, ArrayList<Boolean>> regrasValues;
 	private final JPanel contentPanel = new JPanel();
 	private JPanel resultados_panel, indicadores_panel;
@@ -71,7 +71,8 @@ public class Comparador_de_Qualidade extends JDialog {
 	 */
 	private Comparador_de_Qualidade() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		regras = new HashSet<Regra>();
+//		regras = new HashSet<Regra>();
+		regras = RegrasModel.getInstance().getRegras();
 		setBounds(100, 100, 600, 600);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		getContentPane().setLayout(new BorderLayout());
@@ -113,13 +114,9 @@ public class Comparador_de_Qualidade extends JDialog {
 		setVisible(true);
 	}
 
-	public boolean addRegra(Regra r) {
-		return regras.add(r);
-	}
-	
-	public Set<Regra> getRegras() {
-		return regras;
-	}
+//	public boolean addRegra(Regra r) {
+//		return regras.add(r);
+//	}
 
 	public static Comparador_de_Qualidade getInstance() {
 		if (INSTANCE == null)

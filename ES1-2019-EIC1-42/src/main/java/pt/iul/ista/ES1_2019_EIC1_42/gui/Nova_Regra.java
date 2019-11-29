@@ -167,8 +167,8 @@ public class Nova_Regra extends JDialog {
 	}
 
 	/**
-	 * Verifica se o campo Nome foi preenchido corretamente pelo utilizador, cria um
-	 * nova regra e adiciona ao Set de regras da classe Comparador_de_Qualidade, se
+	 * Verifica se o campo Nome foi preenchido corretamente pelo utilizador, cria uma
+	 * nova regra e adiciona à lista de Regras presente em RegrasModel, se
 	 * essa regra ainda não existir lá.
 	 */
 	protected void salvarRegra() {

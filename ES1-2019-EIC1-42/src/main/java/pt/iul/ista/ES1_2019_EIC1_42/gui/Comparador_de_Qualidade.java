@@ -2,6 +2,8 @@ package pt.iul.ista.ES1_2019_EIC1_42.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,6 +19,7 @@ import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
 import pt.iul.ista.ES1_2019_EIC1_42.Metodo;
 import pt.iul.ista.ES1_2019_EIC1_42.Metrica;
 import pt.iul.ista.ES1_2019_EIC1_42.Regra;
+import javax.swing.JTabbedPane;
 
 /**
  * Classe para visualizar graficamente as regras comparativamente
@@ -36,6 +39,8 @@ public class Comparador_de_Qualidade extends JDialog {
 	private Set<Regra> regras;
 	private HashMap<Regra, ArrayList<Boolean>> regrasValues;
 	private final JPanel contentPanel = new JPanel();
+	private JPanel resultados_panel, indicadores_panel;
+	private JTabbedPane tabbedPane;
 	private ArrayList<Metodo> metodos =  DataModel.getInstance().getMetodos();
 	private ArrayList<Boolean> longMethodValues = new ArrayList<Boolean> ();
 	private ArrayList<Boolean> featureEnvyValues = new ArrayList<Boolean> ();
@@ -67,26 +72,38 @@ public class Comparador_de_Qualidade extends JDialog {
 	private Comparador_de_Qualidade() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		regras = new HashSet<Regra>();
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 600, 600);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(new BorderLayout(0, 0));
+		{
+			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			contentPanel.add(tabbedPane);
+			{
+				resultados_panel = new JPanel(new BorderLayout());
+				tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
+			}
+			{
+				indicadores_panel = new JPanel(new BorderLayout());
+				tabbedPane.addTab("Indicadores", null, indicadores_panel, "Indicadores de qualidade");
+			}
+		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
+				okButton.addActionListener(new ActionListener() {
+					
+					public void actionPerformed(ActionEvent e) {
+						dispose();						
+					}
+				});
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
 			}
 		}
 	}

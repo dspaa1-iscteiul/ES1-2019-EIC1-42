@@ -2,11 +2,10 @@ package pt.iul.ista.ES1_2019_EIC1_42.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -17,6 +16,9 @@ import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
 import pt.iul.ista.ES1_2019_EIC1_42.Metodo;
 import pt.iul.ista.ES1_2019_EIC1_42.Metrica;
 import pt.iul.ista.ES1_2019_EIC1_42.Regra;
+import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
+
+import javax.swing.JTabbedPane;
 
 /**
  * Classe para visualizar graficamente as regras comparativamente
@@ -33,24 +35,27 @@ public class Comparador_de_Qualidade extends JDialog {
 	 */
 	private static final long serialVersionUID = 489999421652308781L;
 	private static Comparador_de_Qualidade INSTANCE;
-	private Set<Regra> regras;
+//	private Set<Regra> regras;
+	private ArrayList<Regra> regras;
+	private HashMap<Regra, ArrayList<Boolean>> regrasValues;
 	private final JPanel contentPanel = new JPanel();
-	private ArrayList<Metodo> metodos =  DataModel.getInstance().getMetodos();
-	private ArrayList<Boolean> longMethodValues = new ArrayList<Boolean> ();
-	private ArrayList<Boolean> featureEnvyValues = new ArrayList<Boolean> ();
-	private ArrayList<Boolean> pmdValues = new ArrayList<Boolean> ();
-	private ArrayList<Boolean> iplasmaValues = new ArrayList<Boolean> ();
+	private JPanel resultados_panel, indicadores_panel;
+	private JTabbedPane tabbedPane;
+	private ArrayList<Metodo> metodos = DataModel.getInstance().getMetodos();
+	private ArrayList<Boolean> longMethodValues = new ArrayList<Boolean>();
+	private ArrayList<Boolean> featureEnvyValues = new ArrayList<Boolean>();
+	private ArrayList<Boolean> pmdValues = new ArrayList<Boolean>();
+	private ArrayList<Boolean> iplasmaValues = new ArrayList<Boolean>();
 	private ArrayList<Integer> locValues = new ArrayList<Integer>();
 	private ArrayList<Integer> cycloValues = new ArrayList<Integer>();
 	private ArrayList<Integer> atfdValues = new ArrayList<Integer>();
 	private ArrayList<Double> laaValues = new ArrayList<Double>();
-	
+
 	private HashMap<Regra, ArrayList<Boolean>> longMethodRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
 	private HashMap<Regra, ArrayList<Boolean>> featureEnvyRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
 	private Integer[] indicadoresiPlasma = new Integer[4];
 	private Integer[] indicadoresPMD = new Integer[4];
 	private HashMap<Regra, ArrayList<Integer>> indicadoresRegrasUtilizador = new HashMap<Regra, ArrayList<Integer>>();
-
 
 	/**
 	 * Launch the application.
@@ -65,33 +70,45 @@ public class Comparador_de_Qualidade extends JDialog {
 		}
 	}
 
-
 	/**
 	 * Create the dialog.
 	 */
 	private Comparador_de_Qualidade() {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		regras = new HashSet<Regra>();
-		setBounds(100, 100, 450, 300);
+//		regras = new HashSet<Regra>();
+		regras = RegrasModel.getInstance().getRegras();
+		setBounds(100, 100, 600, 600);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(new BorderLayout(0, 0));
+		{
+			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+			contentPanel.add(tabbedPane);
+			{
+				resultados_panel = new JPanel(new BorderLayout());
+				tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
+			}
+			{
+				indicadores_panel = new JPanel(new BorderLayout());
+				tabbedPane.addTab("Indicadores", null, indicadores_panel, "Indicadores de qualidade");
+			}
+		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
+				okButton.addActionListener(new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
 			}
 		}
 	}
@@ -101,16 +118,16 @@ public class Comparador_de_Qualidade extends JDialog {
 		setVisible(true);
 	}
 
-	public boolean addRegra(Regra r) {
-		return regras.add(r);
-	}
+//	public boolean addRegra(Regra r) {
+//		return regras.add(r);
+//	}
 
 	public static Comparador_de_Qualidade getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new Comparador_de_Qualidade();
 		return INSTANCE;
 	}
-	
+
 	/**
 	 * Verifies FeatureEnvy Rule Logic Condition. Adds Boolean Results to HashMap
 	 * 
@@ -274,7 +291,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Collects Iplasma Values - Boolean Arraylist
 	 */
 	public void addIplasmaValues() {
-		for(Metodo m: metodos)
+		for (Metodo m : metodos)
 			iplasmaValues.add(m.isIplasma());
 	}
 
@@ -282,7 +299,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Collects FeatureEnvy Values - Boolean Arraylist
 	 */
 	public void addFeatureEnvyValues() {
-		for(Metodo m: metodos)
+		for (Metodo m : metodos)
 			featureEnvyValues.add(m.isIs_feature_envy());
 
 	}
@@ -291,7 +308,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Collects LongMethod Values - Boolean Arraylist
 	 */
 	public void addLongMethodValues() {
-		for(Metodo m: metodos)
+		for (Metodo m : metodos)
 			longMethodValues.add(m.isIs_long_method());
 
 	}
@@ -300,10 +317,10 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Collects PMD Values - Boolean Arraylist
 	 */
 	public void addPMDValues() {
-		for(Metodo m: metodos)
+		for (Metodo m : metodos)
 			pmdValues.add(m.isPmd());
 	}
-	
+
 	/**
 	 * Collects DataModel LOC, CYCLO, ATFD, LAA Values
 	 */
@@ -317,11 +334,11 @@ public class Comparador_de_Qualidade extends JDialog {
 		}
 
 	}
-	
-	
+
 	/**
 	 * Collects LOC Values - Integer Arraylist
-	 * @param metodo 
+	 * 
+	 * @param metodo
 	 */
 	public void getLocValues(Metodo metodo) {
 		this.locValues.add(metodo.getLoc());
@@ -329,7 +346,8 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	/**
 	 * Collects CYCLO Values - Integer ArrayList
-	 * @param metodo 
+	 * 
+	 * @param metodo
 	 */
 	public void getCycloValues(Metodo metodo) {
 		this.cycloValues.add(metodo.getCyclo());
@@ -337,7 +355,8 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	/**
 	 * Collects ATFD Values - Integer ArrayList
-	 * @param metodo 
+	 * 
+	 * @param metodo
 	 */
 	public void getAtfdValues(Metodo metodo) {
 		this.atfdValues.add(metodo.getAtfd());
@@ -345,15 +364,12 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	/**
 	 * Collects LAA Values - Double ArrayList
-	 * @param metodo 
+	 * 
+	 * @param metodo
 	 */
 	public void getLaaValues(Metodo metodo) {
 		this.laaValues.add(metodo.getLaa());
 	}
-
-	
-
-	
 
 	/**
 	 * Starts collection of PMD and iPlasma quality Indicadores
@@ -455,8 +471,10 @@ public class Comparador_de_Qualidade extends JDialog {
 					calculateIndicadoresLongMethodRegras(regra, DCI, DII, ADCI, ADII));
 		}
 	}
+
 	/**
 	 * Calcula indicadores de qualidade Long Method Regras Utilizador
+	 * 
 	 * @param regra
 	 * @param DCI
 	 * @param DII
@@ -505,6 +523,7 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	/**
 	 * Calcula indicadores de qualidade Feature Envy Regras Utilizador
+	 * 
 	 * @param regra
 	 * @param DCI
 	 * @param DII
@@ -532,10 +551,7 @@ public class Comparador_de_Qualidade extends JDialog {
 		indicadores.add(ADII);
 		return indicadores;
 	}
-	
-	
-	
-	
+
 	public ArrayList<Boolean> getLongMethodValues() {
 		return longMethodValues;
 	}
@@ -599,12 +615,5 @@ public class Comparador_de_Qualidade extends JDialog {
 	public void setLaaValues(ArrayList<Double> laaValues) {
 		this.laaValues = laaValues;
 	}
-	
-	
-	
-	
-
-	
-	
 
 }

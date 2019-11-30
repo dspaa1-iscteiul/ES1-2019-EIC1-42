@@ -457,14 +457,10 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Starts collection of Long Method User Rules quality Indicadores
 	 */
 	public void calculateIndicadoresLongMethod() {
-		int DCI;
-		int DII;
-		int ADCI;
-		int ADII;
-		DCI = 0;
-		DII = 0;
-		ADCI = 0;
-		ADII = 0;
+		int DCI = 0;
+		int DII = 0;
+		int ADCI = 0;
+		int ADII = 0;
 		for (Regra regra : this.longMethodRegrasValues.keySet()) {
 			this.indicadoresRegrasUtilizador.put(regra,
 					calculateIndicadoresLongMethodRegras(regra, DCI, DII, ADCI, ADII));
@@ -506,14 +502,10 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Starts collection of Feature Envy Rules quality Indicadores
 	 */
 	public void calculateIndicadoresFeatureEnvy() {
-		int DCI;
-		int DII;
-		int ADCI;
-		int ADII;
-		DCI = 0;
-		DII = 0;
-		ADCI = 0;
-		ADII = 0;
+		int DCI = 0;
+		int DII = 0;
+		int ADCI = 0;
+		int ADII = 0;
 		for (Regra regra : this.featureEnvyRegrasValues.keySet()) {
 			this.indicadoresRegrasUtilizador.put(regra,
 					calculateIndicadoresFeatureEnvyRegras(regra, DCI, DII, ADCI, ADII));
@@ -615,5 +607,5 @@ public class Comparador_de_Qualidade extends JDialog {
 		this.laaValues = laaValues;
 	}
 
-	
+
 }

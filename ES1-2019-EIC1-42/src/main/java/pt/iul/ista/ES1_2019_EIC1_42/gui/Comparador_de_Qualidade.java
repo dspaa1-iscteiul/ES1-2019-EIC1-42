@@ -615,4 +615,5 @@ public class Comparador_de_Qualidade extends JDialog {
 		this.laaValues = laaValues;
 	}
 
+	
 }

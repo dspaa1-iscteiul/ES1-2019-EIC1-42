@@ -375,14 +375,10 @@ public class Comparador_de_Qualidade extends JDialog {
 	 */
 	public void calculateIndicadoresPMDiPlasma() {
 		ArrayList<Boolean> longMethodValues = this.longMethodValues;
-		int DCI;
-		int DII;
-		int ADCI;
-		int ADII;
-		DCI = 0;
-		DII = 0;
-		ADCI = 0;
-		ADII = 0;
+		int DCI = 0;
+		int DII = 0;
+		int ADCI = 0;
+		int ADII = 0;
 		for (int i = 0; i < longMethodValues.size(); i++) {
 			this.indicadoresiPlasma = calculateIndicadoresiPlasma(longMethodValues, DCI, DII, ADCI, ADII);
 			this.indicadoresPMD = calculateIndicadoresPMD(longMethodValues, DCI, DII, ADCI, ADII);

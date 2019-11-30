@@ -1,7 +1,6 @@
 package pt.iul.ista.ES1_2019_EIC1_42.gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -143,7 +142,7 @@ public class ExcelData extends JFrame {
 		mntmNovaRegra.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				new Nova_Regra();
+				new Nova_Regra().open();
 			}
 		});
 

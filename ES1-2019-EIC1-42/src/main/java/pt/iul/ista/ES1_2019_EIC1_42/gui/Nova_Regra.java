@@ -3,8 +3,10 @@ package pt.iul.ista.ES1_2019_EIC1_42.gui;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionEvent;
@@ -13,9 +15,11 @@ import javax.swing.JSpinner;
 import javax.swing.DefaultComboBoxModel;
 import pt.iul.ista.ES1_2019_EIC1_42.Metrica;
 import pt.iul.ista.ES1_2019_EIC1_42.Regra;
+import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
 import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 /**
  * Dialogo para definir uma nova regras e os limites (thresholds)
@@ -37,6 +41,8 @@ public class Nova_Regra extends JDialog {
 	private JLabel lNome;
 	private JTextField nome;
 	private JComboBox<String> type;
+	private JList<Regra> regrasList;
+	private RegrasModel regras;
 
 
 	/**
@@ -55,12 +61,11 @@ public class Nova_Regra extends JDialog {
 		setResizable(false);
 		setTitle("Nova Regra");
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		setBounds(100, 100, 490, 190);
+		setBounds(100, 100, 490, 320);
 		contentPanel.setBounds(0, 0, 480, 180);
 		getContentPane().add(contentPanel);
 		contentPanel.setLayout(null);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setVisible(true);
 	}
 
 	/**
@@ -107,7 +112,7 @@ public class Nova_Regra extends JDialog {
 		contentPanel.add(spinner_metric_2);
 
 		save = new JButton("Salvar");
-		save.setBounds(375, 125, 100, 25);
+		save.setBounds(375, 255, 100, 25);
 		contentPanel.add(save);
 		save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -144,12 +149,26 @@ public class Nova_Regra extends JDialog {
 				}
 			}
 		});
+		
+		JLabel lblRegrasExistentes = new JLabel("Regras existentes");
+		lblRegrasExistentes.setBounds(10, 115, 120, 20);
+		contentPanel.add(lblRegrasExistentes);
+		
+		regras = RegrasModel.getInstance();
+		regrasList = new JList<Regra>(regras);
+		regrasList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		
+		JScrollPane jscrollpane = new JScrollPane(regrasList);
+		jscrollpane.setBounds(10, 140, 465, 109);
+		
+		contentPanel.add(jscrollpane);
 
 	}
 
 	/**
-	 * Verifica se o campo Nome foi preenchido corretamente pelo utilizador, cria um
-	 * nova regra e adiciona ao Set de regras da classe Comparador_de_Qualidade, se
+	 * Verifica se o campo Nome foi preenchido corretamente pelo utilizador, cria uma
+	 * nova regra e adiciona à lista de Regras presente em RegrasModel, se
 	 * essa regra ainda não existir lá.
 	 */
 	protected void salvarRegra() {
@@ -161,7 +180,7 @@ public class Nova_Regra extends JDialog {
 				Regra r = new Regra(nome.getText(), (Metrica) metrics_1.getSelectedItem(),
 						(Metrica) metrics_2.getSelectedItem(), (Number) spinner_metric_1.getValue(),
 						(Number) spinner_metric_2.getValue(), (Logic_And_Or) logic_1.getSelectedItem());
-				if (!Comparador_de_Qualidade.getInstance().addRegra(r))
+				if (!RegrasModel.getInstance().addRegra(r))
 					JOptionPane.showMessageDialog(this, "A regra já existe!", "Regra já existe",
 							JOptionPane.ERROR_MESSAGE);
 				else {
@@ -193,4 +212,7 @@ public class Nova_Regra extends JDialog {
 		return nome;
 	}
 	
+	public void open() {
+		setVisible(true);
+	}
 }

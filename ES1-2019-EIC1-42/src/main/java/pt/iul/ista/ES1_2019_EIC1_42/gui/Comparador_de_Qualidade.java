@@ -9,6 +9,7 @@ import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
@@ -19,6 +20,7 @@ import pt.iul.ista.ES1_2019_EIC1_42.Regra;
 import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
 
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 
 /**
  * Classe para visualizar graficamente as regras comparativamente
@@ -79,11 +81,20 @@ public class Comparador_de_Qualidade extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
+		
+		String data[][]={ {"101","200"},    
+                {"102","200"},    
+                {"101","200"}};    
+		String column[]={"iPlasma e PMD","Número de Regras"};
+		JTable t = new JTable(data,column);
+		
 		{
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			contentPanel.add(tabbedPane);
 			{
 				resultados_panel = new JPanel(new BorderLayout());
+				JScrollPane sp=new JScrollPane(t); 
+				resultados_panel.add(sp);
 				tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
 			}
 			{

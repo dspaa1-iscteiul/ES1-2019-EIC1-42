@@ -82,19 +82,13 @@ public class Comparador_de_Qualidade extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		
-		String data[][]={ {"101","200"},    
-                {"102","200"},    
-                {"101","200"}};    
-		String column[]={"iPlasma e PMD","Número de Regras"};
-		JTable t = new JTable(data,column);
 		
 		{
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			contentPanel.add(tabbedPane);
 			{
 				resultados_panel = new JPanel(new BorderLayout());
-				JScrollPane sp=new JScrollPane(t); 
-				resultados_panel.add(sp);
+				
 				tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
 			}
 			{
@@ -118,6 +112,7 @@ public class Comparador_de_Qualidade extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 		}
+		createTable();
 	}
 
 	public void open() {
@@ -342,6 +337,23 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	}
 	
+	
+	public void createTable() {
+		String data[][]={ {"101","200","200"},    
+                {"102","200","222"},    
+                {"101","200","222"}};    
+		String column[]={"iPlasma","PMD","Número de Regras"};
+		JTable t = new JTable(data,column);
+		System.out.println(iplasmaValues.size());
+		for(int i= 0; i!=iplasmaValues.size();i++){
+			System.out.println(iplasmaValues.get(i));
+		}
+		JScrollPane sp=new JScrollPane(t); 
+		resultados_panel.add(sp);
+		metodos = DataModel.getInstance().getMetodos();
+		System.out.println(metodos != null); // metodos null...
+		
+	}
 	
 	/**
 	 * Collects LOC Values - Integer Arraylist

@@ -44,6 +44,11 @@ public class RegrasModel extends AbstractListModel<Regra> {
 			return true;
 		}
 	}
+	
+	public void editar(Regra r) {
+		int interval = regras.indexOf(r);
+		fireContentsChanged(this, interval, interval);
+	}
 
 	public ArrayList<Regra> getRegras() {
 		return regras;

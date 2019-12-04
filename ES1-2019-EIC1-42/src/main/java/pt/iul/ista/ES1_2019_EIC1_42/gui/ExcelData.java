@@ -136,7 +136,7 @@ public class ExcelData extends JFrame {
 			}
 		});
 
-		mntmNovaRegra = new JMenuItem("Nova Regra");
+		mntmNovaRegra = new JMenuItem("Nova Regra / Gerir Regras");
 		mnFicheiro.add(mntmNovaRegra);
 
 		mntmNovaRegra.addActionListener(new ActionListener() {

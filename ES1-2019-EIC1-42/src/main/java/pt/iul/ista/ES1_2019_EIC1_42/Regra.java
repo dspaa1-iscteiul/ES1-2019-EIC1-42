@@ -112,8 +112,12 @@ public class Regra {
 
 	@Override
 	public String toString() {
-		return "Regra '" + nome + "' [" + metrica_1 + ">" + valor_1 + " " + logico.name() + " " + metrica_2 + ">"
-				+ valor_2 + "]";
+		String parte1 = "Regra '" + nome + "' [" + metrica_1 + ">" + valor_1 + " " + logico.name() + " " + metrica_2;
+		String sinal = ">";
+		if(metrica_2==Metrica.LAA)
+			sinal = "<";
+		return parte1 + sinal + valor_2 + "]";
+			
 	}
 	
 	 

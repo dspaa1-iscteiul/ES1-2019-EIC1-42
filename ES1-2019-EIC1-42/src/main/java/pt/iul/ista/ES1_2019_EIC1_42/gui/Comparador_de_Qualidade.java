@@ -12,6 +12,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -57,6 +59,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	private ArrayList<Integer> cycloValues = new ArrayList<Integer>();
 	private ArrayList<Integer> atfdValues = new ArrayList<Integer>();
 	private ArrayList<Double> laaValues = new ArrayList<Double>();
+	private DefaultTableModel tableModel;
 
 
 	/**
@@ -106,22 +109,16 @@ public class Comparador_de_Qualidade extends JDialog {
 				col[0]="MethodID";
 				col[1]="iPlasma";
 				col[2]="PMD";
-				for(int i=3;i!=regras.size()+3;i++) {
-					col[i]=regras.get(i).getNome();
-				}
-				DefaultTableModel tableModel=new DefaultTableModel(col,0);
+				tableModel=new DefaultTableModel(col,0);
 				JTable table=new JTable(tableModel);
-				addIplasmaValues();
-//				int i= iplasmaValues.size();
-//				System.out.println(i);
 				for(int i=0;i!=metodos.size();i++) {
 					int methodID=metodos.get(i).getMethodID();
 					boolean iPlasma =metodos.get(i).isIplasma();
 					boolean PMD = metodos.get(i).isPmd();
-					
 					Object[] data= {methodID, iPlasma, PMD};
 					tableModel.addRow(data);
 				}
+				
 				JScrollPane panel = new JScrollPane(table);
 				resultados_panel.add(panel);
 			}
@@ -150,6 +147,10 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	public void open() {
 		System.out.println(regras);
+		for(int i=tableModel.getColumnCount()-3;i!=regras.size();i++) {
+			tableModel.addColumn(regras.get(i).getNome());
+			tableModel.fireTableStructureChanged();	
+		}
 		setVisible(true);
 	}
 

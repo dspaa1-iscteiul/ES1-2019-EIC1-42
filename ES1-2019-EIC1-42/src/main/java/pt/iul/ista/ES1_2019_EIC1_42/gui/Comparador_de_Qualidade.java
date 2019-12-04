@@ -12,9 +12,8 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -60,6 +59,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	private ArrayList<Integer> atfdValues = new ArrayList<Integer>();
 	private ArrayList<Double> laaValues = new ArrayList<Double>();
 	private DefaultTableModel tableModel;
+	private JTable table;
 
 	private HashMap<Regra, ArrayList<Boolean>> longMethodRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
 	private HashMap<Regra, ArrayList<Boolean>> featureEnvyRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
@@ -114,7 +114,7 @@ public class Comparador_de_Qualidade extends JDialog {
 				col[1]="iPlasma";
 				col[2]="PMD";
 				tableModel=new DefaultTableModel(col,0);
-				JTable table=new JTable(tableModel);
+				table=new JTable(tableModel);
 				for(int i=0;i!=metodos.size();i++) {
 					int methodID=metodos.get(i).getMethodID();
 					boolean iPlasma =metodos.get(i).isIplasma();
@@ -151,9 +151,14 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	public void open() {
 		System.out.println(regras);
-		for(int i=tableModel.getColumnCount()-3;i!=regras.size();i++) {
-			tableModel.addColumn(regras.get(i).getNome());
-			tableModel.fireTableStructureChanged();	
+		if(!regras.isEmpty()) {
+			for(int i=tableModel.getColumnCount()-3;i!=regras.size();i++) {
+				tableModel.addColumn(regras.get(i).getNome(),regraMetodo(regras.get(i)));
+				tableModel.fireTableStructureChanged();
+			}
+//			for(int i=3;i!=tableModel.getColumnCount();i++) {
+//				TableHeader col=table.getTableHeader();
+//			}
 		}
 		setVisible(true);
 	}
@@ -166,6 +171,31 @@ public class Comparador_de_Qualidade extends JDialog {
 		if (INSTANCE == null)
 			INSTANCE = new Comparador_de_Qualidade();
 		return INSTANCE;
+	}
+	
+	public Object[] regraMetodo(Regra r) {
+		Object[] resultados=new Object[metodos.size()];
+		for(int i=0;i!=metodos.size();i++) {
+			if(r.getMetrica_1()==Metrica.LOC && r.getMetrica_2()==Metrica.CYCLO && r.getLogico()==Logic_And_Or.AND)
+				if((metodos.get(i).getLoc()>r.getValor_1().intValue()) && (metodos.get(i).getCyclo()>r.getValor_2().intValue())) {
+					resultados[i]=true;
+				}else resultados[i]=false;
+			else if(r.getMetrica_1()==Metrica.LOC && r.getMetrica_2()==Metrica.CYCLO && r.getLogico()==Logic_And_Or.OR)
+				if((metodos.get(i).getLoc()>r.getValor_1().intValue()) || (metodos.get(i).getCyclo()>r.getValor_2().intValue())) {
+					resultados[i]=true;
+				}else resultados[i]=false;
+			else if(r.getMetrica_1()==Metrica.ATFD && r.getMetrica_2()==Metrica.LAA && r.getLogico()==Logic_And_Or.AND)
+				if((metodos.get(i).getAtfd()>r.getValor_1().intValue()) && (metodos.get(i).getLaa()<r.getValor_2().doubleValue())) {
+					resultados[i]=true;
+				}else resultados[i]=false;
+			else if(r.getMetrica_1()==Metrica.ATFD && r.getMetrica_2()==Metrica.LAA && r.getLogico()==Logic_And_Or.OR)
+				if((metodos.get(i).getAtfd()>r.getValor_1().intValue()) || (metodos.get(i).getLaa()<r.getValor_2().doubleValue())) {
+					resultados[i]=true;
+				}else resultados[i]=false;
+				
+		}
+		return resultados;
+			
 	}
 
 	/**

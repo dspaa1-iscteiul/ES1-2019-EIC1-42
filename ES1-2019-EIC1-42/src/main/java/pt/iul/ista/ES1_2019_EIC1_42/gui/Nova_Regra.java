@@ -15,6 +15,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JSpinner;
 import javax.swing.DefaultComboBoxModel;
@@ -51,7 +53,7 @@ public class Nova_Regra extends JDialog {
 	private JComboBox<String> type;
 	private JList<Regra> regrasList;
 	private RegrasModel regras;
-//	private Regra regra;
+	private Regra regra;
 
 	/**
 	 * Create the dialog.
@@ -188,6 +190,9 @@ public class Nova_Regra extends JDialog {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(regra!=null && regra==regrasList.getSelectedValue()) {
+					reset();
+				}
 				RegrasModel.getInstance().removeRegra(regrasList.getSelectedValue());
 
 			}
@@ -202,7 +207,26 @@ public class Nova_Regra extends JDialog {
 					if (index != -1)
 						popupMenu.show(regrasList, me.getX(), me.getY());
 				}
+				if(me.getClickCount()==2 && !me.isConsumed()){
+					me.consume();
+					int index = regrasList.locationToIndex(me.getPoint());
+					preencher(regras.getElementAt(index));
+				}
 			}
+		});
+		
+		regrasList.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+					if(!regrasList.isSelectionEmpty()) {
+						if(e.getKeyCode()==KeyEvent.VK_DELETE)
+						RegrasModel.getInstance().removeRegra(regrasList.getSelectedValue());
+						else if(e.getKeyCode()==KeyEvent.VK_ENTER)
+							preencher(regrasList.getSelectedValue());
+					}
+			}
+			
 		});
 
 	}
@@ -245,7 +269,7 @@ public class Nova_Regra extends JDialog {
 	/**
 	 * Salva as alterações na regra presente.
 	 */
-	protected void editarRegra(Regra regra) {
+	protected void editarRegra() {
 		if (nome.getText().trim().equals(""))
 			JOptionPane.showMessageDialog(this, "Escreve um nome para a regra!", "Nome vazio",
 					JOptionPane.ERROR_MESSAGE);
@@ -288,6 +312,7 @@ public class Nova_Regra extends JDialog {
 	}
 
 	public void preencher(Regra r) {
+		regra = r;
 		setTitle(r.getNome());
 		nome.setText(r.getNome());
 		if (r.getMetrica_1() == Metrica.LOC)
@@ -299,7 +324,7 @@ public class Nova_Regra extends JDialog {
 		logic_1.setSelectedItem(r.getLogico());
 
 		removeActionListeners();
-		save.addActionListener(new SaveListenerEdit(r));
+		save.addActionListener(new SaveListenerEdit());
 
 	}
 
@@ -334,14 +359,9 @@ public class Nova_Regra extends JDialog {
 	}
 
 	private class SaveListenerEdit implements ActionListener {
-		private Regra r;
-
-		public SaveListenerEdit(Regra r) {
-			this.r = r;
-		}
 
 		public void actionPerformed(ActionEvent e) {
-			editarRegra(r);
+			editarRegra();
 		}
 
 	}

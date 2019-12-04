@@ -4,12 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
 import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
@@ -19,6 +25,7 @@ import pt.iul.ista.ES1_2019_EIC1_42.Regra;
 import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
 
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 
 /**
  * Classe para visualizar graficamente as regras comparativamente
@@ -41,7 +48,7 @@ public class Comparador_de_Qualidade extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JPanel resultados_panel, indicadores_panel;
 	private JTabbedPane tabbedPane;
-	private ArrayList<Metodo> metodos =  DataModel.getInstance().getMetodos();
+	private ArrayList<Metodo> metodos;
 	private ArrayList<Boolean> longMethodValues = new ArrayList<Boolean> ();
 	private ArrayList<Boolean> featureEnvyValues = new ArrayList<Boolean> ();
 	private ArrayList<Boolean> pmdValues = new ArrayList<Boolean> ();
@@ -73,6 +80,16 @@ public class Comparador_de_Qualidade extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 //		regras = new HashSet<Regra>();
 		regras = RegrasModel.getInstance().getRegras();
+		try {
+			DataModel.getInstance().getContent();
+		} catch (EncryptedDocumentException e1) {
+			e1.printStackTrace();
+		} catch (InvalidFormatException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		metodos = DataModel.getInstance().getMetodos();
 		setBounds(100, 100, 600, 600);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		getContentPane().setLayout(new BorderLayout());
@@ -85,6 +102,28 @@ public class Comparador_de_Qualidade extends JDialog {
 			{
 				resultados_panel = new JPanel(new BorderLayout());
 				tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
+				String [] col= new String[regras.size()+3];
+				col[0]="MethodID";
+				col[1]="iPlasma";
+				col[2]="PMD";
+				for(int i=3;i!=regras.size()+3;i++) {
+					col[i]=regras.get(i).getNome();
+				}
+				DefaultTableModel tableModel=new DefaultTableModel(col,0);
+				JTable table=new JTable(tableModel);
+				addIplasmaValues();
+//				int i= iplasmaValues.size();
+//				System.out.println(i);
+				for(int i=0;i!=metodos.size();i++) {
+					int methodID=metodos.get(i).getMethodID();
+					boolean iPlasma =metodos.get(i).isIplasma();
+					boolean PMD = metodos.get(i).isPmd();
+					
+					Object[] data= {methodID, iPlasma, PMD};
+					tableModel.addRow(data);
+				}
+				JScrollPane panel = new JScrollPane(table);
+				resultados_panel.add(panel);
 			}
 			{
 				indicadores_panel = new JPanel(new BorderLayout());

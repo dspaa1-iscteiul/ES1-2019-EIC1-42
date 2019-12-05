@@ -4,22 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -30,9 +26,6 @@ import pt.iul.ista.ES1_2019_EIC1_42.Metodo;
 import pt.iul.ista.ES1_2019_EIC1_42.Metrica;
 import pt.iul.ista.ES1_2019_EIC1_42.Regra;
 import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
-
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 
 /**
  * Classe para visualizar graficamente as regras comparativamente
@@ -109,12 +102,16 @@ public class Comparador_de_Qualidade extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
+		
+		
 		{
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			contentPanel.add(tabbedPane);
+
 			{	
+				resultados_panel = new JPanel(new BorderLayout());
+				tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
 				createResultsTable();
-			}
 			{
 				indicadores_panel = new JPanel(new BorderLayout());
 				tabbedPane.addTab("Indicadores", null, indicadores_panel, "Indicadores de qualidade");
@@ -136,14 +133,14 @@ public class Comparador_de_Qualidade extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 		}
+		createTable();
+		}
 	}
 	
 	/**
 	 * Creates table with MethodID, iPlasma and PMD columns and respective results
 	 */
 	public void createResultsTable() {
-		resultados_panel = new JPanel(new BorderLayout());
-		tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
 		String [] col= new String[3];
 		col[0]="MethodID";
 		col[1]="iPlasma";
@@ -445,7 +442,24 @@ public class Comparador_de_Qualidade extends JDialog {
 		}
 
 	}
-
+	
+	public void createTable() {
+		String data[][]={ {"101","200","200"},    
+                {"102","200","222"},    
+                {"101","200","222"}};    
+		String column[]={"iPlasma","PMD","Número de Regras"};
+		JTable t = new JTable(data,column);
+		System.out.println(iplasmaValues.size());
+		for(int i= 0; i!=iplasmaValues.size();i++){
+			System.out.println(iplasmaValues.get(i));
+		}
+		JScrollPane sp=new JScrollPane(t); 
+		indicadores_panel.add(sp);
+		metodos = DataModel.getInstance().getMetodos();
+		System.out.println(metodos != null); // metodos null...
+		
+	}
+	
 	/**
 	 * Collects LOC Values - Integer Arraylist
 	 * 

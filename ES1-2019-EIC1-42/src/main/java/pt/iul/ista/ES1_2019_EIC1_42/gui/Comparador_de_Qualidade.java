@@ -115,6 +115,7 @@ public class Comparador_de_Qualidade extends JDialog {
 			{
 				indicadores_panel = new JPanel(new BorderLayout());
 				tabbedPane.addTab("Indicadores", null, indicadores_panel, "Indicadores de qualidade");
+				createIndicatorTable();
 			}
 		}
 		{
@@ -133,7 +134,7 @@ public class Comparador_de_Qualidade extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 		}
-		createTable();
+		
 		}
 	}
 	
@@ -443,20 +444,36 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	}
 	
-	public void createTable() {
-		String data[][]={ {"101","200","200"},    
-                {"102","200","222"},    
-                {"101","200","222"}};    
-		String column[]={"iPlasma","PMD","Número de Regras"};
-		JTable t = new JTable(data,column);
-		System.out.println(iplasmaValues.size());
-		for(int i= 0; i!=iplasmaValues.size();i++){
-			System.out.println(iplasmaValues.get(i));
-		}
-		JScrollPane sp=new JScrollPane(t); 
-		indicadores_panel.add(sp);
-		metodos = DataModel.getInstance().getMetodos();
-		System.out.println(metodos != null); // metodos null...
+	public void createIndicatorTable() {
+		String [] col= new String[4];
+		col[0]="";
+		col[1]="iPlasma";
+		col[2]="PMD";
+		col[3]="Regras";
+		tableModel=new DefaultTableModel(col,0) {
+			/**
+			 * Disables JTable cell editing
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table=new JTable(tableModel);
+		
+			
+			Object[] data= {"DCI", "", "",""};
+			tableModel.addRow(data);
+			Object[] data1= {"DII", "", "",""};
+			tableModel.addRow(data1);
+			Object[] data2= {"ADCI", "", "",""};
+			tableModel.addRow(data2);
+			Object[] data3= {"ADII", "", "",""};
+			tableModel.addRow(data3);
+		
+		JScrollPane panel = new JScrollPane(table);
+		indicadores_panel.add(panel);
 		
 	}
 	

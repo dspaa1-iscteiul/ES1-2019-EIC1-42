@@ -169,13 +169,20 @@ public class Comparador_de_Qualidade extends JDialog {
 		JScrollPane panel = new JScrollPane(table);
 		resultados_panel.add(panel);
 	}
-
+	
+	/**
+	 * Sets the dialog visible
+	 */
 	public void open() {
 		System.out.println(regras);
 		columnForEachRule();
 		setVisible(true);
 	}
-	
+		
+	/**
+	 * Creates a column for each rule created and fills it out with the results
+	 * for each methodID
+	 */
 	public void columnForEachRule() {
 		if(!regras.isEmpty()) {
 			for(int i=tableModel.getColumnCount()-3;i!=regras.size();i++) {
@@ -192,13 +199,21 @@ public class Comparador_de_Qualidade extends JDialog {
 //	public boolean addRegra(Regra r) {
 //		return regras.add(r);
 //	}
-
+		
+	
+	
 	public static Comparador_de_Qualidade getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new Comparador_de_Qualidade();
 		return INSTANCE;
 	}
-	
+		
+	/**
+	 * Verifies the rule result for each method and stores it in an array
+	 * 
+	 * @param r
+	 * @return resultados
+	 */
 	public Object[] ruleResultForEachMethod(Regra r) {
 		Object[] resultados=new Object[metodos.size()];
 		for(int i=0;i!=metodos.size();i++) {

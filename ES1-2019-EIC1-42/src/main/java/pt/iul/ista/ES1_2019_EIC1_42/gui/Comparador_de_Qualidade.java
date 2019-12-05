@@ -4,16 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -106,25 +112,8 @@ public class Comparador_de_Qualidade extends JDialog {
 		{
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			contentPanel.add(tabbedPane);
-			{
-				resultados_panel = new JPanel(new BorderLayout());
-				tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
-				String [] col= new String[regras.size()+3];
-				col[0]="MethodID";
-				col[1]="iPlasma";
-				col[2]="PMD";
-				tableModel=new DefaultTableModel(col,0);
-				table=new JTable(tableModel);
-				for(int i=0;i!=metodos.size();i++) {
-					int methodID=metodos.get(i).getMethodID();
-					boolean iPlasma =metodos.get(i).isIplasma();
-					boolean PMD = metodos.get(i).isPmd();
-					Object[] data= {methodID, iPlasma, PMD};
-					tableModel.addRow(data);
-				}
-				
-				JScrollPane panel = new JScrollPane(table);
-				resultados_panel.add(panel);
+			{	
+				createResultsTable();
 			}
 			{
 				indicadores_panel = new JPanel(new BorderLayout());
@@ -148,19 +137,56 @@ public class Comparador_de_Qualidade extends JDialog {
 			}
 		}
 	}
+	
+	/**
+	 * Creates table with MethodID, iPlasma and PMD columns and respective results
+	 */
+	public void createResultsTable() {
+		resultados_panel = new JPanel(new BorderLayout());
+		tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
+		String [] col= new String[3];
+		col[0]="MethodID";
+		col[1]="iPlasma";
+		col[2]="PMD";
+		tableModel=new DefaultTableModel(col,0) {
+			/**
+			 * Disables JTable cell editing
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		table=new JTable(tableModel);
+		for(int i=0;i!=metodos.size();i++) {
+			int methodID=metodos.get(i).getMethodID();
+			boolean iPlasma =metodos.get(i).isIplasma();
+			boolean PMD = metodos.get(i).isPmd();
+			Object[] data= {methodID, iPlasma, PMD};
+			tableModel.addRow(data);
+		}
+		JScrollPane panel = new JScrollPane(table);
+		resultados_panel.add(panel);
+	}
 
 	public void open() {
 		System.out.println(regras);
+		columnForEachRule();
+		setVisible(true);
+	}
+	
+	public void columnForEachRule() {
 		if(!regras.isEmpty()) {
 			for(int i=tableModel.getColumnCount()-3;i!=regras.size();i++) {
-				tableModel.addColumn(regras.get(i).getNome(),regraMetodo(regras.get(i)));
+				if(regras.get(i).getMetrica_1()==Metrica.LOC)
+					tableModel.addColumn(regras.get(i).getNome()+" (isLongMethod)",ruleResultForEachMethod(regras.get(i)));
+				else
+					tableModel.addColumn(regras.get(i).getNome()+" (featureEnvy)",ruleResultForEachMethod(regras.get(i)));
 				tableModel.fireTableStructureChanged();
 			}
-//			for(int i=3;i!=tableModel.getColumnCount();i++) {
-//				TableHeader col=table.getTableHeader();
-//			}
+			
 		}
-		setVisible(true);
 	}
 
 //	public boolean addRegra(Regra r) {
@@ -173,7 +199,7 @@ public class Comparador_de_Qualidade extends JDialog {
 		return INSTANCE;
 	}
 	
-	public Object[] regraMetodo(Regra r) {
+	public Object[] ruleResultForEachMethod(Regra r) {
 		Object[] resultados=new Object[metodos.size()];
 		for(int i=0;i!=metodos.size();i++) {
 			if(r.getMetrica_1()==Metrica.LOC && r.getMetrica_2()==Metrica.CYCLO && r.getLogico()==Logic_And_Or.AND)

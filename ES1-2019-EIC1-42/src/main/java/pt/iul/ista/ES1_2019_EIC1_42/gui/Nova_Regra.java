@@ -33,7 +33,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 
 /**
- * Dialogo para definir uma nova regras e os limites (thresholds)
+ * Dialogo para criar, vizualizar e editar regras do utilizador
  * 
  * @author dariop
  *
@@ -48,6 +48,9 @@ public class Nova_Regra extends JDialog {
 	private JComboBox<Metrica> metrics_1, metrics_2;
 	private JComboBox<Logic_And_Or> logic_1;
 	private JSpinner spinner_metric_1, spinner_metric_2;
+	private JPopupMenu popupMenu;
+	private JMenuItem mEditar, mApagar;
+	private JLabel label_maior_que, label_menor_que;
 	private JButton save;
 	private JTextField nome;
 	private JComboBox<String> type;
@@ -59,9 +62,9 @@ public class Nova_Regra extends JDialog {
 	 * Create the dialog.
 	 */
 	public Nova_Regra() {
-		initComponents();
+		
 		initPanel();
-
+		initComponents();
 	}
 
 	/**
@@ -82,27 +85,80 @@ public class Nova_Regra extends JDialog {
 	 * Inicializa os componentes da GUI
 	 */
 	private void initComponents() {
+
+		initComboBoxes();
+		initSpinners();
+		initLabels();
+		initOthers();
+		addListeners();
+	}
+
+	/**
+	 * Inicializa outros componentes.
+	 */
+	private void initOthers() {
+		
+		save = new JButton("Salvar");
+		save.setBounds(375, 255, 100, 25);
+		contentPanel.add(save);
+
+		nome = new JTextField();
+		nome.setBounds(66, 10, 214, 20);
+		contentPanel.add(nome);
+		nome.setColumns(10);
+
+		regras = RegrasModel.getInstance();
+		regrasList = new JList<Regra>(regras);
+		regrasList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		JScrollPane jscrollpane = new JScrollPane(regrasList);
+		jscrollpane.setBounds(10, 140, 465, 109);
+		contentPanel.add(jscrollpane);
+
+		popupMenu = new JPopupMenu();
+		mEditar = new JMenuItem("Editar");
+		popupMenu.add(mEditar);
+		mApagar = new JMenuItem("Apagar");
+		popupMenu.add(mApagar);
+
+	}
+
+	/**
+	 * Inicializa os componentes do tipo JLabel
+	 */
+	private void initLabels() {
+		
+		label_maior_que = new JLabel(">");
+		label_maior_que.setBounds(95, 81, 30, 20);
+		label_maior_que.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPanel.add(label_maior_que);
+
+		label_menor_que = new JLabel(">");
+		label_menor_que.setBounds(375, 82, 30, 20);
+		label_menor_que.setHorizontalAlignment(SwingConstants.CENTER);
+		contentPanel.add(label_menor_que);
+
+		JLabel lNome = new JLabel("Nome:");
+		lNome.setBounds(10, 10, 46, 20);
+		contentPanel.add(lNome);
+
+		JLabel lblRegrasExistentes = new JLabel("Regras existentes");
+		lblRegrasExistentes.setBounds(10, 115, 120, 20);
+		contentPanel.add(lblRegrasExistentes);
+
+	}
+
+	/**
+	 * Inicializa os combonentes do tipo JComboBox
+	 */
+	private void initComboBoxes() {
+		
 		metrics_1 = new JComboBox<Metrica>();
 		metrics_1.setEnabled(false);
 		metrics_1.setBounds(10, 82, 85, 20);
 		metrics_1.setModel(new DefaultComboBoxModel<Metrica>(Metrica.values()));
 		metrics_1.setSelectedIndex(0);
 		contentPanel.add(metrics_1);
-
-		JLabel label_maior_que = new JLabel(">");
-		label_maior_que.setBounds(95, 81, 30, 20);
-		label_maior_que.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPanel.add(label_maior_que);
-
-		spinner_metric_1 = new JSpinner();
-		spinner_metric_1.setBounds(125, 82, 70, 20);
-		spinner_metric_1.setModel(new SpinnerNumberModel(0, 0, null, 1));
-		contentPanel.add(spinner_metric_1);
-
-		logic_1 = new JComboBox<Logic_And_Or>();
-		logic_1.setBounds(205, 82, 75, 20);
-		contentPanel.add(logic_1);
-		logic_1.setModel(new DefaultComboBoxModel<Logic_And_Or>(Logic_And_Or.values()));
 
 		metrics_2 = new JComboBox<Metrica>();
 		metrics_2.setEnabled(false);
@@ -111,41 +167,44 @@ public class Nova_Regra extends JDialog {
 		metrics_2.setSelectedIndex(1);
 		contentPanel.add(metrics_2);
 
-		final JLabel label_menor_que = new JLabel(">");
-		label_menor_que.setBounds(375, 82, 30, 20);
-		label_menor_que.setHorizontalAlignment(SwingConstants.CENTER);
-		contentPanel.add(label_menor_que);
-
-		spinner_metric_2 = new JSpinner();
-		spinner_metric_2.setBounds(405, 82, 70, 20);
-		spinner_metric_2.setModel(new SpinnerNumberModel(0, 0, null, 1));
-		contentPanel.add(spinner_metric_2);
-
-		save = new JButton("Salvar");
-		save.setBounds(375, 255, 100, 25);
-		contentPanel.add(save);
-		save.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				salvarRegra();
-			}
-		});
-
-		JLabel lNome = new JLabel("Nome:");
-		lNome.setBounds(10, 10, 46, 20);
-		contentPanel.add(lNome);
-
-		nome = new JTextField();
-		nome.setBounds(66, 10, 214, 20);
-		contentPanel.add(nome);
-		nome.setColumns(10);
+		logic_1 = new JComboBox<Logic_And_Or>();
+		logic_1.setBounds(205, 82, 75, 20);
+		contentPanel.add(logic_1);
+		logic_1.setModel(new DefaultComboBoxModel<Logic_And_Or>(Logic_And_Or.values()));
 
 		type = new JComboBox<String>();
 		type.setModel(new DefaultComboBoxModel<String>(new String[] { "long method", "feature envy" }));
 		type.setSelectedIndex(0);
 		type.setBounds(10, 45, 150, 20);
 		contentPanel.add(type);
+
+	}
+
+	/**
+	 * Inicializa os componentes do tipo JSpinner
+	 */
+	private void initSpinners() {
+		
+		spinner_metric_1 = new JSpinner();
+		spinner_metric_1.setBounds(125, 82, 70, 20);
+		spinner_metric_1.setModel(new SpinnerNumberModel(0, 0, null, 1));
+		contentPanel.add(spinner_metric_1);
+
+		spinner_metric_2 = new JSpinner();
+		spinner_metric_2.setBounds(405, 82, 70, 20);
+		spinner_metric_2.setModel(new SpinnerNumberModel(0, 0, null, 1));
+		contentPanel.add(spinner_metric_2);
+
+	}
+
+	/**
+	 * Adiciona listeners para os diversos componentes que é preciso
+	 */
+	private void addListeners() {
+		
 		type.addItemListener(new ItemListener() {
 
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (type.getSelectedIndex() == 0) {
 					metrics_1.setSelectedIndex(0);
@@ -162,20 +221,38 @@ public class Nova_Regra extends JDialog {
 			}
 		});
 
-		JLabel lblRegrasExistentes = new JLabel("Regras existentes");
-		lblRegrasExistentes.setBounds(10, 115, 120, 20);
-		contentPanel.add(lblRegrasExistentes);
+		regrasList.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent me) {
+				if (SwingUtilities.isRightMouseButton(me)) {
+					int index = regrasList.locationToIndex(me.getPoint());
+					regrasList.setSelectedIndex(index);
+					if (index != -1)
+						popupMenu.show(regrasList, me.getX(), me.getY());
+				}
+				if (me.getClickCount() == 2 && !me.isConsumed()) {
+					me.consume();
+					int index = regrasList.locationToIndex(me.getPoint());
+					preencher(regras.getElementAt(index));
+				}
+			}
+		});
 
-		regras = RegrasModel.getInstance();
-		regrasList = new JList<Regra>(regras);
-		regrasList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		regrasList.addKeyListener(new KeyAdapter() {
 
-		JScrollPane jscrollpane = new JScrollPane(regrasList);
-		jscrollpane.setBounds(10, 140, 465, 109);
-		contentPanel.add(jscrollpane);
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (!regrasList.isSelectionEmpty()) {
+					if (e.getKeyCode() == KeyEvent.VK_DELETE)
+						RegrasModel.getInstance().removeRegra(regrasList.getSelectedValue());
+					else if (e.getKeyCode() == KeyEvent.VK_ENTER)
+						preencher(regrasList.getSelectedValue());
+				}
+			}
 
-		JPopupMenu popupMenu = new JPopupMenu();
-		JMenuItem mEditar = new JMenuItem("Editar");
+		});
+
 		mEditar.addActionListener(new ActionListener() {
 
 			@Override
@@ -184,49 +261,25 @@ public class Nova_Regra extends JDialog {
 
 			}
 		});
-		popupMenu.add(mEditar);
-		JMenuItem mApagar = new JMenuItem("Apagar");
+
 		mApagar.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(regra!=null && regra==regrasList.getSelectedValue()) {
+				if (regra != null && regra == regrasList.getSelectedValue()) {
 					reset();
 				}
 				RegrasModel.getInstance().removeRegra(regrasList.getSelectedValue());
 
 			}
 		});
-		popupMenu.add(mApagar);
 
-		regrasList.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent me) {
-				if (SwingUtilities.isRightMouseButton(me)) {
-					int index = regrasList.locationToIndex(me.getPoint());
-					regrasList.setSelectedIndex(index);
-					if (index != -1)
-						popupMenu.show(regrasList, me.getX(), me.getY());
-				}
-				if(me.getClickCount()==2 && !me.isConsumed()){
-					me.consume();
-					int index = regrasList.locationToIndex(me.getPoint());
-					preencher(regras.getElementAt(index));
-				}
-			}
-		});
-		
-		regrasList.addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-					if(!regrasList.isSelectionEmpty()) {
-						if(e.getKeyCode()==KeyEvent.VK_DELETE)
-						RegrasModel.getInstance().removeRegra(regrasList.getSelectedValue());
-						else if(e.getKeyCode()==KeyEvent.VK_ENTER)
-							preencher(regrasList.getSelectedValue());
-					}
-			}
+		save.addActionListener(new ActionListener() {
 			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				salvarRegra();
+			}
 		});
 
 	}
@@ -281,7 +334,7 @@ public class Nova_Regra extends JDialog {
 				regra.setValor_1((Number) spinner_metric_1.getValue());
 				regra.setValor_2((Number) spinner_metric_2.getValue());
 				regra.setLogico((Logic_And_Or) logic_1.getSelectedItem());
-				RegrasModel.getInstance().editar(regra);
+				RegrasModel.getInstance().atualizar(regra);
 				String[] options = new String[] { "Sim", "Não" };
 				int ok = JOptionPane.showOptionDialog(this,
 						"Regra salva com sucesso! Queres testar a fiabilidade dessa regra, em comparação com as outras?",
@@ -299,35 +352,32 @@ public class Nova_Regra extends JDialog {
 		}
 	}
 
-	public JComboBox<Metrica> getMetrics_1() {
-		return metrics_1;
-	}
-
-	public JButton getSave() {
-		return save;
-	}
-
-	public JTextField getNome() {
-		return nome;
-	}
-
-	public void preencher(Regra r) {
-		regra = r;
-		setTitle(r.getNome());
-		nome.setText(r.getNome());
-		if (r.getMetrica_1() == Metrica.LOC)
+	/**
+	 * Preenche os diversos campos com os atributos da regra dada e altera o modo
+	 * para edição.
+	 * 
+	 * @param regra regra que se pretende editar
+	 */
+	public void preencher(Regra regra) {
+		this.regra = regra;
+		setTitle(regra.getNome());
+		nome.setText(regra.getNome());
+		if (regra.getMetrica_1() == Metrica.LOC)
 			type.setSelectedIndex(0);
 		else
 			type.setSelectedIndex(1);
-		spinner_metric_1.setValue(r.getValor_1());
-		spinner_metric_2.setValue(r.getValor_2());
-		logic_1.setSelectedItem(r.getLogico());
+		spinner_metric_1.setValue(regra.getValor_1());
+		spinner_metric_2.setValue(regra.getValor_2());
+		logic_1.setSelectedItem(regra.getLogico());
 
-		removeActionListeners();
+		removeActionListenersFromSaveButton();
 		save.addActionListener(new SaveListenerEdit());
 
 	}
 
+	/**
+	 * Limpa os campos a preencher e altera para o modo "Nova Regra"
+	 */
 	public void reset() {
 		setTitle("Nova Regra");
 		nome.setText("");
@@ -335,31 +385,46 @@ public class Nova_Regra extends JDialog {
 		spinner_metric_1.setValue(0);
 		spinner_metric_2.setValue(0);
 		logic_1.setSelectedIndex(0);
-		removeActionListeners();
+		removeActionListenersFromSaveButton();
 		save.addActionListener(new SaveListenerCreate());
 	}
 
-	public void removeActionListeners() {
+	/**
+	 * Remove os Action Listeners do botão Save, para permitir que se adicione um
+	 * novo actionListener, sem interferência de comportamento com o outro
+	 */
+	public void removeActionListenersFromSaveButton() {
 		ActionListener[] al = save.getActionListeners();
 		for (int i = 0; i < al.length; i++) {
 			save.removeActionListener(al[i]);
 		}
 	}
 
+	/**
+	 * Torna visível esse diálogo
+	 */
 	public void open() {
 		setVisible(true);
 	}
-
+	/**
+	 * ActionListener para o modo "Nova Regra"
+	 * @author dariop
+	 *
+	 */
 	private class SaveListenerCreate implements ActionListener {
-
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			salvarRegra();
 		}
 
 	}
-
+	/**
+	 * ActionListener para o modo de edição
+	 * @author dariop
+	 *
+	 */
 	private class SaveListenerEdit implements ActionListener {
-
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			editarRegra();
 		}

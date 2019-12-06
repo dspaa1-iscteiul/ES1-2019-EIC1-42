@@ -114,9 +114,13 @@ public class Regra {
 	public String toString() {
 		String parte1 = "Regra '" + nome + "' [" + metrica_1 + ">" + valor_1 + " " + logico.name() + " " + metrica_2;
 		String sinal = ">";
-		if(metrica_2==Metrica.LAA)
+		String tipo = "long_method";
+		if(metrica_2==Metrica.LAA) {
 			sinal = "<";
-		return parte1 + sinal + valor_2 + "]";
+			tipo = "feature_envy";
+		}
+			
+		return parte1 + sinal + valor_2 +"] - " + tipo;
 			
 	}
 	

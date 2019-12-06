@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -102,50 +104,49 @@ public class Comparador_de_Qualidade extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
-		
-		
+
 		{
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			contentPanel.add(tabbedPane);
 
-			{	
+			{
 				resultados_panel = new JPanel(new BorderLayout());
 				tabbedPane.addTab("Resultados", null, resultados_panel, "Resultados da deteção dos defeitos");
 				createResultsTable();
-			{
-				indicadores_panel = new JPanel(new BorderLayout());
-				tabbedPane.addTab("Indicadores", null, indicadores_panel, "Indicadores de qualidade");
+				{
+					indicadores_panel = new JPanel(new BorderLayout());
+					tabbedPane.addTab("Indicadores", null, indicadores_panel, "Indicadores de qualidade");
+				}
 			}
-		}
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.addActionListener(new ActionListener() {
+				JPanel buttonPane = new JPanel();
+				buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+				getContentPane().add(buttonPane, BorderLayout.SOUTH);
+				{
+					JButton okButton = new JButton("OK");
+					okButton.addActionListener(new ActionListener() {
 
-					public void actionPerformed(ActionEvent e) {
-						dispose();
-					}
-				});
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+						public void actionPerformed(ActionEvent e) {
+							dispose();
+						}
+					});
+					buttonPane.add(okButton);
+					getRootPane().setDefaultButton(okButton);
+				}
 			}
-		}
-		createTable();
+			createTable();
 		}
 	}
-	
+
 	/**
 	 * Creates table with MethodID, iPlasma and PMD columns and respective results
 	 */
 	public void createResultsTable() {
-		String [] col= new String[3];
-		col[0]="MethodID";
-		col[1]="iPlasma";
-		col[2]="PMD";
-		tableModel=new DefaultTableModel(col,0) {
+		String[] col = new String[3];
+		col[0] = "MethodID";
+		col[1] = "iPlasma";
+		col[2] = "PMD";
+		tableModel = new DefaultTableModel(col, 0) {
 			/**
 			 * Disables JTable cell editing
 			 */
@@ -155,18 +156,52 @@ public class Comparador_de_Qualidade extends JDialog {
 				return false;
 			}
 		};
-		table=new JTable(tableModel);
-		for(int i=0;i!=metodos.size();i++) {
-			int methodID=metodos.get(i).getMethodID();
-			boolean iPlasma =metodos.get(i).isIplasma();
+		table = new JTable(tableModel) {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected JTableHeader createDefaultTableHeader() {
+				return new JTableHeader(getColumnModel()) {
+
+					/**
+					 * 
+					 */
+					private static final long serialVersionUID = 1L;
+
+					@Override
+					public String getToolTipText(MouseEvent e) {
+//						String tip = null;
+						java.awt.Point p = e.getPoint();
+						int index = columnModel.getColumnIndexAtX(p.x);
+						int realIndex = columnModel.getColumn(index).getModelIndex();
+						if (realIndex > 2)
+							return regras.get(realIndex - 3).toString();
+						else if (realIndex > 0)
+							return col[realIndex] + " - long_method";
+						else
+							return super.getToolTipText();
+					}
+
+				};
+			}
+
+		};
+		table.getTableHeader().setReorderingAllowed(false);
+		for (int i = 0; i != metodos.size(); i++) {
+			int methodID = metodos.get(i).getMethodID();
+			boolean iPlasma = metodos.get(i).isIplasma();
 			boolean PMD = metodos.get(i).isPmd();
-			Object[] data= {methodID, iPlasma, PMD};
+			Object[] data = { methodID, iPlasma, PMD };
 			tableModel.addRow(data);
 		}
 		JScrollPane panel = new JScrollPane(table);
 		resultados_panel.add(panel);
 	}
-	
+
 	/**
 	 * Sets the dialog visible
 	 */
@@ -175,36 +210,31 @@ public class Comparador_de_Qualidade extends JDialog {
 		columnForEachRule();
 		setVisible(true);
 	}
-		
+
 	/**
-	 * Creates a column for each rule created and fills it out with the results
-	 * for each methodID
+	 * Creates a column for each rule created and fills it out with the results for
+	 * each methodID
 	 */
 	public void columnForEachRule() {
-		if(!regras.isEmpty()) {
-			for(int i=tableModel.getColumnCount()-3;i!=regras.size();i++) {
-				if(regras.get(i).getMetrica_1()==Metrica.LOC)
-					tableModel.addColumn(regras.get(i).getNome()+" (isLongMethod)",ruleResultForEachMethod(regras.get(i)));
-				else
-					tableModel.addColumn(regras.get(i).getNome()+" (featureEnvy)",ruleResultForEachMethod(regras.get(i)));
+		if (!regras.isEmpty()) {
+			for (int i = tableModel.getColumnCount() - 3; i != regras.size(); i++) {
+				tableModel.addColumn(regras.get(i).getNome(), ruleResultForEachMethod(regras.get(i)));
 				tableModel.fireTableStructureChanged();
 			}
-			
+
 		}
 	}
 
 //	public boolean addRegra(Regra r) {
 //		return regras.add(r);
 //	}
-		
-	
-	
+
 	public static Comparador_de_Qualidade getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new Comparador_de_Qualidade();
 		return INSTANCE;
 	}
-		
+
 	/**
 	 * Verifies the rule result for each method and stores it in an array
 	 * 
@@ -212,28 +242,40 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * @return resultados
 	 */
 	public Object[] ruleResultForEachMethod(Regra r) {
-		Object[] resultados=new Object[metodos.size()];
-		for(int i=0;i!=metodos.size();i++) {
-			if(r.getMetrica_1()==Metrica.LOC && r.getMetrica_2()==Metrica.CYCLO && r.getLogico()==Logic_And_Or.AND)
-				if((metodos.get(i).getLoc()>r.getValor_1().intValue()) && (metodos.get(i).getCyclo()>r.getValor_2().intValue())) {
-					resultados[i]=true;
-				}else resultados[i]=false;
-			else if(r.getMetrica_1()==Metrica.LOC && r.getMetrica_2()==Metrica.CYCLO && r.getLogico()==Logic_And_Or.OR)
-				if((metodos.get(i).getLoc()>r.getValor_1().intValue()) || (metodos.get(i).getCyclo()>r.getValor_2().intValue())) {
-					resultados[i]=true;
-				}else resultados[i]=false;
-			else if(r.getMetrica_1()==Metrica.ATFD && r.getMetrica_2()==Metrica.LAA && r.getLogico()==Logic_And_Or.AND)
-				if((metodos.get(i).getAtfd()>r.getValor_1().intValue()) && (metodos.get(i).getLaa()<r.getValor_2().doubleValue())) {
-					resultados[i]=true;
-				}else resultados[i]=false;
-			else if(r.getMetrica_1()==Metrica.ATFD && r.getMetrica_2()==Metrica.LAA && r.getLogico()==Logic_And_Or.OR)
-				if((metodos.get(i).getAtfd()>r.getValor_1().intValue()) || (metodos.get(i).getLaa()<r.getValor_2().doubleValue())) {
-					resultados[i]=true;
-				}else resultados[i]=false;
-				
+		Object[] resultados = new Object[metodos.size()];
+		for (int i = 0; i != metodos.size(); i++) {
+			if (r.getMetrica_1() == Metrica.LOC && r.getMetrica_2() == Metrica.CYCLO
+					&& r.getLogico() == Logic_And_Or.AND)
+				if ((metodos.get(i).getLoc() > r.getValor_1().intValue())
+						&& (metodos.get(i).getCyclo() > r.getValor_2().intValue())) {
+					resultados[i] = true;
+				} else
+					resultados[i] = false;
+			else if (r.getMetrica_1() == Metrica.LOC && r.getMetrica_2() == Metrica.CYCLO
+					&& r.getLogico() == Logic_And_Or.OR)
+				if ((metodos.get(i).getLoc() > r.getValor_1().intValue())
+						|| (metodos.get(i).getCyclo() > r.getValor_2().intValue())) {
+					resultados[i] = true;
+				} else
+					resultados[i] = false;
+			else if (r.getMetrica_1() == Metrica.ATFD && r.getMetrica_2() == Metrica.LAA
+					&& r.getLogico() == Logic_And_Or.AND)
+				if ((metodos.get(i).getAtfd() > r.getValor_1().intValue())
+						&& (metodos.get(i).getLaa() < r.getValor_2().doubleValue())) {
+					resultados[i] = true;
+				} else
+					resultados[i] = false;
+			else if (r.getMetrica_1() == Metrica.ATFD && r.getMetrica_2() == Metrica.LAA
+					&& r.getLogico() == Logic_And_Or.OR)
+				if ((metodos.get(i).getAtfd() > r.getValor_1().intValue())
+						|| (metodos.get(i).getLaa() < r.getValor_2().doubleValue())) {
+					resultados[i] = true;
+				} else
+					resultados[i] = false;
+
 		}
 		return resultados;
-			
+
 	}
 
 	/**
@@ -442,24 +484,22 @@ public class Comparador_de_Qualidade extends JDialog {
 		}
 
 	}
-	
+
 	public void createTable() {
-		String data[][]={ {"101","200","200"},    
-                {"102","200","222"},    
-                {"101","200","222"}};    
-		String column[]={"iPlasma","PMD","Número de Regras"};
-		JTable t = new JTable(data,column);
+		String data[][] = { { "101", "200", "200" }, { "102", "200", "222" }, { "101", "200", "222" } };
+		String column[] = { "iPlasma", "PMD", "Número de Regras" };
+		JTable t = new JTable(data, column);
 		System.out.println(iplasmaValues.size());
-		for(int i= 0; i!=iplasmaValues.size();i++){
+		for (int i = 0; i != iplasmaValues.size(); i++) {
 			System.out.println(iplasmaValues.get(i));
 		}
-		JScrollPane sp=new JScrollPane(t); 
+		JScrollPane sp = new JScrollPane(t);
 		indicadores_panel.add(sp);
 		metodos = DataModel.getInstance().getMetodos();
 		System.out.println(metodos != null); // metodos null...
-		
+
 	}
-	
+
 	/**
 	 * Collects LOC Values - Integer Arraylist
 	 * 
@@ -728,6 +768,5 @@ public class Comparador_de_Qualidade extends JDialog {
 	public void setLaaValues(ArrayList<Double> laaValues) {
 		this.laaValues = laaValues;
 	}
-
 
 }

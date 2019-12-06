@@ -107,6 +107,7 @@ public class ExcelData extends JFrame {
 				return tip;
 			}
 		};
+		table.getTableHeader().setReorderingAllowed(false);
 
 		table.setModel(DataModel.getInstance());
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

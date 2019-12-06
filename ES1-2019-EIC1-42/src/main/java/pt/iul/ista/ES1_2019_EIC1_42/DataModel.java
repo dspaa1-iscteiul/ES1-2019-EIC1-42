@@ -27,7 +27,7 @@ public class DataModel extends AbstractTableModel {
 	 * 
 	 */
 	private static final long serialVersionUID = -4220550076295049347L;
-	private ArrayList<Metodo> metodos;
+	private ArrayList<Metodo> metodos = new ArrayList<Metodo>();
 	private static DataModel INSTANCE;
 	private Sheet sheet;
 
@@ -60,7 +60,6 @@ public class DataModel extends AbstractTableModel {
 
 	public void getContent() throws EncryptedDocumentException, InvalidFormatException, IOException {
 		if (sheet != null) {
-			metodos = new ArrayList<Metodo>();
 			DataFormatter dataFormatter = new DataFormatter();
 			int j = 1;
 			while (j <= sheet.getLastRowNum()) {
@@ -82,8 +81,10 @@ public class DataModel extends AbstractTableModel {
 				metodos.add(met);
 				j++;
 			}
+			
 		}
 	}
+	
 
 	public int getColumnCount() {
 		if (sheet != null) {
@@ -164,6 +165,8 @@ public class DataModel extends AbstractTableModel {
 	}
 	
 	public ArrayList<Metodo> getMetodos() {
-				return metodos;
+		int i=metodos.size();
+		System.out.println(i);
+		return metodos;
 		}
 }

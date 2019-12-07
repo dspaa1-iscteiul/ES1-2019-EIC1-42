@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -83,6 +84,12 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Create the dialog.
 	 */
 	private Comparador_de_Qualidade() {
+		addIplasmaValues();
+		addPMDValues();
+		addFeatureEnvyValues();
+		addLongMethodValues();
+		getDataModelValues();
+		calculateIndicadoresPMDiPlasma();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 //		regras = new HashSet<Regra>();
 		regras = RegrasModel.getInstance().getRegras();
@@ -103,6 +110,15 @@ public class Comparador_de_Qualidade extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		
+		getRegrasValues();
+		addIplasmaValues();
+		addFeatureEnvyValues();
+		addLongMethodValues();
+		addPMDValues();
+		getDataModelValues();
+		calculateIndicadoresPMDiPlasma();
+//		calculateIndicadoresFeatureEnvy();
+
 		
 		{
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -174,7 +190,12 @@ public class Comparador_de_Qualidade extends JDialog {
 	public void open() {
 		System.out.println(regras);
 		columnForEachRule();
+		getRegrasValues();
+		calculateIndicadoresLongMethod();
+		calculateIndicadoresRegras();
 		setVisible(true);
+		System.out.println("HEYY");
+		System.out.println(indicadoresRegrasUtilizador.size());
 	}
 		
 	/**
@@ -255,7 +276,17 @@ public class Comparador_de_Qualidade extends JDialog {
 		}
 		this.featureEnvyRegrasValues.put(regra, featureEnvyRuleValues);
 	}
-
+	
+	/**
+	 * Starts collection of Quality Indicators
+	 */
+	
+	public void calculateIndicadoresRegras() {
+		this.indicadoresRegrasUtilizador = new HashMap<Regra, ArrayList<Integer>>();
+		this.calculateIndicadoresFeatureEnvy();
+		this.calculateIndicadoresLongMethod();
+	}
+	
 	/**
 	 * Verifies LongMethod Rule Logic Condition. Adds Boolean Results to HashMap
 	 * 
@@ -278,11 +309,12 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Collects Rules results for each method - Boolean ArrayList
 	 */
 	public void getRegrasValues() {
+		this.longMethodRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
+		this.featureEnvyRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
 		for (Regra regra : this.regras) {
 			if ((regra.getMetrica_1() == Metrica.LOC && regra.getMetrica_2() == Metrica.CYCLO)
 					|| (regra.getMetrica_1() == Metrica.CYCLO && regra.getMetrica_2() == Metrica.LOC)) {
 				verifyLongMethodRuleStructure(regra);
-
 			} else if ((regra.getMetrica_1() == Metrica.ATFD && regra.getMetrica_2() == Metrica.LAA)
 					|| (regra.getMetrica_1() == Metrica.LAA && regra.getMetrica_2() == Metrica.ATFD)) {
 				verifyFeatureEnvyRuleStructure(regra);
@@ -445,11 +477,18 @@ public class Comparador_de_Qualidade extends JDialog {
 	}
 	
 	public void createIndicatorTable() {
-		String [] col= new String[4];
+		getRegrasValues();
+		calculateIndicadoresLongMethod();
+		calculateIndicadoresRegras();
+		int nregras = regras.size();
+		String [] col= new String[3+nregras];
 		col[0]="";
 		col[1]="iPlasma";
 		col[2]="PMD";
-		col[3]="Regras";
+		for(int i=0; i!=nregras;i++) {
+			col[3+i] = regras.get(i).toString();
+		}
+		
 		tableModel=new DefaultTableModel(col,0) {
 			/**
 			 * Disables JTable cell editing
@@ -461,21 +500,33 @@ public class Comparador_de_Qualidade extends JDialog {
 			}
 		};
 		table=new JTable(tableModel);
-		
 			
-			Object[] data= {"DCI", "", "",""};
-			tableModel.addRow(data);
-			Object[] data1= {"DII", "", "",""};
-			tableModel.addRow(data1);
-			Object[] data2= {"ADCI", "", "",""};
-			tableModel.addRow(data2);
-			Object[] data3= {"ADII", "", "",""};
-			tableModel.addRow(data3);
-		
+			String[] indicadores= new String[]{ "DCI","DII","ADCI","ADII" };
+			Vector<Object> data;
+			for(int i=0;i!=4;i++) {
+			//Object[] data= new Object["DCI", indicadoresiPlasma[0],indicadoresPMD[0],"",""];
+				data=new Vector<Object>();
+				data.add(indicadores[i]);
+				data.add(indicadoresiPlasma[i]);
+				data.add(indicadoresPMD[i]);
+				for(int e=0;e!=nregras;e++) {
+					data.add(indicadoresRegrasUtilizador.get(regras.get(e)).get(i));
+				}
+				tableModel.addRow(data);
+			/*	Object[] data1= {"DII", indicadoresiPlasma[1],indicadoresPMD[1],"",""};
+				tableModel.addRow(data1);
+				Object[] data2= {"ADCI", indicadoresiPlasma[2],indicadoresPMD[2], "",""};
+				tableModel.addRow(data2);
+				Object[] data3= {"ADII", indicadoresiPlasma[3],indicadoresPMD[3], "",""};
+				tableModel.addRow(data3);
+				*/
+			}
 		JScrollPane panel = new JScrollPane(table);
 		indicadores_panel.add(panel);
 		
 	}
+	
+	
 	
 	/**
 	 * Collects LOC Values - Integer Arraylist
@@ -610,30 +661,30 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Calcula indicadores de qualidade Long Method Regras Utilizador
 	 * 
 	 * @param regra
-	 * @param DCI
-	 * @param DII
-	 * @param ADCI
-	 * @param ADII
+	 * @param dci
+	 * @param dii
+	 * @param adci
+	 * @param adii
 	 * @return indicadores
 	 */
-	public ArrayList<Integer> calculateIndicadoresLongMethodRegras(Regra regra, int DCI, int DII, int ADCI, int ADII) {
+	public ArrayList<Integer> calculateIndicadoresLongMethodRegras(Regra regra, int dci, int dii, int adci, int adii) {
 		ArrayList<Integer> indicadores = new ArrayList<Integer>();
 		ArrayList<Boolean> regraValues = this.longMethodRegrasValues.get(regra);
 		for (int j = 0; j < longMethodValues.size(); j++) {
 			if (regraValues.get(j) && longMethodValues.get(j)) {
-				DCI++;
+				dci++;
 			} else if (!regraValues.get(j) && longMethodValues.get(j)) {
-				DII++;
+				dii++;
 			} else if (!regraValues.get(j) && !longMethodValues.get(j)) {
-				ADCI++;
+				adci++;
 			} else if (regraValues.get(j) && !longMethodValues.get(j)) {
-				ADII++;
+				adii++;
 			}
 		}
-		indicadores.add(DCI);
-		indicadores.add(DII);
-		indicadores.add(ADCI);
-		indicadores.add(ADII);
+		indicadores.add(dci);
+		indicadores.add(dii);
+		indicadores.add(adci);
+		indicadores.add(adii);
 		return indicadores;
 	}
 

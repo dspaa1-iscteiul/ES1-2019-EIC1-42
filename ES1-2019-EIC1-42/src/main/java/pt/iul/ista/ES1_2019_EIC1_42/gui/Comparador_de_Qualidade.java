@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,7 +17,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -35,7 +34,7 @@ import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
  * @author dariop
  * @author fmpts
  * @author rmdca
- *
+ * @author aaspo
  */
 public class Comparador_de_Qualidade extends JDialog {
 
@@ -60,7 +59,9 @@ public class Comparador_de_Qualidade extends JDialog {
 	private ArrayList<Integer> atfdValues = new ArrayList<Integer>();
 	private ArrayList<Double> laaValues = new ArrayList<Double>();
 	private DefaultTableModel tableModel;
+	private DefaultTableModel tableModel2;
 	private JTable table;
+	private JTable table2;
 
 	private HashMap<Regra, ArrayList<Boolean>> longMethodRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
 	private HashMap<Regra, ArrayList<Boolean>> featureEnvyRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
@@ -77,7 +78,7 @@ public class Comparador_de_Qualidade extends JDialog {
 
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace(); //dis
 		}
 	}
 
@@ -85,6 +86,13 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Create the dialog.
 	 */
 	private Comparador_de_Qualidade() {
+		addIplasmaValues();
+		addPMDValues();
+		addFeatureEnvyValues();
+		addLongMethodValues();
+		getDataModelValues();
+
+		calculateIndicadoresPMDiPlasma();
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 //		regras = new HashSet<Regra>();
 		regras = RegrasModel.getInstance().getRegras();
@@ -105,6 +113,16 @@ public class Comparador_de_Qualidade extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 
+		getRegrasValues();
+		calculateIndicadoresLongMethod();
+		calculateIndicadoresRegras();
+		addIplasmaValues();
+		addFeatureEnvyValues();
+		addLongMethodValues();
+		addPMDValues();
+		getDataModelValues();
+		calculateIndicadoresPMDiPlasma();
+
 		{
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			contentPanel.add(tabbedPane);
@@ -116,6 +134,7 @@ public class Comparador_de_Qualidade extends JDialog {
 				{
 					indicadores_panel = new JPanel(new BorderLayout());
 					tabbedPane.addTab("Indicadores", null, indicadores_panel, "Indicadores de qualidade");
+					createIndicatorTable();
 				}
 			}
 			{
@@ -134,7 +153,7 @@ public class Comparador_de_Qualidade extends JDialog {
 					getRootPane().setDefaultButton(okButton);
 				}
 			}
-			createTable();
+
 		}
 	}
 
@@ -156,41 +175,7 @@ public class Comparador_de_Qualidade extends JDialog {
 				return false;
 			}
 		};
-		table = new JTable(tableModel) {
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected JTableHeader createDefaultTableHeader() {
-				return new JTableHeader(getColumnModel()) {
-
-					/**
-					 * 
-					 */
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public String getToolTipText(MouseEvent e) {
-//						String tip = null;
-						java.awt.Point p = e.getPoint();
-						int index = columnModel.getColumnIndexAtX(p.x);
-						int realIndex = columnModel.getColumn(index).getModelIndex();
-						if (realIndex > 2)
-							return regras.get(realIndex - 3).toString();
-						else if (realIndex > 0)
-							return col[realIndex] + " - long_method";
-						else
-							return super.getToolTipText();
-					}
-
-				};
-			}
-
-		};
-		table.getTableHeader().setReorderingAllowed(false);
+		table = new JTable(tableModel);
 		for (int i = 0; i != metodos.size(); i++) {
 			int methodID = metodos.get(i).getMethodID();
 			boolean iPlasma = metodos.get(i).isIplasma();
@@ -208,7 +193,11 @@ public class Comparador_de_Qualidade extends JDialog {
 	public void open() {
 		System.out.println(regras);
 		columnForEachRule();
+		getRegrasValues();
+		calculateIndicadoresRegras();
+		columnForEachRegra();
 		setVisible(true);
+
 	}
 
 	/**
@@ -218,7 +207,12 @@ public class Comparador_de_Qualidade extends JDialog {
 	public void columnForEachRule() {
 		if (!regras.isEmpty()) {
 			for (int i = tableModel.getColumnCount() - 3; i != regras.size(); i++) {
-				tableModel.addColumn(regras.get(i).getNome(), ruleResultForEachMethod(regras.get(i)));
+				if (regras.get(i).getMetrica_1() == Metrica.LOC)
+					tableModel.addColumn(regras.get(i).getNome() + " (isLongMethod)",
+							ruleResultForEachMethod(regras.get(i)));
+				else
+					tableModel.addColumn(regras.get(i).getNome() + " (featureEnvy)",
+							ruleResultForEachMethod(regras.get(i)));
 				tableModel.fireTableStructureChanged();
 			}
 
@@ -281,36 +275,46 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Verifies FeatureEnvy Rule Logic Condition. Adds Boolean Results to HashMap
 	 * 
-	 * @param ATFDValue
-	 * @param LAAValue
+	 * @param atfdValue
+	 * @param laaValue
 	 * @param logico
 	 * @param regra
 	 * 
 	 */
-	public void verifyFeatureEnvyRegraLogicValue(Number ATFDValue, Number LAAValue, Logic_And_Or logico, Regra regra) {
+	public void verifyFeatureEnvyRegraLogicValue(Number atfdValue, Number laaValue, Logic_And_Or logico, Regra regra) {
 		ArrayList<Boolean> featureEnvyRuleValues = new ArrayList<Boolean>();
 		if (logico == Logic_And_Or.AND) {
-			featureEnvyRuleValues = generateFeatureEnvyRegraValuesAnd(ATFDValue, LAAValue, featureEnvyRuleValues);
+			featureEnvyRuleValues = generateFeatureEnvyRegraValuesAnd(atfdValue, laaValue, featureEnvyRuleValues);
 		} else if (logico == Logic_And_Or.OR) {
-			featureEnvyRuleValues = generateFeatureEnvyRegraValuesOr(ATFDValue, LAAValue, featureEnvyRuleValues);
+			featureEnvyRuleValues = generateFeatureEnvyRegraValuesOr(atfdValue, laaValue, featureEnvyRuleValues);
 		}
 		this.featureEnvyRegrasValues.put(regra, featureEnvyRuleValues);
 	}
 
 	/**
+	 * Starts collection of Quality Indicators
+	 */
+
+	public void calculateIndicadoresRegras() {
+		this.indicadoresRegrasUtilizador = new HashMap<Regra, ArrayList<Integer>>();
+		this.calculateIndicadoresFeatureEnvy();
+		this.calculateIndicadoresLongMethod();
+	}
+
+	/**
 	 * Verifies LongMethod Rule Logic Condition. Adds Boolean Results to HashMap
 	 * 
-	 * @param LOCValue
-	 * @param CYCLOValue
+	 * @param locValue
+	 * @param cycloValue
 	 * @param logico
 	 * 
 	 */
-	public void verifyLongMethodRegraLogicValue(Number LOCValue, Number CYCLOValue, Logic_And_Or logico, Regra regra) {
+	public void verifyLongMethodRegraLogicValue(Number locValue, Number cycloValue, Logic_And_Or logico, Regra regra) {
 		ArrayList<Boolean> longMethodRuleValues = new ArrayList<Boolean>();
 		if (logico == Logic_And_Or.AND) {
-			longMethodRuleValues = generateLongMethodRegraValuesAnd(LOCValue, CYCLOValue, longMethodRuleValues);
+			longMethodRuleValues = generateLongMethodRegraValuesAnd(locValue, cycloValue, longMethodRuleValues);
 		} else if (logico == Logic_And_Or.OR) {
-			longMethodRuleValues = generateLongMethodRegraValuesOr(LOCValue, CYCLOValue, longMethodRuleValues);
+			longMethodRuleValues = generateLongMethodRegraValuesOr(locValue, cycloValue, longMethodRuleValues);
 		}
 		this.longMethodRegrasValues.put(regra, longMethodRuleValues);
 	}
@@ -319,11 +323,12 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Collects Rules results for each method - Boolean ArrayList
 	 */
 	public void getRegrasValues() {
+		this.longMethodRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
+		this.featureEnvyRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
 		for (Regra regra : this.regras) {
 			if ((regra.getMetrica_1() == Metrica.LOC && regra.getMetrica_2() == Metrica.CYCLO)
 					|| (regra.getMetrica_1() == Metrica.CYCLO && regra.getMetrica_2() == Metrica.LOC)) {
 				verifyLongMethodRuleStructure(regra);
-
 			} else if ((regra.getMetrica_1() == Metrica.ATFD && regra.getMetrica_2() == Metrica.LAA)
 					|| (regra.getMetrica_1() == Metrica.LAA && regra.getMetrica_2() == Metrica.ATFD)) {
 				verifyFeatureEnvyRuleStructure(regra);
@@ -351,17 +356,17 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Generates LongMethod Rule Values based on And Condition
 	 * 
-	 * @param LOCValue
-	 * @param CYCLOValue
+	 * @param locValue
+	 * @param cycloValue
 	 * @param longMethodRuleValues
 	 * @return longMethodRuleValues
 	 * 
 	 */
-	public ArrayList<Boolean> generateLongMethodRegraValuesAnd(Number LOCValue, Number CYCLOValue,
+	public ArrayList<Boolean> generateLongMethodRegraValuesAnd(Number locValue, Number cycloValue,
 			ArrayList<Boolean> longMethodRuleValues) {
 		for (int i = 0; i < this.locValues.size(); i++) {
 			longMethodRuleValues.add(
-					((this.locValues.get(i) > (Integer) LOCValue) && (this.cycloValues.get(i) > (Integer) CYCLOValue)));
+					((this.locValues.get(i) > (Integer) locValue) && (this.cycloValues.get(i) > (Integer) cycloValue)));
 		}
 		return longMethodRuleValues;
 
@@ -370,16 +375,16 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Generates LongMethod Rule Values based on Or Condition
 	 * 
-	 * @param LOCValue
-	 * @param CYCLOValue
+	 * @param locValue
+	 * @param cycloValue
 	 * @param longMethodRuleValues
 	 * @return longMethodRuleValues
 	 */
-	public ArrayList<Boolean> generateLongMethodRegraValuesOr(Number LOCValue, Number CYCLOValue,
+	public ArrayList<Boolean> generateLongMethodRegraValuesOr(Number locValue, Number cycloValue,
 			ArrayList<Boolean> longMethodRuleValues) {
 		for (int i = 0; i < this.locValues.size(); i++) {
 			longMethodRuleValues.add(
-					((this.locValues.get(i) > (Integer) LOCValue) || (this.cycloValues.get(i) > (Integer) CYCLOValue)));
+					((this.locValues.get(i) > (Integer) locValue) || (this.cycloValues.get(i) > (Integer) cycloValue)));
 		}
 		return longMethodRuleValues;
 	}
@@ -402,17 +407,17 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Generates FeatureEnvy Rule Values based on And Condition
 	 * 
-	 * @param ATFDValue
-	 * @param LAAValue
+	 * @param atfdValue
+	 * @param laaValue
 	 * @param featureEnvyRuleValues
 	 * @return featureEnvyRuleValues
 	 * 
 	 */
-	public ArrayList<Boolean> generateFeatureEnvyRegraValuesAnd(Number ATFDValue, Number LAAValue,
+	public ArrayList<Boolean> generateFeatureEnvyRegraValuesAnd(Number atfdValue, Number laaValue,
 			ArrayList<Boolean> featureEnvyRuleValues) {
 		for (int i = 0; i < this.locValues.size(); i++) {
 			featureEnvyRuleValues.add(
-					((this.atfdValues.get(i) > (Integer) ATFDValue) && (this.laaValues.get(i) < (Double) LAAValue)));
+					((this.atfdValues.get(i) > (Integer) atfdValue) && (this.laaValues.get(i) < (Double) laaValue)));
 		}
 		return featureEnvyRuleValues;
 
@@ -421,17 +426,17 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Generates FeatureEnvy Rule Values based on Or Condition
 	 * 
-	 * @param ATFDValue
-	 * @param LAAValue
+	 * @param atfdValue
+	 * @param laaValue
 	 * @param featureEnvyRuleValues
 	 * @return featureEnvyRuleValues
 	 * 
 	 */
-	public ArrayList<Boolean> generateFeatureEnvyRegraValuesOr(Number ATFDValue, Number LAAValue,
+	public ArrayList<Boolean> generateFeatureEnvyRegraValuesOr(Number atfdValue, Number laaValue,
 			ArrayList<Boolean> featureEnvyRuleValues) {
 		for (int i = 0; i < this.locValues.size(); i++) {
 			featureEnvyRuleValues.add(
-					((this.atfdValues.get(i) > (Integer) ATFDValue) || (this.laaValues.get(i) < (Double) LAAValue)));
+					((this.atfdValues.get(i) > (Integer) atfdValue) || (this.laaValues.get(i) < (Double) laaValue)));
 		}
 		return featureEnvyRuleValues;
 
@@ -485,19 +490,63 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	}
 
-	public void createTable() {
-		String data[][] = { { "101", "200", "200" }, { "102", "200", "222" }, { "101", "200", "222" } };
-		String column[] = { "iPlasma", "PMD", "Número de Regras" };
-		JTable t = new JTable(data, column);
-		System.out.println(iplasmaValues.size());
-		for (int i = 0; i != iplasmaValues.size(); i++) {
-			System.out.println(iplasmaValues.get(i));
-		}
-		JScrollPane sp = new JScrollPane(t);
-		indicadores_panel.add(sp);
-		metodos = DataModel.getInstance().getMetodos();
-		System.out.println(metodos != null); // metodos null...
+	/**
+	 * creates Indicator Table
+	 */
+	public void createIndicatorTable() {
+		String[] col = new String[3];
+		col[0] = "";
+		col[1] = "iPlasma";
+		col[2] = "PMD";
 
+		tableModel2 = new DefaultTableModel(col, 0) {
+			/**
+			 * Disables JTable cell editing
+			 */
+			private static final long serialVersionUID = 1L;
+
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+
+		table2 = new JTable(tableModel2);
+
+		String[] indicadores = new String[] { "DCI", "DII", "ADCI", "ADII" };
+		Vector<Object> data;
+		for (int i = 0; i != 4; i++) {
+			data = new Vector<Object>();
+			data.add(indicadores[i]);
+			data.add(indicadoresiPlasma[i]);
+			data.add(indicadoresPMD[i]);
+			tableModel2.addRow(data);
+		}
+		JScrollPane panel = new JScrollPane(table2);
+		indicadores_panel.add(panel);
+
+	}
+
+	/**
+	 * Generates Columns for each User Rule at Indicators Table
+	 */
+	public void columnForEachRegra() {
+		if (!regras.isEmpty()) {
+			for (int i = tableModel2.getColumnCount() - 3; i != regras.size(); i++) {
+				tableModel2.addColumn(regras.get(i).getNome() + "-Regra", regraResultForEachMethod(regras.get(i)));
+				
+			}
+			tableModel2.fireTableStructureChanged();
+		
+
+		}
+	}
+
+	public Object[] regraResultForEachMethod(Regra r) {
+		Object[] resultados = new Object[4];
+		for (int i = 0; i != 4; i++) {
+			resultados[i] = indicadoresRegrasUtilizador.get(r).get(i);
+		}
+		return resultados;
 	}
 
 	/**
@@ -541,13 +590,9 @@ public class Comparador_de_Qualidade extends JDialog {
 	 */
 	public void calculateIndicadoresPMDiPlasma() {
 		ArrayList<Boolean> longMethodValues = this.longMethodValues;
-		int DCI = 0;
-		int DII = 0;
-		int ADCI = 0;
-		int ADII = 0;
 		for (int i = 0; i < longMethodValues.size(); i++) {
-			this.indicadoresiPlasma = calculateIndicadoresiPlasma(longMethodValues, DCI, DII, ADCI, ADII);
-			this.indicadoresPMD = calculateIndicadoresPMD(longMethodValues, DCI, DII, ADCI, ADII);
+			this.indicadoresiPlasma = calculateIndicadoresiPlasma(longMethodValues, 0, 0, 0, 0);
+			this.indicadoresPMD = calculateIndicadoresPMD(longMethodValues, 0, 0, 0, 0);
 		}
 	}
 
@@ -555,31 +600,31 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Calcula indicadores de qualidade iplasma
 	 * 
 	 * @param longMethodValues
-	 * @param DCI
-	 * @param DII
-	 * @param ADCI
-	 * @param ADII
+	 * @param dci
+	 * @param dii
+	 * @param adci
+	 * @param adii
 	 * @return indicadoresiPlasma
 	 */
-	public Integer[] calculateIndicadoresiPlasma(ArrayList<Boolean> longMethodValues, int DCI, int DII, int ADCI,
-			int ADII) {
+	public Integer[] calculateIndicadoresiPlasma(ArrayList<Boolean> longMethodValues, int dci, int dii, int adci,
+			int adii) {
 		ArrayList<Boolean> iPlasmaValues = this.iplasmaValues;
 		Integer[] indicadoresiPlasma = this.indicadoresiPlasma;
 		for (int i = 0; i < longMethodValues.size(); i++) {
 			if (iPlasmaValues.get(i) && longMethodValues.get(i)) {
-				DCI++;
+				dci++;
 			} else if (!iPlasmaValues.get(i) && longMethodValues.get(i)) {
-				DII++;
+				dii++;
 			} else if (!iPlasmaValues.get(i) && !longMethodValues.get(i)) {
-				ADCI++;
+				adci++;
 			} else if (iPlasmaValues.get(i) && !longMethodValues.get(i)) {
-				ADII++;
+				adii++;
 			}
 		}
-		indicadoresiPlasma[0] = DCI;
-		indicadoresiPlasma[1] = DII;
-		indicadoresiPlasma[2] = ADCI;
-		indicadoresiPlasma[3] = ADII;
+		indicadoresiPlasma[0] = dci;
+		indicadoresiPlasma[1] = dii;
+		indicadoresiPlasma[2] = adci;
+		indicadoresiPlasma[3] = adii;
 		return indicadoresiPlasma;
 	}
 
@@ -587,31 +632,31 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Calcula indicadores de qualidade PMD
 	 * 
 	 * @param longMethodValues
-	 * @param DCI
-	 * @param DII
-	 * @param ADCI
-	 * @param ADII
+	 * @param dci
+	 * @param dii
+	 * @param adci
+	 * @param adii
 	 * @return indicadoresPMD
 	 */
-	public Integer[] calculateIndicadoresPMD(ArrayList<Boolean> longMethodValues, int DCI, int DII, int ADCI,
-			int ADII) {
+	public Integer[] calculateIndicadoresPMD(ArrayList<Boolean> longMethodValues, int dci, int dii, int adci,
+			int adii) {
 		ArrayList<Boolean> PMDValues = this.pmdValues;
 		Integer[] indicadoresPMD = this.indicadoresPMD;
 		for (int i = 0; i < longMethodValues.size(); i++) {
 			if (PMDValues.get(i) && longMethodValues.get(i)) {
-				DCI++;
+				dci++;
 			} else if (!PMDValues.get(i) && longMethodValues.get(i)) {
-				DII++;
+				dii++;
 			} else if (!PMDValues.get(i) && !longMethodValues.get(i)) {
-				ADCI++;
+				adci++;
 			} else if (PMDValues.get(i) && !longMethodValues.get(i)) {
-				ADII++;
+				adii++;
 			}
 		}
-		indicadoresPMD[0] = DCI;
-		indicadoresPMD[1] = DII;
-		indicadoresPMD[2] = ADCI;
-		indicadoresPMD[3] = ADII;
+		indicadoresPMD[0] = dci;
+		indicadoresPMD[1] = dii;
+		indicadoresPMD[2] = adci;
+		indicadoresPMD[3] = adii;
 		return indicadoresPMD;
 	}
 
@@ -619,13 +664,9 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Starts collection of Long Method User Rules quality Indicadores
 	 */
 	public void calculateIndicadoresLongMethod() {
-		int DCI = 0;
-		int DII = 0;
-		int ADCI = 0;
-		int ADII = 0;
 		for (Regra regra : this.longMethodRegrasValues.keySet()) {
 			this.indicadoresRegrasUtilizador.put(regra,
-					calculateIndicadoresLongMethodRegras(regra, DCI, DII, ADCI, ADII));
+					calculateIndicadoresLongMethodRegras(regra, 0, 0, 0, 0));
 		}
 	}
 
@@ -633,30 +674,30 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Calcula indicadores de qualidade Long Method Regras Utilizador
 	 * 
 	 * @param regra
-	 * @param DCI
-	 * @param DII
-	 * @param ADCI
-	 * @param ADII
+	 * @param dci
+	 * @param dii
+	 * @param adci
+	 * @param adii
 	 * @return indicadores
 	 */
-	public ArrayList<Integer> calculateIndicadoresLongMethodRegras(Regra regra, int DCI, int DII, int ADCI, int ADII) {
+	public ArrayList<Integer> calculateIndicadoresLongMethodRegras(Regra regra, int dci, int dii, int adci, int adii) {
 		ArrayList<Integer> indicadores = new ArrayList<Integer>();
 		ArrayList<Boolean> regraValues = this.longMethodRegrasValues.get(regra);
 		for (int j = 0; j < longMethodValues.size(); j++) {
 			if (regraValues.get(j) && longMethodValues.get(j)) {
-				DCI++;
+				dci++;
 			} else if (!regraValues.get(j) && longMethodValues.get(j)) {
-				DII++;
+				dii++;
 			} else if (!regraValues.get(j) && !longMethodValues.get(j)) {
-				ADCI++;
+				adci++;
 			} else if (regraValues.get(j) && !longMethodValues.get(j)) {
-				ADII++;
+				adii++;
 			}
 		}
-		indicadores.add(DCI);
-		indicadores.add(DII);
-		indicadores.add(ADCI);
-		indicadores.add(ADII);
+		indicadores.add(dci);
+		indicadores.add(dii);
+		indicadores.add(adci);
+		indicadores.add(adii);
 		return indicadores;
 	}
 
@@ -664,13 +705,9 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Starts collection of Feature Envy Rules quality Indicadores
 	 */
 	public void calculateIndicadoresFeatureEnvy() {
-		int DCI = 0;
-		int DII = 0;
-		int ADCI = 0;
-		int ADII = 0;
 		for (Regra regra : this.featureEnvyRegrasValues.keySet()) {
 			this.indicadoresRegrasUtilizador.put(regra,
-					calculateIndicadoresFeatureEnvyRegras(regra, DCI, DII, ADCI, ADII));
+					calculateIndicadoresFeatureEnvyRegras(regra, 0, 0, 0, 0));
 		}
 	}
 
@@ -678,30 +715,30 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Calcula indicadores de qualidade Feature Envy Regras Utilizador
 	 * 
 	 * @param regra
-	 * @param DCI
-	 * @param DII
-	 * @param ADCI
-	 * @param ADII
+	 * @param D`CI
+	 * @param dii
+	 * @param adci
+	 * @param adii
 	 * @return indicadores
 	 */
-	public ArrayList<Integer> calculateIndicadoresFeatureEnvyRegras(Regra regra, int DCI, int DII, int ADCI, int ADII) {
+	public ArrayList<Integer> calculateIndicadoresFeatureEnvyRegras(Regra regra, int dci, int dii, int adci, int adii) {
 		ArrayList<Integer> indicadores = new ArrayList<Integer>();
 		ArrayList<Boolean> regraValues = this.featureEnvyRegrasValues.get(regra);
 		for (int j = 0; j < featureEnvyValues.size(); j++) {
 			if (regraValues.get(j) && featureEnvyValues.get(j)) {
-				DCI++;
+				dci++;
 			} else if (!regraValues.get(j) && featureEnvyValues.get(j)) {
-				DII++;
+				dii++;
 			} else if (!regraValues.get(j) && !featureEnvyValues.get(j)) {
-				ADCI++;
+				adci++;
 			} else if (regraValues.get(j) && !featureEnvyValues.get(j)) {
-				ADII++;
+				adii++;
 			}
 		}
-		indicadores.add(DCI);
-		indicadores.add(DII);
-		indicadores.add(ADCI);
-		indicadores.add(ADII);
+		indicadores.add(dci);
+		indicadores.add(dii);
+		indicadores.add(adci);
+		indicadores.add(adii);
 		return indicadores;
 	}
 

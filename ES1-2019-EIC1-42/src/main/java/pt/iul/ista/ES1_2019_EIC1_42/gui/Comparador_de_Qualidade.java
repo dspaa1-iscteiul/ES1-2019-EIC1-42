@@ -78,7 +78,7 @@ public class Comparador_de_Qualidade extends JDialog {
 
 			dialog.setVisible(true);
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace(); //dis
 		}
 	}
 

@@ -122,7 +122,6 @@ public class Comparador_de_Qualidade extends JDialog {
 		addPMDValues();
 		getDataModelValues();
 		calculateIndicadoresPMDiPlasma();
-//		calculateIndicadoresFeatureEnvy();
 
 		{
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -276,18 +275,18 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Verifies FeatureEnvy Rule Logic Condition. Adds Boolean Results to HashMap
 	 * 
-	 * @param ATFDValue
-	 * @param LAAValue
+	 * @param atfdValue
+	 * @param laaValue
 	 * @param logico
 	 * @param regra
 	 * 
 	 */
-	public void verifyFeatureEnvyRegraLogicValue(Number ATFDValue, Number LAAValue, Logic_And_Or logico, Regra regra) {
+	public void verifyFeatureEnvyRegraLogicValue(Number atfdValue, Number laaValue, Logic_And_Or logico, Regra regra) {
 		ArrayList<Boolean> featureEnvyRuleValues = new ArrayList<Boolean>();
 		if (logico == Logic_And_Or.AND) {
-			featureEnvyRuleValues = generateFeatureEnvyRegraValuesAnd(ATFDValue, LAAValue, featureEnvyRuleValues);
+			featureEnvyRuleValues = generateFeatureEnvyRegraValuesAnd(atfdValue, laaValue, featureEnvyRuleValues);
 		} else if (logico == Logic_And_Or.OR) {
-			featureEnvyRuleValues = generateFeatureEnvyRegraValuesOr(ATFDValue, LAAValue, featureEnvyRuleValues);
+			featureEnvyRuleValues = generateFeatureEnvyRegraValuesOr(atfdValue, laaValue, featureEnvyRuleValues);
 		}
 		this.featureEnvyRegrasValues.put(regra, featureEnvyRuleValues);
 	}
@@ -305,17 +304,17 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Verifies LongMethod Rule Logic Condition. Adds Boolean Results to HashMap
 	 * 
-	 * @param LOCValue
-	 * @param CYCLOValue
+	 * @param locValue
+	 * @param cycloValue
 	 * @param logico
 	 * 
 	 */
-	public void verifyLongMethodRegraLogicValue(Number LOCValue, Number CYCLOValue, Logic_And_Or logico, Regra regra) {
+	public void verifyLongMethodRegraLogicValue(Number locValue, Number cycloValue, Logic_And_Or logico, Regra regra) {
 		ArrayList<Boolean> longMethodRuleValues = new ArrayList<Boolean>();
 		if (logico == Logic_And_Or.AND) {
-			longMethodRuleValues = generateLongMethodRegraValuesAnd(LOCValue, CYCLOValue, longMethodRuleValues);
+			longMethodRuleValues = generateLongMethodRegraValuesAnd(locValue, cycloValue, longMethodRuleValues);
 		} else if (logico == Logic_And_Or.OR) {
-			longMethodRuleValues = generateLongMethodRegraValuesOr(LOCValue, CYCLOValue, longMethodRuleValues);
+			longMethodRuleValues = generateLongMethodRegraValuesOr(locValue, cycloValue, longMethodRuleValues);
 		}
 		this.longMethodRegrasValues.put(regra, longMethodRuleValues);
 	}
@@ -357,17 +356,17 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Generates LongMethod Rule Values based on And Condition
 	 * 
-	 * @param LOCValue
-	 * @param CYCLOValue
+	 * @param locValue
+	 * @param cycloValue
 	 * @param longMethodRuleValues
 	 * @return longMethodRuleValues
 	 * 
 	 */
-	public ArrayList<Boolean> generateLongMethodRegraValuesAnd(Number LOCValue, Number CYCLOValue,
+	public ArrayList<Boolean> generateLongMethodRegraValuesAnd(Number locValue, Number cycloValue,
 			ArrayList<Boolean> longMethodRuleValues) {
 		for (int i = 0; i < this.locValues.size(); i++) {
 			longMethodRuleValues.add(
-					((this.locValues.get(i) > (Integer) LOCValue) && (this.cycloValues.get(i) > (Integer) CYCLOValue)));
+					((this.locValues.get(i) > (Integer) locValue) && (this.cycloValues.get(i) > (Integer) cycloValue)));
 		}
 		return longMethodRuleValues;
 
@@ -376,16 +375,16 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Generates LongMethod Rule Values based on Or Condition
 	 * 
-	 * @param LOCValue
-	 * @param CYCLOValue
+	 * @param locValue
+	 * @param cycloValue
 	 * @param longMethodRuleValues
 	 * @return longMethodRuleValues
 	 */
-	public ArrayList<Boolean> generateLongMethodRegraValuesOr(Number LOCValue, Number CYCLOValue,
+	public ArrayList<Boolean> generateLongMethodRegraValuesOr(Number locValue, Number cycloValue,
 			ArrayList<Boolean> longMethodRuleValues) {
 		for (int i = 0; i < this.locValues.size(); i++) {
 			longMethodRuleValues.add(
-					((this.locValues.get(i) > (Integer) LOCValue) || (this.cycloValues.get(i) > (Integer) CYCLOValue)));
+					((this.locValues.get(i) > (Integer) locValue) || (this.cycloValues.get(i) > (Integer) cycloValue)));
 		}
 		return longMethodRuleValues;
 	}
@@ -408,17 +407,17 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Generates FeatureEnvy Rule Values based on And Condition
 	 * 
-	 * @param ATFDValue
-	 * @param LAAValue
+	 * @param atfdValue
+	 * @param laaValue
 	 * @param featureEnvyRuleValues
 	 * @return featureEnvyRuleValues
 	 * 
 	 */
-	public ArrayList<Boolean> generateFeatureEnvyRegraValuesAnd(Number ATFDValue, Number LAAValue,
+	public ArrayList<Boolean> generateFeatureEnvyRegraValuesAnd(Number atfdValue, Number laaValue,
 			ArrayList<Boolean> featureEnvyRuleValues) {
 		for (int i = 0; i < this.locValues.size(); i++) {
 			featureEnvyRuleValues.add(
-					((this.atfdValues.get(i) > (Integer) ATFDValue) && (this.laaValues.get(i) < (Double) LAAValue)));
+					((this.atfdValues.get(i) > (Integer) atfdValue) && (this.laaValues.get(i) < (Double) laaValue)));
 		}
 		return featureEnvyRuleValues;
 
@@ -427,17 +426,17 @@ public class Comparador_de_Qualidade extends JDialog {
 	/**
 	 * Generates FeatureEnvy Rule Values based on Or Condition
 	 * 
-	 * @param ATFDValue
-	 * @param LAAValue
+	 * @param atfdValue
+	 * @param laaValue
 	 * @param featureEnvyRuleValues
 	 * @return featureEnvyRuleValues
 	 * 
 	 */
-	public ArrayList<Boolean> generateFeatureEnvyRegraValuesOr(Number ATFDValue, Number LAAValue,
+	public ArrayList<Boolean> generateFeatureEnvyRegraValuesOr(Number atfdValue, Number laaValue,
 			ArrayList<Boolean> featureEnvyRuleValues) {
 		for (int i = 0; i < this.locValues.size(); i++) {
 			featureEnvyRuleValues.add(
-					((this.atfdValues.get(i) > (Integer) ATFDValue) || (this.laaValues.get(i) < (Double) LAAValue)));
+					((this.atfdValues.get(i) > (Integer) atfdValue) || (this.laaValues.get(i) < (Double) laaValue)));
 		}
 		return featureEnvyRuleValues;
 
@@ -491,6 +490,9 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	}
 
+	/**
+	 * creates Indicator Table
+	 */
 	public void createIndicatorTable() {
 		String[] col = new String[3];
 		col[0] = "";
@@ -524,6 +526,9 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	}
 
+	/**
+	 * Generates Columns for each User Rule at Indicators Table
+	 */
 	public void columnForEachRegra() {
 		if (!regras.isEmpty()) {
 			for (int i = tableModel2.getColumnCount() - 3; i != regras.size(); i++) {
@@ -585,13 +590,9 @@ public class Comparador_de_Qualidade extends JDialog {
 	 */
 	public void calculateIndicadoresPMDiPlasma() {
 		ArrayList<Boolean> longMethodValues = this.longMethodValues;
-		int DCI = 0;
-		int DII = 0;
-		int ADCI = 0;
-		int ADII = 0;
 		for (int i = 0; i < longMethodValues.size(); i++) {
-			this.indicadoresiPlasma = calculateIndicadoresiPlasma(longMethodValues, DCI, DII, ADCI, ADII);
-			this.indicadoresPMD = calculateIndicadoresPMD(longMethodValues, DCI, DII, ADCI, ADII);
+			this.indicadoresiPlasma = calculateIndicadoresiPlasma(longMethodValues, 0, 0, 0, 0);
+			this.indicadoresPMD = calculateIndicadoresPMD(longMethodValues, 0, 0, 0, 0);
 		}
 	}
 
@@ -599,31 +600,31 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Calcula indicadores de qualidade iplasma
 	 * 
 	 * @param longMethodValues
-	 * @param DCI
-	 * @param DII
-	 * @param ADCI
-	 * @param ADII
+	 * @param dci
+	 * @param dii
+	 * @param adci
+	 * @param adii
 	 * @return indicadoresiPlasma
 	 */
-	public Integer[] calculateIndicadoresiPlasma(ArrayList<Boolean> longMethodValues, int DCI, int DII, int ADCI,
-			int ADII) {
+	public Integer[] calculateIndicadoresiPlasma(ArrayList<Boolean> longMethodValues, int dci, int dii, int adci,
+			int adii) {
 		ArrayList<Boolean> iPlasmaValues = this.iplasmaValues;
 		Integer[] indicadoresiPlasma = this.indicadoresiPlasma;
 		for (int i = 0; i < longMethodValues.size(); i++) {
 			if (iPlasmaValues.get(i) && longMethodValues.get(i)) {
-				DCI++;
+				dci++;
 			} else if (!iPlasmaValues.get(i) && longMethodValues.get(i)) {
-				DII++;
+				dii++;
 			} else if (!iPlasmaValues.get(i) && !longMethodValues.get(i)) {
-				ADCI++;
+				adci++;
 			} else if (iPlasmaValues.get(i) && !longMethodValues.get(i)) {
-				ADII++;
+				adii++;
 			}
 		}
-		indicadoresiPlasma[0] = DCI;
-		indicadoresiPlasma[1] = DII;
-		indicadoresiPlasma[2] = ADCI;
-		indicadoresiPlasma[3] = ADII;
+		indicadoresiPlasma[0] = dci;
+		indicadoresiPlasma[1] = dii;
+		indicadoresiPlasma[2] = adci;
+		indicadoresiPlasma[3] = adii;
 		return indicadoresiPlasma;
 	}
 
@@ -631,31 +632,31 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Calcula indicadores de qualidade PMD
 	 * 
 	 * @param longMethodValues
-	 * @param DCI
-	 * @param DII
-	 * @param ADCI
-	 * @param ADII
+	 * @param dci
+	 * @param dii
+	 * @param adci
+	 * @param adii
 	 * @return indicadoresPMD
 	 */
-	public Integer[] calculateIndicadoresPMD(ArrayList<Boolean> longMethodValues, int DCI, int DII, int ADCI,
-			int ADII) {
+	public Integer[] calculateIndicadoresPMD(ArrayList<Boolean> longMethodValues, int dci, int dii, int adci,
+			int adii) {
 		ArrayList<Boolean> PMDValues = this.pmdValues;
 		Integer[] indicadoresPMD = this.indicadoresPMD;
 		for (int i = 0; i < longMethodValues.size(); i++) {
 			if (PMDValues.get(i) && longMethodValues.get(i)) {
-				DCI++;
+				dci++;
 			} else if (!PMDValues.get(i) && longMethodValues.get(i)) {
-				DII++;
+				dii++;
 			} else if (!PMDValues.get(i) && !longMethodValues.get(i)) {
-				ADCI++;
+				adci++;
 			} else if (PMDValues.get(i) && !longMethodValues.get(i)) {
-				ADII++;
+				adii++;
 			}
 		}
-		indicadoresPMD[0] = DCI;
-		indicadoresPMD[1] = DII;
-		indicadoresPMD[2] = ADCI;
-		indicadoresPMD[3] = ADII;
+		indicadoresPMD[0] = dci;
+		indicadoresPMD[1] = dii;
+		indicadoresPMD[2] = adci;
+		indicadoresPMD[3] = adii;
 		return indicadoresPMD;
 	}
 
@@ -663,13 +664,9 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Starts collection of Long Method User Rules quality Indicadores
 	 */
 	public void calculateIndicadoresLongMethod() {
-		int DCI = 0;
-		int DII = 0;
-		int ADCI = 0;
-		int ADII = 0;
 		for (Regra regra : this.longMethodRegrasValues.keySet()) {
 			this.indicadoresRegrasUtilizador.put(regra,
-					calculateIndicadoresLongMethodRegras(regra, DCI, DII, ADCI, ADII));
+					calculateIndicadoresLongMethodRegras(regra, 0, 0, 0, 0));
 		}
 	}
 
@@ -708,13 +705,9 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Starts collection of Feature Envy Rules quality Indicadores
 	 */
 	public void calculateIndicadoresFeatureEnvy() {
-		int DCI = 0;
-		int DII = 0;
-		int ADCI = 0;
-		int ADII = 0;
 		for (Regra regra : this.featureEnvyRegrasValues.keySet()) {
 			this.indicadoresRegrasUtilizador.put(regra,
-					calculateIndicadoresFeatureEnvyRegras(regra, DCI, DII, ADCI, ADII));
+					calculateIndicadoresFeatureEnvyRegras(regra, 0, 0, 0, 0));
 		}
 	}
 
@@ -722,30 +715,30 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Calcula indicadores de qualidade Feature Envy Regras Utilizador
 	 * 
 	 * @param regra
-	 * @param DCI
-	 * @param DII
-	 * @param ADCI
-	 * @param ADII
+	 * @param D`CI
+	 * @param dii
+	 * @param adci
+	 * @param adii
 	 * @return indicadores
 	 */
-	public ArrayList<Integer> calculateIndicadoresFeatureEnvyRegras(Regra regra, int DCI, int DII, int ADCI, int ADII) {
+	public ArrayList<Integer> calculateIndicadoresFeatureEnvyRegras(Regra regra, int dci, int dii, int adci, int adii) {
 		ArrayList<Integer> indicadores = new ArrayList<Integer>();
 		ArrayList<Boolean> regraValues = this.featureEnvyRegrasValues.get(regra);
 		for (int j = 0; j < featureEnvyValues.size(); j++) {
 			if (regraValues.get(j) && featureEnvyValues.get(j)) {
-				DCI++;
+				dci++;
 			} else if (!regraValues.get(j) && featureEnvyValues.get(j)) {
-				DII++;
+				dii++;
 			} else if (!regraValues.get(j) && !featureEnvyValues.get(j)) {
-				ADCI++;
+				adci++;
 			} else if (regraValues.get(j) && !featureEnvyValues.get(j)) {
-				ADII++;
+				adii++;
 			}
 		}
-		indicadores.add(DCI);
-		indicadores.add(DII);
-		indicadores.add(ADCI);
-		indicadores.add(ADII);
+		indicadores.add(dci);
+		indicadores.add(dii);
+		indicadores.add(adci);
+		indicadores.add(adii);
 		return indicadores;
 	}
 

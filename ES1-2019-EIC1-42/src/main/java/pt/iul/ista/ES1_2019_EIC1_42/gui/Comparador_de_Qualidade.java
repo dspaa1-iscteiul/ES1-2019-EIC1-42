@@ -613,11 +613,11 @@ public class Comparador_de_Qualidade extends JDialog {
 		for (int i = 0; i < longMethodValues.size(); i++) {
 			if (iPlasmaValues.get(i) && longMethodValues.get(i)) {
 				dci++;
-			} else if (!iPlasmaValues.get(i) && longMethodValues.get(i)) {
+			} else if (iPlasmaValues.get(i) && !longMethodValues.get(i)) {
 				dii++;
 			} else if (!iPlasmaValues.get(i) && !longMethodValues.get(i)) {
 				adci++;
-			} else if (iPlasmaValues.get(i) && !longMethodValues.get(i)) {
+			} else if (!iPlasmaValues.get(i) && longMethodValues.get(i)) {
 				adii++;
 			}
 		}
@@ -645,11 +645,11 @@ public class Comparador_de_Qualidade extends JDialog {
 		for (int i = 0; i < longMethodValues.size(); i++) {
 			if (PMDValues.get(i) && longMethodValues.get(i)) {
 				dci++;
-			} else if (!PMDValues.get(i) && longMethodValues.get(i)) {
+			} else if (PMDValues.get(i) && !longMethodValues.get(i)) {
 				dii++;
 			} else if (!PMDValues.get(i) && !longMethodValues.get(i)) {
 				adci++;
-			} else if (PMDValues.get(i) && !longMethodValues.get(i)) {
+			} else if (!PMDValues.get(i) && longMethodValues.get(i)) {
 				adii++;
 			}
 		}
@@ -686,11 +686,11 @@ public class Comparador_de_Qualidade extends JDialog {
 		for (int j = 0; j < longMethodValues.size(); j++) {
 			if (regraValues.get(j) && longMethodValues.get(j)) {
 				dci++;
-			} else if (!regraValues.get(j) && longMethodValues.get(j)) {
+			} else if (regraValues.get(j) && !longMethodValues.get(j)) {
 				dii++;
 			} else if (!regraValues.get(j) && !longMethodValues.get(j)) {
 				adci++;
-			} else if (regraValues.get(j) && !longMethodValues.get(j)) {
+			} else if (!regraValues.get(j) && longMethodValues.get(j)) {
 				adii++;
 			}
 		}
@@ -727,11 +727,11 @@ public class Comparador_de_Qualidade extends JDialog {
 		for (int j = 0; j < featureEnvyValues.size(); j++) {
 			if (regraValues.get(j) && featureEnvyValues.get(j)) {
 				dci++;
-			} else if (!regraValues.get(j) && featureEnvyValues.get(j)) {
+			} else if (regraValues.get(j) && !featureEnvyValues.get(j)) {
 				dii++;
 			} else if (!regraValues.get(j) && !featureEnvyValues.get(j)) {
 				adci++;
-			} else if (regraValues.get(j) && !featureEnvyValues.get(j)) {
+			} else if (!regraValues.get(j) && featureEnvyValues.get(j)) {
 				adii++;
 			}
 		}

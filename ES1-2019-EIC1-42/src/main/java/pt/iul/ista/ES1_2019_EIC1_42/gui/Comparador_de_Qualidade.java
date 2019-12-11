@@ -461,8 +461,10 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * @param regra - regra que deve ser removida
 	 */
 	public void removeRegra(Regra regra) {
-		tableModelResultados.removeColumn(regra.getNome());
-		tableModelIndicadores.removeColumn(regra.getNome());
+		if (regra != null) {
+			tableModelResultados.removeColumn(regra.getNome());
+			tableModelIndicadores.removeColumn(regra.getNome());
+		}
 	}
 
 	/**
@@ -513,6 +515,14 @@ public class Comparador_de_Qualidade extends JDialog {
 		if (INSTANCE == null)
 			INSTANCE = new Comparador_de_Qualidade();
 		return INSTANCE;
+	}
+
+	public ArrayList<Regra> getRegras() {
+		return regras;
+	}
+
+	public HashMap<Regra, ArrayList<Integer>> getIndicadoresRegrasUtilizador() {
+		return indicadoresRegrasUtilizador;
 	}
 
 }

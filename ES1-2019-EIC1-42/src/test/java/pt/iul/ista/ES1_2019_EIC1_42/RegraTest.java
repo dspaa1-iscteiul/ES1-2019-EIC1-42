@@ -118,5 +118,29 @@ public class RegraTest {
 				+ r.getValor_2() + "] - feature_envy";
 		assertEquals(s,r.toString());
 	}
+	
+	@Test
+	public void testIsLongMethodRule() {
+		assertFalse(r.isLongMethodRule());
+		r.setMetrica_1(Metrica.LOC);
+		r.setMetrica_2(Metrica.CYCLO);
+		assertTrue(r.isLongMethodRule());
+	}
+	
+	@Test
+	public void testIsFeatureEnvyRule() {
+		assertTrue(r.isFeautureEnvyRule());
+		r.setMetrica_1(Metrica.LOC);
+		r.setMetrica_2(Metrica.CYCLO);
+		assertFalse(r.isFeautureEnvyRule());
+	}
+	
+	@Test
+	public void testHashCode() {
+		Regra s=new Regra("regra", Metrica.ATFD, Metrica.LAA, 20, 30, Logic_And_Or.AND);
+		Regra t=new Regra("regra1",Metrica.LOC, Metrica.CYCLO, 22,33, Logic_And_Or.OR);
+		assertEquals(r.hashCode(), s.hashCode());
+		assertNotEquals(r.hashCode(), t.hashCode());
+	}
 
 }	

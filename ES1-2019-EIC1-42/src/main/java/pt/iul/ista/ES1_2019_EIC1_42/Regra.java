@@ -69,6 +69,30 @@ public class Regra {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
+	/**
+	 * 
+	 * @return true se essa é uma regra do tipo Long_Method </br>
+	 * 		   false caso contrário
+	 */
+	public boolean isLongMethodRule() {
+		if(getMetrica_1()==Metrica.LOC && getMetrica_2()==Metrica.CYCLO)
+			return true;
+		else
+			return false;
+	}
+	
+	/**
+	 * 
+	 * @return true se essa é uma regra do tipo FeautureEnvy </br>
+	 * 		   false caso contrário
+	 */
+	public boolean isFeautureEnvyRule() {
+		if(getMetrica_1()==Metrica.ATFD && getMetrica_2()==Metrica.LAA)
+			return true;
+		else
+			return false;
+	}
 
 	@Override
 	public int hashCode() {
@@ -115,13 +139,12 @@ public class Regra {
 		String parte1 = "Regra '" + nome + "' [" + metrica_1 + ">" + valor_1 + " " + logico.name() + " " + metrica_2;
 		String sinal = ">";
 		String tipo = "long_method";
-		if(metrica_2==Metrica.LAA) {
+		if(isFeautureEnvyRule()) {
 			sinal = "<";
 			tipo = "feature_envy";
 		}
 			
-		return parte1 + sinal + valor_2 +"] - " + tipo;
-			
+		return parte1 + sinal + valor_2 +"] - " + tipo;	
 	}
 	
 	 

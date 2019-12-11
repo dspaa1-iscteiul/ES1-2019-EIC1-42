@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
@@ -28,31 +29,11 @@ public class ExcelData extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 5646410931104674210L;
-	private JPanel contentPane, excel_panel;
+	private JPanel contentPane, excel_panel, info_panel;
 	private JTable table;
 	private JMenuBar menuBar;
 	private JMenu mnFicheiro;
-	private JMenu mnAjuda;
-	private JMenuItem mntmImportarExcel;
-	private JMenuItem mntmNovaRegra;
-	private JMenuItem mntmComparador;
-	private JMenuItem mntmSobre;
-
-//	/**
-//	 * Launch the application.
-//	 */
-//	public void start() {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ExcelData frame = new ExcelData();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+	private JMenuItem mImportarExcel, mNovaRegra, mComparador;
 
 	/**
 	 * Create the frame.
@@ -61,7 +42,7 @@ public class ExcelData extends JFrame {
 		initContentPanel();
 		initTable();
 
-		JPanel info_panel = new JPanel();
+		info_panel = new JPanel();
 		contentPane.add(info_panel, BorderLayout.SOUTH);
 
 	}
@@ -101,15 +82,12 @@ public class ExcelData extends JFrame {
 				try {
 					tip = getValueAt(rowIndex, colIndex).toString();
 				} catch (RuntimeException e1) {
-					// catch null pointer exception if mouse is over an empty line
+					tip = "";
 				}
-
 				return tip;
 			}
 		};
 		table.getTableHeader().setReorderingAllowed(false);
-
-		table.setModel(DataModel.getInstance());
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -127,42 +105,43 @@ public class ExcelData extends JFrame {
 		mnFicheiro = new JMenu("Ficheiro");
 		menuBar.add(mnFicheiro);
 
-		mntmImportarExcel = new JMenuItem("Importar Excel");
-		mnFicheiro.add(mntmImportarExcel);
+		mImportarExcel = new JMenuItem("Importar Excel");
+		mnFicheiro.add(mImportarExcel);
 
-		mntmImportarExcel.addActionListener(new ActionListener() {
+		mImportarExcel.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				table.setModel(DataModel.newInstance());
 			}
 		});
 
-		mntmNovaRegra = new JMenuItem("Nova Regra / Gerir Regras");
-		mnFicheiro.add(mntmNovaRegra);
+		mNovaRegra = new JMenuItem("Nova Regra / Gerir Regras");
+		mnFicheiro.add(mNovaRegra);
 
-		mntmNovaRegra.addActionListener(new ActionListener() {
+		mNovaRegra.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				new Nova_Regra().open();
 			}
 		});
 
-		mntmComparador = new JMenuItem("Comparador");
-		mnFicheiro.add(mntmComparador);
+		mComparador = new JMenuItem("Comparador");
+		mnFicheiro.add(mComparador);
 
-		mntmComparador.addActionListener(new ActionListener() {
+		mComparador.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				Comparador_de_Qualidade.getInstance().open();
 			}
 		});
-
-		mnAjuda = new JMenu("Ajuda");
-		menuBar.add(mnAjuda);
-
-		mntmSobre = new JMenuItem("Sobre");
-		mnAjuda.add(mntmSobre);
 	}
+	
+	public void openFile() {
+		DataModel.getInstance().addFile();
+		table.setModel(DataModel.getInstance());
+		info_panel.add(new JLabel(DataModel.getInstance().getRowCount() + " métodos"));
+		setVisible(true);
+		}
 
 	/**
 	 * 

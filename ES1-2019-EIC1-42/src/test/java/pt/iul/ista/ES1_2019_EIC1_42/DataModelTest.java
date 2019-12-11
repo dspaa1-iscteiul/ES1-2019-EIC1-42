@@ -5,9 +5,6 @@ package pt.iul.ista.ES1_2019_EIC1_42;
 
 import static org.junit.Assert.*;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import org.apache.poi.EncryptedDocumentException;
@@ -31,22 +28,7 @@ public class DataModelTest {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		new Thread(new Runnable() {
-
-			public void run() {
-				try {
-					Robot r = new Robot();
-					r.delay(1000);
-					r.keyPress(KeyEvent.VK_ESCAPE);
-				} catch (AWTException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		}).start();
-		ntable = DataModel.getInstance();
-		table = DataModel.newInstance();
+		
 	}
 
 	/**
@@ -194,28 +176,6 @@ public class DataModelTest {
 	@Test
 	public void testGetInstance() {
 		assertTrue(DataModel.getInstance() != null);
-	}
-
-	/**
-	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.DataModel#fileChooser()}.
-	 */
-	@Test
-	public void testFileChooser_null() {
-		new Thread(new Runnable() {
-
-			public void run() {
-				try {
-					Robot r = new Robot();
-					r.delay(1000);
-					r.keyPress(KeyEvent.VK_ESCAPE);
-				} catch (AWTException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-		}).start();
-		assertNull(ntable.fileChooser());
 	}
 
 }

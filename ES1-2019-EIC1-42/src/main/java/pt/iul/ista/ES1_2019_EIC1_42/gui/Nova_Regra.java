@@ -62,7 +62,7 @@ public class Nova_Regra extends JDialog {
 	 * Create the dialog.
 	 */
 	public Nova_Regra() {
-		
+
 		initPanel();
 		initComponents();
 	}
@@ -97,7 +97,7 @@ public class Nova_Regra extends JDialog {
 	 * Inicializa outros componentes.
 	 */
 	private void initOthers() {
-		
+
 		save = new JButton("Salvar");
 		save.setBounds(375, 255, 100, 25);
 		contentPanel.add(save);
@@ -127,7 +127,7 @@ public class Nova_Regra extends JDialog {
 	 * Inicializa os componentes do tipo JLabel
 	 */
 	private void initLabels() {
-		
+
 		label_maior_que = new JLabel(">");
 		label_maior_que.setBounds(95, 81, 30, 20);
 		label_maior_que.setHorizontalAlignment(SwingConstants.CENTER);
@@ -152,7 +152,7 @@ public class Nova_Regra extends JDialog {
 	 * Inicializa os combonentes do tipo JComboBox
 	 */
 	private void initComboBoxes() {
-		
+
 		metrics_1 = new JComboBox<Metrica>();
 		metrics_1.setEnabled(false);
 		metrics_1.setBounds(10, 82, 85, 20);
@@ -184,7 +184,7 @@ public class Nova_Regra extends JDialog {
 	 * Inicializa os componentes do tipo JSpinner
 	 */
 	private void initSpinners() {
-		
+
 		spinner_metric_1 = new JSpinner();
 		spinner_metric_1.setBounds(125, 82, 70, 20);
 		spinner_metric_1.setModel(new SpinnerNumberModel(0, 0, null, 1));
@@ -201,7 +201,7 @@ public class Nova_Regra extends JDialog {
 	 * Adiciona listeners para os diversos componentes que é preciso
 	 */
 	private void addListeners() {
-		
+
 		type.addItemListener(new ItemListener() {
 
 			@Override
@@ -222,7 +222,7 @@ public class Nova_Regra extends JDialog {
 		});
 
 		regrasList.addMouseListener(new MouseAdapter() {
-			
+
 			@Override
 			public void mouseClicked(MouseEvent me) {
 				if (SwingUtilities.isRightMouseButton(me)) {
@@ -244,9 +244,10 @@ public class Nova_Regra extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (!regrasList.isSelectionEmpty()) {
-					if (e.getKeyCode() == KeyEvent.VK_DELETE)
+					if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+						Comparador_de_Qualidade.getInstance().removeRegra(regrasList.getSelectedValue());
 						RegrasModel.getInstance().removeRegra(regrasList.getSelectedValue());
-					else if (e.getKeyCode() == KeyEvent.VK_ENTER)
+					} else if (e.getKeyCode() == KeyEvent.VK_ENTER)
 						preencher(regrasList.getSelectedValue());
 				}
 			}
@@ -269,13 +270,14 @@ public class Nova_Regra extends JDialog {
 				if (regra != null && regra == regrasList.getSelectedValue()) {
 					reset();
 				}
+				Comparador_de_Qualidade.getInstance().removeRegra(regrasList.getSelectedValue());
 				RegrasModel.getInstance().removeRegra(regrasList.getSelectedValue());
 
 			}
 		});
 
 		save.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				salvarRegra();
@@ -298,7 +300,8 @@ public class Nova_Regra extends JDialog {
 				Regra r = new Regra(nome.getText(), (Metrica) metrics_1.getSelectedItem(),
 						(Metrica) metrics_2.getSelectedItem(), (Number) spinner_metric_1.getValue(),
 						(Number) spinner_metric_2.getValue(), (Logic_And_Or) logic_1.getSelectedItem());
-				if (!RegrasModel.getInstance().addRegra(r))
+				if (Comparador_de_Qualidade.getInstance().existsRuleWithName(r.getNome())
+						|| !RegrasModel.getInstance().addRegra(r))
 					JOptionPane.showMessageDialog(this, "A regra já existe!", "Regra já existe",
 							JOptionPane.ERROR_MESSAGE);
 				else {
@@ -307,9 +310,10 @@ public class Nova_Regra extends JDialog {
 							"Regra criada com sucesso! Queres testar a fiabilidade dessa regra, em comparação com as outras?",
 							"Regra criada", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
 							options[0]);
-					if (ok == JOptionPane.YES_OPTION) {
+					if (ok == JOptionPane.YES_OPTION)
 						Comparador_de_Qualidade.getInstance().open();
-					}
+					else
+						Comparador_de_Qualidade.getInstance().atualizar();
 					reset();
 				}
 			} catch (ClassCastException e) {
@@ -327,27 +331,34 @@ public class Nova_Regra extends JDialog {
 			JOptionPane.showMessageDialog(this, "Escreve um nome para a regra!", "Nome vazio",
 					JOptionPane.ERROR_MESSAGE);
 		else {
-			try {
-				regra.setNome(nome.getText());
-				regra.setMetrica_1((Metrica) metrics_1.getSelectedItem());
-				regra.setMetrica_2((Metrica) metrics_2.getSelectedItem());
-				regra.setValor_1((Number) spinner_metric_1.getValue());
-				regra.setValor_2((Number) spinner_metric_2.getValue());
-				regra.setLogico((Logic_And_Or) logic_1.getSelectedItem());
-				RegrasModel.getInstance().atualizar(regra);
-				String[] options = new String[] { "Sim", "Não" };
-				int ok = JOptionPane.showOptionDialog(this,
-						"Regra salva com sucesso! Queres testar a fiabilidade dessa regra, em comparação com as outras?",
-						"Regra salva", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
-						options[0]);
-				if (ok == JOptionPane.YES_OPTION) {
-					Comparador_de_Qualidade.getInstance().open();
+			if (!nome.getText().equals(regra.getNome())
+					&& Comparador_de_Qualidade.getInstance().existsRuleWithName(nome.getText()))
+				JOptionPane.showMessageDialog(this, "Esse nome já existe! Escreve outro nome para a regra.",
+						"Nome já existe", JOptionPane.ERROR_MESSAGE);
+			else {
+				try {
+					Comparador_de_Qualidade.getInstance().mudarNomedaRegra(regra, nome.getText());
+					regra.setNome(nome.getText());
+					regra.setMetrica_1((Metrica) metrics_1.getSelectedItem());
+					regra.setMetrica_2((Metrica) metrics_2.getSelectedItem());
+					regra.setValor_1((Number) spinner_metric_1.getValue());
+					regra.setValor_2((Number) spinner_metric_2.getValue());
+					regra.setLogico((Logic_And_Or) logic_1.getSelectedItem());
+					RegrasModel.getInstance().atualizar(regra);
+					String[] options = new String[] { "Sim", "Não" };
+					int ok = JOptionPane.showOptionDialog(this,
+							"Regra salva com sucesso! Queres testar a fiabilidade dessa regra, em comparação com as outras?",
+							"Regra salva", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,
+							options[0]);
+					if (ok == JOptionPane.YES_OPTION) {
+						Comparador_de_Qualidade.getInstance().open();
+					}
+					reset();
+					regrasList.setSelectedIndex(-1);
+				} catch (ClassCastException | NullPointerException e) {
+					JOptionPane.showMessageDialog(this, "Erro ao salvar alterações! Nenhuma regra selecionada!",
+							"Exception", JOptionPane.ERROR_MESSAGE);
 				}
-				reset();
-				regrasList.setSelectedIndex(-1);
-			} catch (ClassCastException | NullPointerException e) {
-				JOptionPane.showMessageDialog(this, "Erro ao salvar alterações! Nenhuma regra selecionada!",
-						"Exception", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -406,8 +417,10 @@ public class Nova_Regra extends JDialog {
 	public void open() {
 		setVisible(true);
 	}
+
 	/**
 	 * ActionListener para o modo "Nova Regra"
+	 * 
 	 * @author dariop
 	 *
 	 */
@@ -418,8 +431,10 @@ public class Nova_Regra extends JDialog {
 		}
 
 	}
+
 	/**
 	 * ActionListener para o modo de edição
+	 * 
 	 * @author dariop
 	 *
 	 */

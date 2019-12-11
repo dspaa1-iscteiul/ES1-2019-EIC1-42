@@ -10,7 +10,6 @@ import pt.iul.ista.ES1_2019_EIC1_42.gui.Nova_RegraTest;
 @RunWith(Suite.class)
 @SuiteClasses({
 	AppTest.class,
-	Comparador_de_QualidadeTest.class,
 	DataModelTest.class,
 	ExcelDataTest.class,
 	MetodoTest.class,

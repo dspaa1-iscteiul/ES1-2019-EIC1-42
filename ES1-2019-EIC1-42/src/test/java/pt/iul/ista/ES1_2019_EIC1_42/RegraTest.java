@@ -114,8 +114,8 @@ public class RegraTest {
 	
 	@Test
 	public void testToString() {
-		String s="Regra '" + r.getNome() + "' [" + r.getMetrica_1() + ">" + r.getValor_1() + " " + r.getLogico().name() + " " + r.getMetrica_2() + ">"
-				+ r.getValor_2() + "]";
+		String s="Regra '" + r.getNome() + "' [" + r.getMetrica_1() + ">" + r.getValor_1() + " " + r.getLogico().name() + " " + r.getMetrica_2() + "<"
+				+ r.getValor_2() + "] - feature_envy";
 		assertEquals(s,r.toString());
 	}
 

@@ -27,38 +27,29 @@ public class DataModel extends AbstractTableModel {
 	 * 
 	 */
 	private static final long serialVersionUID = -4220550076295049347L;
-	private ArrayList<Metodo> metodos = new ArrayList<Metodo>();
 	private static DataModel INSTANCE;
 	private Sheet sheet;
 
 	private DataModel() {
-		addFile();
 	}
-	
+
 	/**
 	 * Abre o filechooser para escolher o ficheiro Excel
 	 */
-	
+
 	public void addFile() {
 		Workbook workbook;
 		try {
 			workbook = WorkbookFactory.create(fileChooser());
 			sheet = workbook.getSheetAt(0);
-		} catch (EncryptedDocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NullPointerException e) {
+		} catch (NullPointerException | InvalidFormatException | IOException e) {
 			System.out.println("Ficheiro não aberto!");
-		} catch (InvalidFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.exit(0);
 		}
 	}
 
-	public void getContent() throws EncryptedDocumentException, InvalidFormatException, IOException {
+	public ArrayList<Metodo> getContent() throws EncryptedDocumentException, InvalidFormatException, IOException {
+		ArrayList<Metodo> metodos = new ArrayList<Metodo>();
 		if (sheet != null) {
 			DataFormatter dataFormatter = new DataFormatter();
 			int j = 1;
@@ -81,11 +72,11 @@ public class DataModel extends AbstractTableModel {
 				metodos.add(met);
 				j++;
 			}
-			
 		}
+		return metodos;
 	}
-	
 
+	@Override
 	public int getColumnCount() {
 		if (sheet != null) {
 			int last_cell = sheet.getRow(0).getLastCellNum();
@@ -95,6 +86,7 @@ public class DataModel extends AbstractTableModel {
 		}
 	}
 
+	@Override
 	public int getRowCount() {
 		if (sheet != null) {
 			return sheet.getLastRowNum();
@@ -113,14 +105,13 @@ public class DataModel extends AbstractTableModel {
 		}
 	}
 
+	@Override
 	public Object getValueAt(int arg0, int arg1) {
 		if (sheet != null) {
 			DataFormatter dataFormatter = new DataFormatter();
 			arg0++;
 			Cell cell = sheet.getRow(arg0).getCell(arg1);
-//		if(arg0 == 0) {
-//			return cell.getStringCellValue();
-//		}
+
 			switch (arg1) {
 			case 0:
 				return (int) cell.getNumericCellValue();
@@ -143,17 +134,30 @@ public class DataModel extends AbstractTableModel {
 		}
 
 	}
-	
+
+	/**
+	 * 
+	 * @return a Instance of this class
+	 */
 	public static DataModel getInstance() {
 		if (INSTANCE == null)
 			INSTANCE = new DataModel();
 		return INSTANCE;
 	}
+
+	/**
+	 * 
+	 * @return a new Instance of this class
+	 */
 	public static DataModel newInstance() {
 		INSTANCE = new DataModel();
 		return INSTANCE;
 	}
-	
+
+	/**
+	 * Abre um seletor de ficheiros para o utilizador poder abrir um ficheiro do tipo Excel
+	 * @return o ficheiro selecionado pelo utilizador (null se não foi selecionado nenhum)
+	 */
 	public File fileChooser() {
 		JFileChooser filechooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Excel File", "xlsx", "excel");
@@ -163,10 +167,4 @@ public class DataModel extends AbstractTableModel {
 		File excelfile = filechooser.getSelectedFile();
 		return excelfile;
 	}
-	
-	public ArrayList<Metodo> getMetodos() {
-		int i=metodos.size();
-		System.out.println(i);
-		return metodos;
-		}
 }

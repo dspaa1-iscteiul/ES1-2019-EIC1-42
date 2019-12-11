@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import pt.iul.ista.ES1_2019_EIC1_42.App;
 import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
 import pt.iul.ista.ES1_2019_EIC1_42.Metrica;
 import pt.iul.ista.ES1_2019_EIC1_42.Regra;
@@ -20,7 +19,6 @@ public class Comparador_de_QualidadeTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		App.main(null);
 		comparador = Comparador_de_Qualidade.getInstance();
 	}
 

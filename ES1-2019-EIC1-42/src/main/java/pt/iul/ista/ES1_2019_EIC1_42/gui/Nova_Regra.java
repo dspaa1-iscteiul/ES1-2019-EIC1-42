@@ -53,7 +53,7 @@ public class Nova_Regra extends JDialog {
 	private JLabel label_maior_que, label_menor_que;
 	private JButton save;
 	private JTextField nome;
-	private JComboBox<String> type;
+	private JComboBox<String> tipo;
 	private JList<Regra> regrasList;
 	private RegrasModel regras;
 	private Regra regra;
@@ -172,11 +172,11 @@ public class Nova_Regra extends JDialog {
 		contentPanel.add(logic_1);
 		logic_1.setModel(new DefaultComboBoxModel<Logic_And_Or>(Logic_And_Or.values()));
 
-		type = new JComboBox<String>();
-		type.setModel(new DefaultComboBoxModel<String>(new String[] { "long method", "feature envy" }));
-		type.setSelectedIndex(0);
-		type.setBounds(10, 45, 150, 20);
-		contentPanel.add(type);
+		tipo = new JComboBox<String>();
+		tipo.setModel(new DefaultComboBoxModel<String>(new String[] { "long method", "feature envy" }));
+		tipo.setSelectedIndex(0);
+		tipo.setBounds(10, 45, 150, 20);
+		contentPanel.add(tipo);
 
 	}
 
@@ -202,16 +202,16 @@ public class Nova_Regra extends JDialog {
 	 */
 	private void addListeners() {
 
-		type.addItemListener(new ItemListener() {
+		tipo.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				if (type.getSelectedIndex() == 0) {
+				if (tipo.getSelectedIndex() == 0) {
 					metrics_1.setSelectedIndex(0);
 					metrics_2.setSelectedIndex(1);
 					spinner_metric_2.setModel(new SpinnerNumberModel(0, 0, null, 1));
 					label_menor_que.setText(">");
-				} else if (type.getSelectedIndex() == 1) {
+				} else if (tipo.getSelectedIndex() == 1) {
 					metrics_1.setSelectedIndex(2);
 					metrics_2.setSelectedIndex(3);
 					spinner_metric_2.setModel(new SpinnerNumberModel(0, 0, 1, 0.1));
@@ -253,7 +253,7 @@ public class Nova_Regra extends JDialog {
 			}
 
 		});
-
+		
 		mEditar.addActionListener(new ActionListener() {
 
 			@Override
@@ -370,19 +370,23 @@ public class Nova_Regra extends JDialog {
 	 * @param regra regra que se pretende editar
 	 */
 	public void preencher(Regra regra) {
+		try {
 		this.regra = regra;
 		setTitle(regra.getNome());
 		nome.setText(regra.getNome());
 		if (regra.getMetrica_1() == Metrica.LOC)
-			type.setSelectedIndex(0);
+			tipo.setSelectedIndex(0);
 		else
-			type.setSelectedIndex(1);
+			tipo.setSelectedIndex(1);
 		spinner_metric_1.setValue(regra.getValor_1());
 		spinner_metric_2.setValue(regra.getValor_2());
 		logic_1.setSelectedItem(regra.getLogico());
 
 		removeActionListenersFromSaveButton();
 		save.addActionListener(new SaveListenerEdit());
+		} catch (NullPointerException e) {
+			System.out.println("Alguma coisa correu mal...");
+		}
 
 	}
 
@@ -392,7 +396,7 @@ public class Nova_Regra extends JDialog {
 	public void reset() {
 		setTitle("Nova Regra");
 		nome.setText("");
-		type.setSelectedIndex(0);
+		tipo.setSelectedIndex(0);
 		spinner_metric_1.setValue(0);
 		spinner_metric_2.setValue(0);
 		logic_1.setSelectedIndex(0);
@@ -429,7 +433,6 @@ public class Nova_Regra extends JDialog {
 		public void actionPerformed(ActionEvent e) {
 			salvarRegra();
 		}
-
 	}
 
 	/**
@@ -443,6 +446,49 @@ public class Nova_Regra extends JDialog {
 		public void actionPerformed(ActionEvent e) {
 			editarRegra();
 		}
-
 	}
+
+	/**
+	 * Usado para o teste JUnit
+	 * @return o JComboBox de seleção do tipo de regra
+	 */
+	public JComboBox<String> getTipo() {
+		return tipo;
+	}
+
+	/**
+	 * Usado para o teste JUnit
+	 * @return o JMenuItem mEditar
+	 */
+	public JMenuItem getmEditar() {
+		return mEditar;
+	}
+
+	/**
+	 * Usado para o teste JUnit
+	 * @return o JMenuItem mApagar
+	 */
+	public JMenuItem getmApagar() {
+		return mApagar;
+	}
+	
+	/**
+	 * Usado para o teste JUnit
+	 * @return a JList regrasList
+	 */
+	public JList<Regra> getRegrasList() {
+		return regrasList;
+	}
+	
+	/**
+	 * Usado para o teste JUnit
+	 * @return o JButton save
+	 */
+	public JButton getSave() {
+		return save;
+	}
+	
+	
+	
+	
 }

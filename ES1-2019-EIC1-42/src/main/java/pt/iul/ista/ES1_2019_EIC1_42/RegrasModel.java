@@ -16,12 +16,12 @@ public class RegrasModel extends AbstractListModel<Regra> {
 	 */
 	private static final long serialVersionUID = 6668612315702095255L;
 	private static RegrasModel INSTANCE;
-	private ArrayList<Regra> regras;
+	private static ArrayList<Regra> regras;
 
 	/**
 	 * Construtor: inicializa o ArrayList das regras
 	 */
-	private RegrasModel() {
+	public RegrasModel() {
 		regras = new ArrayList<Regra>();
 	}
 

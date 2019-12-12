@@ -2,6 +2,8 @@ package pt.iul.ista.ES1_2019_EIC1_42;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -9,6 +11,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RegrasModelTest {
+	
+	RegrasModel regras;
+	Regra r = new Regra("regra", Metrica.ATFD, Metrica.LAA, 20, 30, Logic_And_Or.AND);
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -20,6 +25,8 @@ public class RegrasModelTest {
 
 	@Before
 	public void setUp() throws Exception {
+		regras = new RegrasModel();
+		regras.addRegra(r);
 	}
 
 	@After
@@ -28,37 +35,42 @@ public class RegrasModelTest {
 
 	@Test
 	public void testGetElementAt() {
-		fail("Not yet implemented");
+		assertEquals(r,regras.getElementAt(0));
 	}
 
 	@Test
 	public void testGetSize() {
-		fail("Not yet implemented");
+		assertEquals(1,regras.getSize());
 	}
 
 	@Test
 	public void testAddRegra() {
-		fail("Not yet implemented");
+		assertFalse(regras.addRegra(r));
 	}
 
 	@Test
 	public void testRemoveRegra() {
-		fail("Not yet implemented");
+		assertTrue(regras.removeRegra(r));
+		assertFalse(regras.removeRegra(r));
 	}
 
 	@Test
 	public void testAtualizar() {
-		fail("Not yet implemented");
+		r.setValor_1(40);
+		regras.atualizar(r);
+		assertEquals(40,regras.getElementAt(0).getValor_1());
+		
 	}
 
 	@Test
 	public void testGetRegras() {
-		fail("Not yet implemented");
+		assertNotNull(regras.getRegras());
 	}
 
+	
 	@Test
 	public void testGetInstance() {
-		fail("Not yet implemented");
+		assertNotNull(RegrasModel.getInstance());
 	}
 
 }

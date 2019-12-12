@@ -19,6 +19,7 @@ import org.apache.poi.ss.usermodel.*;
  * passados para uma JTable
  * 
  * @author elsas
+ * @author aaspo
  *
  */
 public class DataModel extends AbstractTableModel {
@@ -166,5 +167,27 @@ public class DataModel extends AbstractTableModel {
 		filechooser.showOpenDialog(null);
 		File excelfile = filechooser.getSelectedFile();
 		return excelfile;
+		
+		
 	}
+	/**
+	 * Adiciona o ficheiro do tipo excel diretamente do diretorio a fim de uso para testes
+	 */
+	public void setFile(boolean s) {
+		File f = null;
+		if(s) {
+			f = new File(System.getProperty("user.dir")+"/Long-Method.xlsx");
+		}
+		Workbook workbook;
+		try {
+			workbook = WorkbookFactory.create(f);
+			sheet = workbook.getSheetAt(0);
+		} catch (NullPointerException | InvalidFormatException | IOException e) {
+			System.out.println("Ficheiro não aberto!");
+		}
+		
+	}
+	
+	
+	
 }

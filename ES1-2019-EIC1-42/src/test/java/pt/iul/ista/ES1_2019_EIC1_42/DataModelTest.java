@@ -28,7 +28,10 @@ public class DataModelTest {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		
+		table = table.newInstance();
+		ntable = ntable.newInstance();
+		table.setFile(true);
+		ntable.setFile(false);
 	}
 
 	/**

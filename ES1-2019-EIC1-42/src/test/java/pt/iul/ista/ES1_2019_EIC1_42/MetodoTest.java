@@ -5,8 +5,6 @@ package pt.iul.ista.ES1_2019_EIC1_42;
 
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,23 +40,9 @@ public class MetodoTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Before
 	public void setUp() throws Exception {
 		metodo = new Metodo(METHOD_ID, PACKAGE, CLASS, METHOD, LOC, CYCLO, ATFD, LAA, is_long_method, iPlasma, pmd, is_feature_envy);
-	}
-
-	/**
-	 * @throws java.lang.Exception
-	 */
-	@After
-	public void tearDown() throws Exception {
 	}
 
 	/**

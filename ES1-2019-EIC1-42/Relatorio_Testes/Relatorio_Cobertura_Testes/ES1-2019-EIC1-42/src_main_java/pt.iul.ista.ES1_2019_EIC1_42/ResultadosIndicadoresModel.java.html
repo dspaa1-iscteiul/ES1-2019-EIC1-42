@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ResultadosIndicadoresModel.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42</a> &gt; <span class="el_source">ResultadosIndicadoresModel.java</span></div><h1>ResultadosIndicadoresModel.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.table.AbstractTableModel;
+
+/**
+ * Classe para guardar as informações dos resultados e indicadores de qualidade
+ * @author dariop
+ *
+ */
+public class ResultadosIndicadoresModel extends AbstractTableModel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7323033175889007523L;
+	private ArrayList&lt;String&gt; columnNames;
+<span class="fc" id="L20">	private ArrayList&lt;ArrayList&lt;Object&gt;&gt; rows = new ArrayList&lt;ArrayList&lt;Object&gt;&gt;();</span>
+	
+	
+	/**
+	 * Construtor
+	 * @param columnNames - array de String que contém os nomes das colunas iniciais da tabela.
+	 */
+	public ResultadosIndicadoresModel(String[] columnNames) {
+<span class="fc" id="L28">		super();</span>
+<span class="fc" id="L29">		this.columnNames = new ArrayList&lt;String&gt;(Arrays.asList(columnNames));</span>
+<span class="fc" id="L30">	}</span>
+	
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex) {
+<span class="fc" id="L34">		return false;</span>
+	}
+
+	@Override
+	public int getColumnCount() {
+<span class="fc" id="L39">		return columnNames.size();</span>
+	}
+
+	@Override
+	public int getRowCount() {
+<span class="fc" id="L44">		return rows.size();</span>
+	}
+
+	@Override
+	public String getColumnName(int column) {
+<span class="fc" id="L49">		return columnNames.get(column);</span>
+	}
+
+	@Override
+	public Object getValueAt(int row, int col) {
+<span class="fc" id="L54">		return rows.get(row).get(col);</span>
+	}
+	
+	/**
+	 * Adiciona uma nova linha na tabela
+	 * @param data Array que contém em cada posição uma coluna da linha que se pretende adicionar
+	 * @return true se  foi adicionada a linha com sucesso
+	 */
+	public boolean addRow(Object[] data) {
+<span class="fc" id="L63">		boolean result = rows.add(new ArrayList&lt;Object&gt;(Arrays.asList(data)));</span>
+<span class="fc" id="L64">		fireTableStructureChanged();</span>
+<span class="fc" id="L65">		return result;</span>
+	}
+	
+	/**
+	 * Adiciona uma nova coluna à tabela
+	 * @param columnName - header da nova coluna
+	 * @param data - array que deve conter todas as linhas da tabela para essa nova coluna
+	 * @return true se foi adicionada a nova coluna com sucesso, se não foi lançada nenhuma exceção
+	 */
+	public boolean addColumn(String columnName, Object[] data) {
+<span class="fc bfc" id="L75" title="All 2 branches covered.">		if(columnNames.contains(columnName))</span>
+<span class="fc" id="L76">			return false;</span>
+<span class="fc" id="L77">		columnNames.add(columnName);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">		for(int i=0; i&lt;rows.size(); i++) {</span>
+<span class="fc" id="L79">			rows.get(i).add(data[i]);</span>
+		}
+<span class="fc" id="L81">		fireTableStructureChanged();</span>
+<span class="fc" id="L82">		return true;</span>
+	}
+	
+	/**
+	 * Remove uma coluna da tabela, dado o seu nome
+	 * @param columnName - nome da coluna que se pretende remover
+	 */
+	public void removeColumn(String columnName) {
+<span class="fc" id="L90">		removeColumn(columnNames.indexOf(columnName));</span>
+<span class="fc" id="L91">		columnNames.remove(columnName);</span>
+<span class="fc" id="L92">		fireTableStructureChanged();</span>
+<span class="fc" id="L93">	}</span>
+	
+	/**
+	 * Only used as an auxiliar method for removeColumn(String columnName)
+	 * @param index
+	 */
+	private void removeColumn(int index) {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		for(int i = 0; i&lt;rows.size(); i++) {</span>
+<span class="fc" id="L101">			rows.get(i).remove(index);</span>
+		}
+<span class="fc" id="L103">	}</span>
+	
+	/**
+	 * Verifica se já existe uma coluna com determinado nome
+	 * @param columnName - nome da coluna que se pretende verificar se existe
+	 * @return true - se já existe uma coluna com o dado nome
+	 */
+	public boolean existsColumn(String columnName) {
+<span class="fc bfc" id="L111" title="All 2 branches covered.">		if(columnNames.contains(columnName))</span>
+<span class="fc" id="L112">			return true;</span>
+		else
+<span class="fc" id="L114">			return false;</span>
+	}
+	
+	/**
+	 *  Muda o nome de uma coluna
+	 * @param oldName - nome da coluna que se pretende alterar
+	 * @param newName - novo nome que quer dar à coluna
+	 * @return true - se o nome foi alterado &lt;/br&gt;
+	 * 		   false - se não existe a coluna que se quer mudar
+	 */
+	public boolean changeColumnName(String oldName, String newName) {
+<span class="fc bfc" id="L125" title="All 2 branches covered.">		if(!existsColumn(oldName))</span>
+<span class="fc" id="L126">				return false;</span>
+		else {
+<span class="fc" id="L128">			int index = columnNames.indexOf(oldName);</span>
+<span class="fc" id="L129">			columnNames.set(index, newName);</span>
+<span class="fc" id="L130">			fireTableStructureChanged();</span>
+<span class="fc" id="L131">			return true;</span>
+		}
+	}	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

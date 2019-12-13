@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>RegrasModel.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42</a> &gt; <span class="el_source">RegrasModel.java</span></div><h1>RegrasModel.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42;
+
+import java.util.ArrayList;
+import javax.swing.AbstractListModel;
+
+/**
+ * Classe para guardar as regras criadas pelo utilizador
+ * 
+ * @author dariop
+ *
+ */
+public class RegrasModel extends AbstractListModel&lt;Regra&gt; {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6668612315702095255L;
+	private static RegrasModel INSTANCE;
+	private static ArrayList&lt;Regra&gt; regras;
+
+	/**
+	 * Construtor: inicializa o ArrayList das regras
+	 */
+<span class="fc" id="L24">	public RegrasModel() {</span>
+<span class="fc" id="L25">		regras = new ArrayList&lt;Regra&gt;();</span>
+<span class="fc" id="L26">	}</span>
+
+	@Override
+	public Regra getElementAt(int index) {
+<span class="fc" id="L30">		return regras.get(index);</span>
+	}
+
+	@Override
+	public int getSize() {
+<span class="fc" id="L35">		return regras.size();</span>
+	}
+
+	/**
+	 * 
+	 * @param regra regra que se pretende adicionar na lista
+	 * @return &lt;b&gt;true&lt;/b&gt; se ainda não existe na lista e foi adicionada com sucesso
+	 *         &lt;/br&gt;
+	 *         &lt;b&gt;false&lt;/b&gt; se a regra já existe na lista
+	 */
+	public boolean addRegra(Regra regra) {
+<span class="fc bfc" id="L46" title="All 2 branches covered.">		if (regras.contains(regra))</span>
+<span class="fc" id="L47">			return false;</span>
+		else {
+<span class="fc" id="L49">			regras.add(regra);</span>
+<span class="fc" id="L50">			fireIntervalAdded(this, regras.size() - 1, regras.size() - 1);</span>
+<span class="fc" id="L51">			return true;</span>
+		}
+	}
+
+	/**
+	 * @param regra regra que se pretende remvoer da lista
+	 * @return &lt;b&gt;true&lt;/b&gt; se a regra existia na lista e foi removida com sucesso
+	 *         &lt;/br&gt;
+	 *         &lt;b&gt;false&lt;/b&gt; se a regra não existe na lista
+	 */
+	public boolean removeRegra(Regra regra) {
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		if (!regras.contains(regra))</span>
+<span class="fc" id="L63">			return false;</span>
+		else {
+<span class="fc" id="L65">			int interval = regras.indexOf(regra);</span>
+<span class="fc" id="L66">			regras.remove(regra);</span>
+<span class="fc" id="L67">			fireIntervalRemoved(this, interval, interval);</span>
+<span class="fc" id="L68">			return true;</span>
+		}
+	}
+
+	/**
+	 * Atualiza na tabela a regra que foi modificada.
+	 * @param regra regra que se pretende atualizar
+	 */
+	public void atualizar(Regra regra) {
+<span class="fc" id="L77">		int interval = regras.indexOf(regra);</span>
+<span class="fc" id="L78">		fireContentsChanged(this, interval, interval);</span>
+<span class="fc" id="L79">	}</span>
+
+	/**
+	 * 
+	 * @return o ArrayList com as regras criadas pelo utilizador.
+	 */
+	public ArrayList&lt;Regra&gt; getRegras() {
+<span class="fc" id="L86">		return regras;</span>
+	}
+
+	/**
+	 * 
+	 * @return uma instância dessa classe
+	 */
+	public static RegrasModel getInstance() {
+<span class="fc bfc" id="L94" title="All 2 branches covered.">		if (INSTANCE == null)</span>
+<span class="fc" id="L95">			INSTANCE = new RegrasModel();</span>
+<span class="fc" id="L96">		return INSTANCE;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

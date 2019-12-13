@@ -23,8 +23,8 @@ import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
  */
 public class Nova_RegraTest {
 
-	static Nova_Regra nr;
-	static Regra r;
+	private static Nova_Regra nr;
+	private static Regra r;
 
 	/**
 	 * @throws java.lang.Exception

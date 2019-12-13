@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ResultadosIndicadoresModelTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42</a> &gt; <span class="el_source">ResultadosIndicadoresModelTest.java</span></div><h1>ResultadosIndicadoresModelTest.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+<span class="fc" id="L7">public class ResultadosIndicadoresModelTest {</span>
+	
+<span class="fc" id="L9">	private String[] columnNames= {&quot;col1&quot;,&quot;col2&quot;,&quot;col3&quot;,&quot;col4&quot;,&quot;col5&quot;, &quot;col6&quot;, &quot;col7&quot;};</span>
+<span class="fc" id="L10">	private ResultadosIndicadoresModel m=new ResultadosIndicadoresModel(columnNames);</span>
+	
+	@Test
+	public void testIsCellEditable() {
+<span class="fc" id="L14">		assertFalse(m.isCellEditable(1,1));</span>
+<span class="fc" id="L15">	}</span>
+
+	@Test
+	public void testResultadosIndicadoresModel() {
+<span class="fc" id="L19">		assertNotNull(m);</span>
+		
+<span class="fc" id="L21">	}</span>
+
+	@Test
+	public void testGetColumnCount() {
+<span class="fc" id="L25">		assertEquals(7,m.getColumnCount());</span>
+		
+<span class="fc" id="L27">	}</span>
+
+	@Test
+	public void testGetRowCount() {
+<span class="fc" id="L31">		assertEquals(0,m.getRowCount());</span>
+<span class="fc" id="L32">	}</span>
+
+	@Test
+	public void testGetColumnNameInt() {
+<span class="fc" id="L36">		assertEquals(&quot;col1&quot;,m.getColumnName(0));</span>
+<span class="fc" id="L37">	}</span>
+
+	@Test
+	public void testGetValueAt() {
+<span class="fc" id="L41">		Object[] data= {1};</span>
+<span class="fc" id="L42">		m.addRow(data);</span>
+<span class="fc" id="L43">		assertSame(1,m.getValueAt(0, 0));</span>
+<span class="fc" id="L44">	}</span>
+
+	@Test
+	public void testAddRow() {
+<span class="fc" id="L48">		Object[] data= {1};</span>
+<span class="fc" id="L49">		assertTrue(m.addRow(data));</span>
+<span class="fc" id="L50">	}</span>
+
+	@Test
+	public void testAddColumn() {
+<span class="fc" id="L54">		Object[] data= {1};</span>
+<span class="fc" id="L55">		m.addRow(data);</span>
+<span class="fc" id="L56">		Object[] data1= {1,2,3,4,5};</span>
+<span class="fc" id="L57">		assertFalse(m.addColumn(&quot;col1&quot;, data1));</span>
+<span class="fc" id="L58">		assertTrue(m.addColumn(&quot;col8&quot;, data1));</span>
+		
+		
+<span class="fc" id="L61">	}</span>
+
+	@Test
+	public void testRemoveColumn() {
+<span class="fc" id="L65">		Object[] data= {1};</span>
+<span class="fc" id="L66">		m.addRow(data);</span>
+<span class="fc" id="L67">		m.removeColumn(&quot;col1&quot;);</span>
+<span class="fc" id="L68">		assertEquals(6,m.getColumnCount());</span>
+<span class="fc" id="L69">	}</span>
+
+	@Test
+	public void testExistsColumn() {
+<span class="fc" id="L73">		assertTrue(m.existsColumn(&quot;col1&quot;));</span>
+<span class="fc" id="L74">		assertFalse(m.existsColumn(&quot;col8&quot;));</span>
+<span class="fc" id="L75">	}</span>
+
+	@Test
+	public void testChangeColumnName() {
+<span class="fc" id="L79">		assertFalse(m.changeColumnName(&quot;col8&quot;, &quot;col9&quot;));</span>
+<span class="fc" id="L80">		assertTrue(m.changeColumnName(&quot;col7&quot;, &quot;col7b&quot;));</span>
+<span class="fc" id="L81">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

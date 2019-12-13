@@ -1,37 +1,27 @@
 package pt.iul.ista.ES1_2019_EIC1_42.gui;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
 import pt.iul.ista.ES1_2019_EIC1_42.Metrica;
 import pt.iul.ista.ES1_2019_EIC1_42.Regra;
+import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
 
 public class Comparador_de_QualidadeTest {
 
 	private static Comparador_de_Qualidade comparador;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		comparador = Comparador_de_Qualidade.getInstance();
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
 	}
 
 	@Test
@@ -42,33 +32,37 @@ public class Comparador_de_QualidadeTest {
 	@Test
 	public void testCreateResultsTable() {
 		comparador.createResultsTable();
+		assertNotNull(comparador.getResultTable());
 	}
 
 	@Test
 	public void testColumnForEachRule() {
-		comparador.getRegras().add(new Regra("nome",Metrica.LOC,Metrica.CYCLO,(Number)12,(Number)13,Logic_And_Or.AND));
+		assertEquals(comparador.getTableModelResultados().getColumnCount(),3);
+		RegrasModel.getInstance()
+				.addRegra(new Regra("nome", Metrica.LOC, Metrica.CYCLO, (Number) 12, (Number) 13, Logic_And_Or.AND));
 		comparador.columnForEachRule();
+		assertEquals(comparador.getTableModelResultados().getColumnCount(),4);
 	}
 
 	@Test
 	public void testRuleResultForEachMethod() {
-		comparador.ruleResultForEachMethod(new Regra("nome",Metrica.LOC,Metrica.CYCLO,(Number)12,(Number)13,Logic_And_Or.AND));
+		assertEquals(comparador.ruleResultForEachMethod(
+				new Regra("nome", Metrica.LOC, Metrica.CYCLO, (Number) 12, (Number) 13, Logic_And_Or.AND)).length, 0);
 	}
 
 	@Test
 	public void testCreateIndicatorTable() {
 		comparador.createIndicatorTable();
+		assertNotNull(comparador.getIndicadoresTable());
 	}
 
 	@Test
 	public void testColumnForEachRegra() {
-		comparador.getRegras().add(new Regra("nome",Metrica.LOC,Metrica.CYCLO,(Number)12,(Number)13,Logic_And_Or.AND));
+		assertEquals(comparador.getTableModelIndicadores().getColumnCount(),4);
+		RegrasModel.getInstance()
+				.addRegra(new Regra("nome", Metrica.LOC, Metrica.CYCLO, (Number) 12, (Number) 13, Logic_And_Or.AND));
 		comparador.columnForEachRegra();
-	}
-
-	@Test
-	public void testRegraResultForEachMethod() {
-	
+		assertEquals(comparador.getTableModelIndicadores().getColumnCount(),4);
 	}
 
 	@Test
@@ -78,15 +72,14 @@ public class Comparador_de_QualidadeTest {
 
 	@Test
 	public void testVerifyLongMethodRegraLogicValue() {
-		Regra regra = new Regra("nome",Metrica.LOC,Metrica.CYCLO,(Number)12,(Number)13,Logic_And_Or.AND);
+		Regra regra = new Regra("nome", Metrica.LOC, Metrica.CYCLO, (Number) 12, (Number) 13, Logic_And_Or.AND);
 		comparador.verifyLongMethodRegraLogicValue(regra);
 	}
 
 	@Test
 	public void testVerifyFeatureEnvyRegraLogicValue() {
-		Regra regra = new Regra("nome",Metrica.ATFD,Metrica.LAA,(Number)12,(Number)13,Logic_And_Or.AND);
+		Regra regra = new Regra("nome", Metrica.ATFD, Metrica.LAA, (Number) 12, (Number) 13, Logic_And_Or.AND);
 		comparador.verifyFeatureEnvyRegraLogicValue(regra);
-		
 	}
 
 	@Test
@@ -108,10 +101,10 @@ public class Comparador_de_QualidadeTest {
 	public void testGenerateFeatureEnvyRegraValuesOr() {
 		comparador.generateFeatureEnvyRegraValuesOr(22, 22, new ArrayList<Boolean>());
 	}
-	
+
 	@Test
-	public	void testRegraResultForEachMethodTest() {
-		Regra regra = new Regra("nome",Metrica.ATFD,Metrica.LAA,(Number)12,(Number)13,Logic_And_Or.AND);
+	public void testRegraResultForEachMethodTest() {
+		Regra regra = new Regra("nome", Metrica.ATFD, Metrica.LAA, (Number) 12, (Number) 13, Logic_And_Or.AND);
 		comparador.getIndicadoresRegrasUtilizador().put(regra, new ArrayList<Integer>());
 	}
 
@@ -142,7 +135,7 @@ public class Comparador_de_QualidadeTest {
 
 	@Test
 	public void testCalculateIndicadoresLongMethodRegras() {
-		Regra regra = new Regra("nome",Metrica.LOC,Metrica.CYCLO,(Number)12,(Number)13,Logic_And_Or.AND);
+		Regra regra = new Regra("nome", Metrica.LOC, Metrica.CYCLO, (Number) 12, (Number) 13, Logic_And_Or.AND);
 		comparador.calculateIndicadoresLongMethodRegras(regra);
 	}
 
@@ -153,7 +146,7 @@ public class Comparador_de_QualidadeTest {
 
 	@Test
 	public void testCalculateIndicadoresFeatureEnvyRegras() {
-		Regra regra = new Regra("nome",Metrica.ATFD,Metrica.LAA,(Number)12,(Number)13,Logic_And_Or.AND);
+		Regra regra = new Regra("nome", Metrica.ATFD, Metrica.LAA, (Number) 12, (Number) 13, Logic_And_Or.AND);
 		comparador.calculateIndicadoresFeatureEnvyRegras(regra);
 	}
 
@@ -164,19 +157,17 @@ public class Comparador_de_QualidadeTest {
 
 	@Test
 	public void testMudarNomedaRegra() {
-		Regra regra = new Regra("nome",Metrica.ATFD,Metrica.LAA,(Number)12,(Number)13,Logic_And_Or.AND);
-		comparador.getRegras().add(regra);
+		Regra regra = new Regra("nome", Metrica.ATFD, Metrica.LAA, (Number) 12, (Number) 13, Logic_And_Or.AND);
+		RegrasModel.getInstance().addRegra(regra);
 		comparador.mudarNomedaRegra(regra, "null");
 	}
 
 	@Test
 	public void testExistsRuleWithName() {
-		comparador.existsRuleWithName("null");
-	}
-
-	@Test
-	public void testOpen() {
-		
+		Regra regra = new Regra("nome", Metrica.ATFD, Metrica.LAA, (Number) 12, (Number) 13, Logic_And_Or.AND);
+		comparador.getTableModelResultados().addColumn(regra.getNome(), null);
+		assertTrue(comparador.existsRuleWithName("nome"));
+		assertFalse(comparador.existsRuleWithName("nada"));
 	}
 
 	@Test
@@ -186,7 +177,7 @@ public class Comparador_de_QualidadeTest {
 
 	@Test
 	public void testGetInstance() {
-		Comparador_de_Qualidade.getInstance();
+		assertEquals(comparador, Comparador_de_Qualidade.getInstance());
 	}
 
 }

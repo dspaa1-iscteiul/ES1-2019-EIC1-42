@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>DataModel.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42</a> &gt; <span class="el_source">DataModel.java</span></div><h1>DataModel.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42;
+
+import java.util.ArrayList;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.AbstractTableModel;
+
+import java.io.File;
+import java.io.IOException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.*;
+
+/**
+ * Classe para gerir os dados que são importados do ficheiro Excel e são
+ * passados para uma JTable
+ * 
+ * @author elsas
+ * @author aaspo
+ *
+ */
+public class DataModel extends AbstractTableModel {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4220550076295049347L;
+	private static DataModel INSTANCE;
+	private Sheet sheet;
+
+	private DataModel() {
+	}
+
+	/**
+	 * Abre o filechooser para escolher o ficheiro Excel
+	 */
+
+	public void addFile() {
+		Workbook workbook;
+		try {
+<span class="nc" id="L44">			workbook = WorkbookFactory.create(fileChooser());</span>
+<span class="nc" id="L45">			sheet = workbook.getSheetAt(0);</span>
+<span class="nc" id="L46">		} catch (NullPointerException | InvalidFormatException | IOException e) {</span>
+<span class="nc" id="L47">			System.out.println(&quot;Ficheiro não aberto!&quot;);</span>
+<span class="nc" id="L48">			System.exit(0);</span>
+		}
+<span class="nc" id="L50">	}</span>
+
+	public ArrayList&lt;Metodo&gt; getContent() throws EncryptedDocumentException, InvalidFormatException, IOException {
+<span class="fc" id="L53">		ArrayList&lt;Metodo&gt; metodos = new ArrayList&lt;Metodo&gt;();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">		if (sheet != null) {</span>
+<span class="fc" id="L55">			DataFormatter dataFormatter = new DataFormatter();</span>
+<span class="fc" id="L56">			int j = 1;</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">			while (j &lt;= sheet.getLastRowNum()) {</span>
+<span class="fc" id="L58">				Row row = sheet.getRow(j);</span>
+<span class="fc" id="L59">				int methodID = (int) row.getCell(0).getNumericCellValue();</span>
+<span class="fc" id="L60">				String pacote = row.getCell(1).getStringCellValue();</span>
+<span class="fc" id="L61">				String classe = row.getCell(2).getStringCellValue();</span>
+<span class="fc" id="L62">				String method = row.getCell(3).getStringCellValue();</span>
+<span class="fc" id="L63">				int loc = (int) row.getCell(4).getNumericCellValue();</span>
+<span class="fc" id="L64">				int cyclo = (int) row.getCell(5).getNumericCellValue();</span>
+<span class="fc" id="L65">				int atfd = (int) row.getCell(6).getNumericCellValue();</span>
+<span class="fc" id="L66">				double laa = Double.parseDouble(dataFormatter.formatCellValue(row.getCell(7)));</span>
+<span class="fc" id="L67">				boolean is_long_method = row.getCell(8).getBooleanCellValue();</span>
+<span class="fc" id="L68">				boolean iplasma = row.getCell(9).getBooleanCellValue();</span>
+<span class="fc" id="L69">				boolean pmd = row.getCell(10).getBooleanCellValue();</span>
+<span class="fc" id="L70">				boolean is_feature_envy = row.getCell(11).getBooleanCellValue();</span>
+<span class="fc" id="L71">				Metodo met = new Metodo(methodID, pacote, classe, method, loc, cyclo, atfd, laa, is_long_method,</span>
+<span class="fc" id="L72">						iplasma, pmd, is_feature_envy);</span>
+<span class="fc" id="L73">				metodos.add(met);</span>
+<span class="fc" id="L74">				j++;</span>
+			}
+		}
+<span class="fc" id="L77">		return metodos;</span>
+	}
+
+	@Override
+	public int getColumnCount() {
+<span class="fc bfc" id="L82" title="All 2 branches covered.">		if (sheet != null) {</span>
+<span class="fc" id="L83">			int last_cell = sheet.getRow(0).getLastCellNum();</span>
+<span class="fc" id="L84">			return last_cell;</span>
+		} else {
+<span class="fc" id="L86">			return 0;</span>
+		}
+	}
+
+	@Override
+	public int getRowCount() {
+<span class="fc bfc" id="L92" title="All 2 branches covered.">		if (sheet != null) {</span>
+<span class="fc" id="L93">			return sheet.getLastRowNum();</span>
+		} else {
+<span class="fc" id="L95">			return 0;</span>
+		}
+	}
+
+	@Override
+	public String getColumnName(int arg0) {
+<span class="fc bfc" id="L101" title="All 2 branches covered.">		if (sheet != null) {</span>
+<span class="fc" id="L102">			Cell cell = sheet.getRow(0).getCell(arg0);</span>
+<span class="fc" id="L103">			return cell.getStringCellValue();</span>
+		} else {
+<span class="fc" id="L105">			return &quot;&quot;;</span>
+		}
+	}
+
+	@Override
+	public Object getValueAt(int arg0, int arg1) {
+<span class="fc bfc" id="L111" title="All 2 branches covered.">		if (sheet != null) {</span>
+<span class="fc" id="L112">			DataFormatter dataFormatter = new DataFormatter();</span>
+<span class="fc" id="L113">			arg0++;</span>
+<span class="fc" id="L114">			Cell cell = sheet.getRow(arg0).getCell(arg1);</span>
+
+<span class="fc bfc" id="L116" title="All 5 branches covered.">			switch (arg1) {</span>
+			case 0:
+<span class="fc" id="L118">				return (int) cell.getNumericCellValue();</span>
+			case 1:
+			case 2:
+			case 3:
+<span class="fc" id="L122">				return cell.getStringCellValue();</span>
+			case 4:
+			case 5:
+			case 6:
+<span class="fc" id="L126">				return (int) cell.getNumericCellValue();</span>
+			case 7:
+<span class="fc" id="L128">				return Double.parseDouble(dataFormatter.formatCellValue(cell));</span>
+			default:
+<span class="fc" id="L130">				return cell.getBooleanCellValue();</span>
+
+			}
+		} else {
+<span class="fc" id="L134">			return &quot;&quot;;</span>
+		}
+
+	}
+
+	/**
+	 * 
+	 * @return a Instance of this class
+	 */
+	public static DataModel getInstance() {
+<span class="fc bfc" id="L144" title="All 2 branches covered.">		if (INSTANCE == null)</span>
+<span class="fc" id="L145">			INSTANCE = new DataModel();</span>
+<span class="fc" id="L146">		return INSTANCE;</span>
+	}
+
+	/**
+	 * 
+	 * @return a new Instance of this class
+	 */
+	public static DataModel newInstance() {
+<span class="fc" id="L154">		INSTANCE = new DataModel();</span>
+<span class="fc" id="L155">		return INSTANCE;</span>
+	}
+
+	/**
+	 * Abre um seletor de ficheiros para o utilizador poder abrir um ficheiro do tipo Excel
+	 * @return o ficheiro selecionado pelo utilizador (null se não foi selecionado nenhum)
+	 */
+	public File fileChooser() {
+<span class="nc" id="L163">		JFileChooser filechooser = new JFileChooser();</span>
+<span class="nc" id="L164">		FileNameExtensionFilter filter = new FileNameExtensionFilter(&quot;Excel File&quot;, &quot;xlsx&quot;, &quot;excel&quot;);</span>
+<span class="nc" id="L165">		filechooser.setAcceptAllFileFilterUsed(false);</span>
+<span class="nc" id="L166">		filechooser.setFileFilter(filter);</span>
+<span class="nc" id="L167">		filechooser.showOpenDialog(null);</span>
+<span class="nc" id="L168">		File excelfile = filechooser.getSelectedFile();</span>
+<span class="nc" id="L169">		return excelfile;</span>
+		
+		
+	}
+	/**
+	 * Adiciona o ficheiro do tipo excel diretamente do diretorio a fim de uso para testes
+	 */
+	public void setFile(boolean s) {
+<span class="fc" id="L177">		File f = null;</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">		if(s) {</span>
+<span class="fc" id="L179">			f = new File(System.getProperty(&quot;user.dir&quot;)+&quot;/Long-Method.xlsx&quot;);</span>
+		}
+		Workbook workbook;
+		try {
+<span class="fc" id="L183">			workbook = WorkbookFactory.create(f);</span>
+<span class="fc" id="L184">			sheet = workbook.getSheetAt(0);</span>
+<span class="fc" id="L185">		} catch (NullPointerException | InvalidFormatException | IOException e) {</span>
+<span class="fc" id="L186">			System.out.println(&quot;Ficheiro não aberto!&quot;);</span>
+		}
+		
+<span class="fc" id="L189">	}</span>
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

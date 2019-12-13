@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ExcelDataTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42.gui</a> &gt; <span class="el_source">ExcelDataTest.java</span></div><h1>ExcelDataTest.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42.gui;
+
+import static org.junit.Assert.*;
+
+import java.awt.event.MouseEvent;
+
+import javax.swing.JFrame;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+<span class="fc" id="L12">public class ExcelDataTest {</span>
+
+	private static ExcelData excel;
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+<span class="fc" id="L18">		excel = new ExcelData();</span>
+<span class="fc" id="L19">	}</span>
+
+	@Test
+	public void testExcelData() {
+<span class="fc" id="L23">		assertEquals(excel.getSize().getWidth(), 1300, 0.1);</span>
+<span class="fc" id="L24">		assertEquals(excel.getSize().getHeight(), 600, 0.1);</span>
+<span class="fc" id="L25">		assertEquals(excel.getDefaultCloseOperation(), JFrame.EXIT_ON_CLOSE);</span>
+<span class="fc" id="L26">		MouseEvent e = new MouseEvent(excel.getTable(), MouseEvent.MOUSE_MOVED, System.currentTimeMillis(), 0, 150, 150,</span>
+<span class="fc" id="L27">				1, false);</span>
+<span class="fc" id="L28">		assertEquals(excel.getTable().getToolTipText(e), &quot;&quot;);</span>
+<span class="fc" id="L29">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

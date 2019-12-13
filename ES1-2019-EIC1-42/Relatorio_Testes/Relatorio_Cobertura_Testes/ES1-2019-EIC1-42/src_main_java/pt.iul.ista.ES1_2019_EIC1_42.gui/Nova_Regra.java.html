@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Nova_Regra.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42.gui</a> &gt; <span class="el_source">Nova_Regra.java</span></div><h1>Nova_Regra.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42.gui;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JSpinner;
+import javax.swing.DefaultComboBoxModel;
+import pt.iul.ista.ES1_2019_EIC1_42.Metrica;
+import pt.iul.ista.ES1_2019_EIC1_42.Regra;
+import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
+import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.JPopupMenu;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
+
+/**
+ * Dialogo para criar, vizualizar e editar regras do utilizador
+ * 
+ * @author dariop
+ *
+ */
+public class Nova_Regra extends JDialog {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2326177220283427980L;
+<span class="fc" id="L47">	private final JPanel contentPanel = new JPanel();</span>
+	private JComboBox&lt;Metrica&gt; metrics_1, metrics_2;
+	private JComboBox&lt;Logic_And_Or&gt; logic_1;
+	private JSpinner spinner_metric_1, spinner_metric_2;
+	private JPopupMenu popupMenu;
+	private JMenuItem mEditar, mApagar;
+	private JLabel label_maior_que, label_menor_que;
+	private JButton save;
+	private JTextField nome;
+	private JComboBox&lt;String&gt; tipo;
+	private JList&lt;Regra&gt; regrasList;
+	private RegrasModel regras;
+	private Regra regra;
+
+	/**
+	 * Create the dialog.
+	 */
+<span class="fc" id="L64">	public Nova_Regra() {</span>
+
+<span class="fc" id="L66">		initPanel();</span>
+<span class="fc" id="L67">		initComponents();</span>
+<span class="fc" id="L68">	}</span>
+
+	/**
+	 * Inicializa o painel que vai guardar os componentes da GUI
+	 */
+	private void initPanel() {
+<span class="fc" id="L74">		setResizable(false);</span>
+<span class="fc" id="L75">		setTitle(&quot;Nova Regra&quot;);</span>
+<span class="fc" id="L76">		setModalityType(ModalityType.APPLICATION_MODAL);</span>
+<span class="fc" id="L77">		setBounds(100, 100, 490, 320);</span>
+<span class="fc" id="L78">		contentPanel.setBounds(0, 0, 480, 180);</span>
+<span class="fc" id="L79">		getContentPane().add(contentPanel);</span>
+<span class="fc" id="L80">		contentPanel.setLayout(null);</span>
+<span class="fc" id="L81">		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);</span>
+<span class="fc" id="L82">	}</span>
+
+	/**
+	 * Inicializa os componentes da GUI
+	 */
+	private void initComponents() {
+
+<span class="fc" id="L89">		initComboBoxes();</span>
+<span class="fc" id="L90">		initSpinners();</span>
+<span class="fc" id="L91">		initLabels();</span>
+<span class="fc" id="L92">		initOthers();</span>
+<span class="fc" id="L93">		addListeners();</span>
+<span class="fc" id="L94">	}</span>
+
+	/**
+	 * Inicializa outros componentes.
+	 */
+	private void initOthers() {
+
+<span class="fc" id="L101">		save = new JButton(&quot;Salvar&quot;);</span>
+<span class="fc" id="L102">		save.setBounds(375, 255, 100, 25);</span>
+<span class="fc" id="L103">		contentPanel.add(save);</span>
+
+<span class="fc" id="L105">		nome = new JTextField();</span>
+<span class="fc" id="L106">		nome.setBounds(66, 10, 214, 20);</span>
+<span class="fc" id="L107">		contentPanel.add(nome);</span>
+<span class="fc" id="L108">		nome.setColumns(10);</span>
+
+<span class="fc" id="L110">		regras = RegrasModel.getInstance();</span>
+<span class="fc" id="L111">		regrasList = new JList&lt;Regra&gt;(regras);</span>
+<span class="fc" id="L112">		regrasList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);</span>
+
+<span class="fc" id="L114">		JScrollPane jscrollpane = new JScrollPane(regrasList);</span>
+<span class="fc" id="L115">		jscrollpane.setBounds(10, 140, 465, 109);</span>
+<span class="fc" id="L116">		contentPanel.add(jscrollpane);</span>
+
+<span class="fc" id="L118">		popupMenu = new JPopupMenu();</span>
+<span class="fc" id="L119">		mEditar = new JMenuItem(&quot;Editar&quot;);</span>
+<span class="fc" id="L120">		popupMenu.add(mEditar);</span>
+<span class="fc" id="L121">		mApagar = new JMenuItem(&quot;Apagar&quot;);</span>
+<span class="fc" id="L122">		popupMenu.add(mApagar);</span>
+
+<span class="fc" id="L124">	}</span>
+
+	/**
+	 * Inicializa os componentes do tipo JLabel
+	 */
+	private void initLabels() {
+
+<span class="fc" id="L131">		label_maior_que = new JLabel(&quot;&gt;&quot;);</span>
+<span class="fc" id="L132">		label_maior_que.setBounds(95, 81, 30, 20);</span>
+<span class="fc" id="L133">		label_maior_que.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="fc" id="L134">		contentPanel.add(label_maior_que);</span>
+
+<span class="fc" id="L136">		label_menor_que = new JLabel(&quot;&gt;&quot;);</span>
+<span class="fc" id="L137">		label_menor_que.setBounds(375, 82, 30, 20);</span>
+<span class="fc" id="L138">		label_menor_que.setHorizontalAlignment(SwingConstants.CENTER);</span>
+<span class="fc" id="L139">		contentPanel.add(label_menor_que);</span>
+
+<span class="fc" id="L141">		JLabel lNome = new JLabel(&quot;Nome:&quot;);</span>
+<span class="fc" id="L142">		lNome.setBounds(10, 10, 46, 20);</span>
+<span class="fc" id="L143">		contentPanel.add(lNome);</span>
+
+<span class="fc" id="L145">		JLabel lblRegrasExistentes = new JLabel(&quot;Regras existentes&quot;);</span>
+<span class="fc" id="L146">		lblRegrasExistentes.setBounds(10, 115, 120, 20);</span>
+<span class="fc" id="L147">		contentPanel.add(lblRegrasExistentes);</span>
+
+<span class="fc" id="L149">	}</span>
+
+	/**
+	 * Inicializa os combonentes do tipo JComboBox
+	 */
+	private void initComboBoxes() {
+
+<span class="fc" id="L156">		metrics_1 = new JComboBox&lt;Metrica&gt;();</span>
+<span class="fc" id="L157">		metrics_1.setEnabled(false);</span>
+<span class="fc" id="L158">		metrics_1.setBounds(10, 82, 85, 20);</span>
+<span class="fc" id="L159">		metrics_1.setModel(new DefaultComboBoxModel&lt;Metrica&gt;(Metrica.values()));</span>
+<span class="fc" id="L160">		metrics_1.setSelectedIndex(0);</span>
+<span class="fc" id="L161">		contentPanel.add(metrics_1);</span>
+
+<span class="fc" id="L163">		metrics_2 = new JComboBox&lt;Metrica&gt;();</span>
+<span class="fc" id="L164">		metrics_2.setEnabled(false);</span>
+<span class="fc" id="L165">		metrics_2.setBounds(290, 82, 85, 20);</span>
+<span class="fc" id="L166">		metrics_2.setModel(new DefaultComboBoxModel&lt;Metrica&gt;(Metrica.values()));</span>
+<span class="fc" id="L167">		metrics_2.setSelectedIndex(1);</span>
+<span class="fc" id="L168">		contentPanel.add(metrics_2);</span>
+
+<span class="fc" id="L170">		logic_1 = new JComboBox&lt;Logic_And_Or&gt;();</span>
+<span class="fc" id="L171">		logic_1.setBounds(205, 82, 75, 20);</span>
+<span class="fc" id="L172">		contentPanel.add(logic_1);</span>
+<span class="fc" id="L173">		logic_1.setModel(new DefaultComboBoxModel&lt;Logic_And_Or&gt;(Logic_And_Or.values()));</span>
+
+<span class="fc" id="L175">		tipo = new JComboBox&lt;String&gt;();</span>
+<span class="fc" id="L176">		tipo.setModel(new DefaultComboBoxModel&lt;String&gt;(new String[] { &quot;long method&quot;, &quot;feature envy&quot; }));</span>
+<span class="fc" id="L177">		tipo.setSelectedIndex(0);</span>
+<span class="fc" id="L178">		tipo.setBounds(10, 45, 150, 20);</span>
+<span class="fc" id="L179">		contentPanel.add(tipo);</span>
+
+<span class="fc" id="L181">	}</span>
+
+	/**
+	 * Inicializa os componentes do tipo JSpinner
+	 */
+	private void initSpinners() {
+
+<span class="fc" id="L188">		spinner_metric_1 = new JSpinner();</span>
+<span class="fc" id="L189">		spinner_metric_1.setBounds(125, 82, 70, 20);</span>
+<span class="fc" id="L190">		spinner_metric_1.setModel(new SpinnerNumberModel(0, 0, null, 1));</span>
+<span class="fc" id="L191">		contentPanel.add(spinner_metric_1);</span>
+
+<span class="fc" id="L193">		spinner_metric_2 = new JSpinner();</span>
+<span class="fc" id="L194">		spinner_metric_2.setBounds(405, 82, 70, 20);</span>
+<span class="fc" id="L195">		spinner_metric_2.setModel(new SpinnerNumberModel(0, 0, null, 1));</span>
+<span class="fc" id="L196">		contentPanel.add(spinner_metric_2);</span>
+
+<span class="fc" id="L198">	}</span>
+
+	/**
+	 * Adiciona listeners para os diversos componentes que é preciso
+	 */
+	private void addListeners() {
+
+<span class="fc" id="L205">		tipo.addItemListener(new ItemListener() {</span>
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+<span class="fc bfc" id="L209" title="All 2 branches covered.">				if (tipo.getSelectedIndex() == 0) {</span>
+<span class="fc" id="L210">					metrics_1.setSelectedIndex(0);</span>
+<span class="fc" id="L211">					metrics_2.setSelectedIndex(1);</span>
+<span class="fc" id="L212">					spinner_metric_2.setModel(new SpinnerNumberModel(0, 0, null, 1));</span>
+<span class="fc" id="L213">					label_menor_que.setText(&quot;&gt;&quot;);</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">				} else if (tipo.getSelectedIndex() == 1) {</span>
+<span class="fc" id="L215">					metrics_1.setSelectedIndex(2);</span>
+<span class="fc" id="L216">					metrics_2.setSelectedIndex(3);</span>
+<span class="fc" id="L217">					spinner_metric_2.setModel(new SpinnerNumberModel(0, 0, 1, 0.1));</span>
+<span class="fc" id="L218">					label_menor_que.setText(&quot;&lt;&quot;);</span>
+				}
+
+<span class="fc" id="L221">			}</span>
+		});
+
+<span class="fc" id="L224">		regrasList.addMouseListener(new MouseAdapter() {</span>
+
+			@Override
+			public void mouseClicked(MouseEvent me) {
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">				if (SwingUtilities.isRightMouseButton(me)) {</span>
+<span class="nc" id="L229">					int index = regrasList.locationToIndex(me.getPoint());</span>
+<span class="nc" id="L230">					regrasList.setSelectedIndex(index);</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">					if (index != -1)</span>
+<span class="nc" id="L232">						popupMenu.show(regrasList, me.getX(), me.getY());</span>
+				}
+<span class="pc bpc" id="L234" title="2 of 4 branches missed.">				if (me.getClickCount() == 2 &amp;&amp; !me.isConsumed()) {</span>
+<span class="fc" id="L235">					me.consume();</span>
+<span class="fc" id="L236">					int index = regrasList.locationToIndex(me.getPoint());</span>
+<span class="fc" id="L237">					preencher(regras.getElementAt(index));</span>
+				}
+<span class="fc" id="L239">			}</span>
+		});
+
+<span class="fc" id="L242">		regrasList.addKeyListener(new KeyAdapter() {</span>
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+<span class="nc bnc" id="L246" title="All 2 branches missed.">				if (!regrasList.isSelectionEmpty()) {</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">					if (e.getKeyCode() == KeyEvent.VK_DELETE) {</span>
+<span class="nc" id="L248">						Comparador_de_Qualidade.getInstance().removeRegra(regrasList.getSelectedValue());</span>
+<span class="nc" id="L249">						RegrasModel.getInstance().removeRegra(regrasList.getSelectedValue());</span>
+<span class="nc bnc" id="L250" title="All 2 branches missed.">					} else if (e.getKeyCode() == KeyEvent.VK_ENTER)</span>
+<span class="nc" id="L251">						preencher(regrasList.getSelectedValue());</span>
+				}
+<span class="nc" id="L253">			}</span>
+
+		});
+		
+<span class="fc" id="L257">		mEditar.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="fc" id="L261">				preencher(regrasList.getSelectedValue());</span>
+
+<span class="fc" id="L263">			}</span>
+		});
+
+<span class="fc" id="L266">		mApagar.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="pc bpc" id="L270" title="3 of 4 branches missed.">				if (regra != null &amp;&amp; regra == regrasList.getSelectedValue()) {</span>
+<span class="nc" id="L271">					reset();</span>
+				}
+<span class="fc" id="L273">				Comparador_de_Qualidade.getInstance().removeRegra(regrasList.getSelectedValue());</span>
+<span class="fc" id="L274">				RegrasModel.getInstance().removeRegra(regrasList.getSelectedValue());</span>
+
+<span class="fc" id="L276">			}</span>
+		});
+
+<span class="fc" id="L279">		save.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L283">				salvarRegra();</span>
+<span class="nc" id="L284">			}</span>
+		});
+
+<span class="fc" id="L287">	}</span>
+
+	/**
+	 * Verifica se o campo Nome foi preenchido corretamente pelo utilizador, cria
+	 * uma nova regra e adiciona à lista de Regras presente em RegrasModel, se essa
+	 * regra ainda não existir lá.
+	 */
+	protected void salvarRegra() {
+<span class="nc bnc" id="L295" title="All 2 branches missed.">		if (nome.getText().trim().equals(&quot;&quot;))</span>
+<span class="nc" id="L296">			JOptionPane.showMessageDialog(this, &quot;Escreve um nome para a regra!&quot;, &quot;Nome vazio&quot;,</span>
+<span class="nc" id="L297">					JOptionPane.ERROR_MESSAGE);</span>
+		else {
+			try {
+<span class="nc" id="L300">				Regra r = new Regra(nome.getText(), (Metrica) metrics_1.getSelectedItem(),</span>
+<span class="nc" id="L301">						(Metrica) metrics_2.getSelectedItem(), (Number) spinner_metric_1.getValue(),</span>
+<span class="nc" id="L302">						(Number) spinner_metric_2.getValue(), (Logic_And_Or) logic_1.getSelectedItem());</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">				if (Comparador_de_Qualidade.getInstance().existsRuleWithName(r.getNome())</span>
+<span class="nc bnc" id="L304" title="All 2 branches missed.">						|| !RegrasModel.getInstance().addRegra(r))</span>
+<span class="nc" id="L305">					JOptionPane.showMessageDialog(this, &quot;A regra já existe!&quot;, &quot;Regra já existe&quot;,</span>
+<span class="nc" id="L306">							JOptionPane.ERROR_MESSAGE);</span>
+				else {
+<span class="nc" id="L308">					String[] options = new String[] { &quot;Sim&quot;, &quot;Não&quot; };</span>
+<span class="nc" id="L309">					int ok = JOptionPane.showOptionDialog(this,</span>
+<span class="nc" id="L310">							&quot;Regra criada com sucesso! Queres testar a fiabilidade dessa regra, em comparação com as outras?&quot;,</span>
+<span class="nc" id="L311">							&quot;Regra criada&quot;, JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,</span>
+<span class="nc" id="L312">							options[0]);</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">					if (ok == JOptionPane.YES_OPTION)</span>
+<span class="nc" id="L314">						Comparador_de_Qualidade.getInstance().open();</span>
+					else
+<span class="nc" id="L316">						Comparador_de_Qualidade.getInstance().atualizar();</span>
+<span class="nc" id="L317">					reset();</span>
+				}
+<span class="nc" id="L319">			} catch (ClassCastException e) {</span>
+<span class="nc" id="L320">				JOptionPane.showMessageDialog(this, &quot;Erro ao criar nova regra!&quot;, &quot;ClassCastException&quot;,</span>
+<span class="nc" id="L321">						JOptionPane.ERROR_MESSAGE);</span>
+			}
+		}
+<span class="nc" id="L324">	}</span>
+
+	/**
+	 * Salva as alterações na regra presente.
+	 */
+	protected void editarRegra() {
+<span class="nc bnc" id="L330" title="All 2 branches missed.">		if (nome.getText().trim().equals(&quot;&quot;))</span>
+<span class="nc" id="L331">			JOptionPane.showMessageDialog(this, &quot;Escreve um nome para a regra!&quot;, &quot;Nome vazio&quot;,</span>
+<span class="nc" id="L332">					JOptionPane.ERROR_MESSAGE);</span>
+		else {
+<span class="nc bnc" id="L334" title="All 2 branches missed.">			if (!nome.getText().equals(regra.getNome())</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">					&amp;&amp; Comparador_de_Qualidade.getInstance().existsRuleWithName(nome.getText()))</span>
+<span class="nc" id="L336">				JOptionPane.showMessageDialog(this, &quot;Esse nome já existe! Escreve outro nome para a regra.&quot;,</span>
+<span class="nc" id="L337">						&quot;Nome já existe&quot;, JOptionPane.ERROR_MESSAGE);</span>
+			else {
+				try {
+<span class="nc" id="L340">					Comparador_de_Qualidade.getInstance().mudarNomedaRegra(regra, nome.getText());</span>
+<span class="nc" id="L341">					regra.setNome(nome.getText());</span>
+<span class="nc" id="L342">					regra.setMetrica_1((Metrica) metrics_1.getSelectedItem());</span>
+<span class="nc" id="L343">					regra.setMetrica_2((Metrica) metrics_2.getSelectedItem());</span>
+<span class="nc" id="L344">					regra.setValor_1((Number) spinner_metric_1.getValue());</span>
+<span class="nc" id="L345">					regra.setValor_2((Number) spinner_metric_2.getValue());</span>
+<span class="nc" id="L346">					regra.setLogico((Logic_And_Or) logic_1.getSelectedItem());</span>
+<span class="nc" id="L347">					RegrasModel.getInstance().atualizar(regra);</span>
+<span class="nc" id="L348">					String[] options = new String[] { &quot;Sim&quot;, &quot;Não&quot; };</span>
+<span class="nc" id="L349">					int ok = JOptionPane.showOptionDialog(this,</span>
+<span class="nc" id="L350">							&quot;Regra salva com sucesso! Queres testar a fiabilidade dessa regra, em comparação com as outras?&quot;,</span>
+<span class="nc" id="L351">							&quot;Regra salva&quot;, JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options,</span>
+<span class="nc" id="L352">							options[0]);</span>
+<span class="nc bnc" id="L353" title="All 2 branches missed.">					if (ok == JOptionPane.YES_OPTION) {</span>
+<span class="nc" id="L354">						Comparador_de_Qualidade.getInstance().open();</span>
+					}
+<span class="nc" id="L356">					reset();</span>
+<span class="nc" id="L357">					regrasList.setSelectedIndex(-1);</span>
+<span class="nc" id="L358">				} catch (ClassCastException | NullPointerException e) {</span>
+<span class="nc" id="L359">					JOptionPane.showMessageDialog(this, &quot;Erro ao salvar alterações! Nenhuma regra selecionada!&quot;,</span>
+<span class="nc" id="L360">							&quot;Exception&quot;, JOptionPane.ERROR_MESSAGE);</span>
+				}
+			}
+		}
+<span class="nc" id="L364">	}</span>
+
+	/**
+	 * Preenche os diversos campos com os atributos da regra dada e altera o modo
+	 * para edição.
+	 * 
+	 * @param regra regra que se pretende editar
+	 */
+	public void preencher(Regra regra) {
+		try {
+<span class="fc" id="L374">		this.regra = regra;</span>
+<span class="fc" id="L375">		setTitle(regra.getNome());</span>
+<span class="fc" id="L376">		nome.setText(regra.getNome());</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">		if (regra.getMetrica_1() == Metrica.LOC)</span>
+<span class="fc" id="L378">			tipo.setSelectedIndex(0);</span>
+		else
+<span class="fc" id="L380">			tipo.setSelectedIndex(1);</span>
+<span class="fc" id="L381">		spinner_metric_1.setValue(regra.getValor_1());</span>
+<span class="fc" id="L382">		spinner_metric_2.setValue(regra.getValor_2());</span>
+<span class="fc" id="L383">		logic_1.setSelectedItem(regra.getLogico());</span>
+
+<span class="fc" id="L385">		removeActionListenersFromSaveButton();</span>
+<span class="fc" id="L386">		save.addActionListener(new SaveListenerEdit());</span>
+<span class="fc" id="L387">		} catch (NullPointerException e) {</span>
+<span class="fc" id="L388">			System.out.println(&quot;Alguma coisa correu mal...&quot;);</span>
+		}
+
+<span class="fc" id="L391">	}</span>
+
+	/**
+	 * Limpa os campos a preencher e altera para o modo &quot;Nova Regra&quot;
+	 */
+	public void reset() {
+<span class="fc" id="L397">		setTitle(&quot;Nova Regra&quot;);</span>
+<span class="fc" id="L398">		nome.setText(&quot;&quot;);</span>
+<span class="fc" id="L399">		tipo.setSelectedIndex(0);</span>
+<span class="fc" id="L400">		spinner_metric_1.setValue(0);</span>
+<span class="fc" id="L401">		spinner_metric_2.setValue(0);</span>
+<span class="fc" id="L402">		logic_1.setSelectedIndex(0);</span>
+<span class="fc" id="L403">		removeActionListenersFromSaveButton();</span>
+<span class="fc" id="L404">		save.addActionListener(new SaveListenerCreate());</span>
+<span class="fc" id="L405">	}</span>
+
+	/**
+	 * Remove os Action Listeners do botão Save, para permitir que se adicione um
+	 * novo actionListener, sem interferência de comportamento com o outro
+	 */
+	public void removeActionListenersFromSaveButton() {
+<span class="fc" id="L412">		ActionListener[] al = save.getActionListeners();</span>
+<span class="fc bfc" id="L413" title="All 2 branches covered.">		for (int i = 0; i &lt; al.length; i++) {</span>
+<span class="fc" id="L414">			save.removeActionListener(al[i]);</span>
+		}
+<span class="fc" id="L416">	}</span>
+
+	/**
+	 * Torna visível esse diálogo
+	 */
+	public void open() {
+<span class="nc" id="L422">		setVisible(true);</span>
+<span class="nc" id="L423">	}</span>
+
+	/**
+	 * ActionListener para o modo &quot;Nova Regra&quot;
+	 * 
+	 * @author dariop
+	 *
+	 */
+<span class="fc" id="L431">	private class SaveListenerCreate implements ActionListener {</span>
+		@Override
+		public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L434">			salvarRegra();</span>
+<span class="nc" id="L435">		}</span>
+	}
+
+	/**
+	 * ActionListener para o modo de edição
+	 * 
+	 * @author dariop
+	 *
+	 */
+<span class="fc" id="L444">	private class SaveListenerEdit implements ActionListener {</span>
+		@Override
+		public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L447">			editarRegra();</span>
+<span class="nc" id="L448">		}</span>
+	}
+
+	/**
+	 * Usado para o teste JUnit
+	 * @return o JComboBox de seleção do tipo de regra
+	 */
+	public JComboBox&lt;String&gt; getTipo() {
+<span class="fc" id="L456">		return tipo;</span>
+	}
+
+	/**
+	 * Usado para o teste JUnit
+	 * @return o JMenuItem mEditar
+	 */
+	public JMenuItem getmEditar() {
+<span class="fc" id="L464">		return mEditar;</span>
+	}
+
+	/**
+	 * Usado para o teste JUnit
+	 * @return o JMenuItem mApagar
+	 */
+	public JMenuItem getmApagar() {
+<span class="fc" id="L472">		return mApagar;</span>
+	}
+	
+	/**
+	 * Usado para o teste JUnit
+	 * @return a JList regrasList
+	 */
+	public JList&lt;Regra&gt; getRegrasList() {
+<span class="fc" id="L480">		return regrasList;</span>
+	}
+	
+	/**
+	 * Usado para o teste JUnit
+	 * @return o JButton save
+	 */
+	public JButton getSave() {
+<span class="fc" id="L488">		return save;</span>
+	}
+	
+	
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

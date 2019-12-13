@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="AllTests" project="ES1-2019-EIC1-42" tests="93" started="93" failures="0" errors="0" ignored="0">
+  <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.AllTests" time="2.71">
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.AppTest" time="0.188">
+      <testcase name="testMain" classname="pt.iul.ista.ES1_2019_EIC1_42.AppTest" time="0.188"/>
+    </testsuite>
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.CompareTableTest" time="0.047">
+      <testcase name="testGetToolTipText" classname="pt.iul.ista.ES1_2019_EIC1_42.CompareTableTest" time="0.0"/>
+      <testcase name="testCompareTable" classname="pt.iul.ista.ES1_2019_EIC1_42.CompareTableTest" time="0.047"/>
+    </testsuite>
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="1.802">
+      <testcase name="testGetRegrasValues" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCalculateIndicadoresLongMethod" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCalculateIndicadoresPMD" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testMudarNomedaRegra" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.015"/>
+      <testcase name="testVerifyFeatureEnvyRegraLogicValue" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testVerifyLongMethodRegraLogicValue" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testRemoveRegra" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testColumnForEachRule" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCalculateIndicadoresRegras" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testRegraResultForEachMethodTest" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testGenerateFeatureEnvyRegraValuesOr" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCreateIndicatorTable" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCalculateIndicadoresLongMethodRegras" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCalculateIndicadoresiPlasma" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testInicializarRegrasHashMaps" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testGenerateLongMethodRegraValuesOr" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCalculateIndicadoresPMDiPlasma" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testExistsRuleWithName" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCalculateIndicadoresFeatureEnvyRegras" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testAtualizar" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testRuleResultForEachMethod" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCreateResultsTable" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testGenerateFeatureEnvyRegraValuesAnd" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testGenerateLongMethodRegraValuesAnd" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testColumnForEachRegra" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testGetInstance" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="0.0"/>
+      <testcase name="testCalculateIndicadoresFeatureEnvy" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Comparador_de_QualidadeTest" time="1.787"/>
+    </testsuite>
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.195">
+      <testcase name="testGetValueAt_casedefault" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.024"/>
+      <testcase name="testGetColumnName" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.0"/>
+      <testcase name="testGetValueAt" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.0"/>
+      <testcase name="ConstructorTest_null" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.0"/>
+      <testcase name="testGetContent" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.14"/>
+      <testcase name="testGetValueAt_case3" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.0"/>
+      <testcase name="testGetValueAt_case6" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.0"/>
+      <testcase name="testGetValueAt_case7" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.016"/>
+      <testcase name="ConstructorTest" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.0"/>
+      <testcase name="testGetValueAt_null" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.0"/>
+      <testcase name="testGetColumnName_null" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.0"/>
+      <testcase name="testGetInstance" classname="pt.iul.ista.ES1_2019_EIC1_42.DataModelTest" time="0.015"/>
+    </testsuite>
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.gui.ExcelDataTest" time="0.0">
+      <testcase name="testExcelData" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.ExcelDataTest" time="0.0"/>
+    </testsuite>
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.188">
+      <testcase name="testIsLongMethod" classname="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.0"/>
+      <testcase name="testGetCyclo" classname="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.0"/>
+      <testcase name="testIsPmd" classname="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.0"/>
+      <testcase name="testGetAtfd" classname="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.0"/>
+      <testcase name="testIsFeatureEnvy" classname="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.0"/>
+      <testcase name="testGetMethodID" classname="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.0"/>
+      <testcase name="testGetLaa" classname="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.0"/>
+      <testcase name="testGetLoc" classname="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.0"/>
+      <testcase name="testIsIplasma" classname="pt.iul.ista.ES1_2019_EIC1_42.MetodoTest" time="0.188"/>
+    </testsuite>
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.gui.Nova_RegraTest" time="0.29">
+      <testcase name="testNova_Regra" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Nova_RegraTest" time="0.186"/>
+      <testcase name="testEditarRegra" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Nova_RegraTest" time="0.088"/>
+      <testcase name="testReset" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Nova_RegraTest" time="0.016"/>
+      <testcase name="testPreencher" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Nova_RegraTest" time="0.0"/>
+      <testcase name="testRemoveActionListenersFromSaveButton" classname="pt.iul.ista.ES1_2019_EIC1_42.gui.Nova_RegraTest" time="0.0"/>
+    </testsuite>
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.RegrasModelTest" time="0.0">
+      <testcase name="testRemoveRegra" classname="pt.iul.ista.ES1_2019_EIC1_42.RegrasModelTest" time="0.0"/>
+      <testcase name="testAddRegra" classname="pt.iul.ista.ES1_2019_EIC1_42.RegrasModelTest" time="0.0"/>
+      <testcase name="testGetSize" classname="pt.iul.ista.ES1_2019_EIC1_42.RegrasModelTest" time="0.0"/>
+      <testcase name="testGetElementAt" classname="pt.iul.ista.ES1_2019_EIC1_42.RegrasModelTest" time="0.0"/>
+      <testcase name="testAtualizar" classname="pt.iul.ista.ES1_2019_EIC1_42.RegrasModelTest" time="0.0"/>
+      <testcase name="testGetRegras" classname="pt.iul.ista.ES1_2019_EIC1_42.RegrasModelTest" time="0.0"/>
+      <testcase name="testGetInstance" classname="pt.iul.ista.ES1_2019_EIC1_42.RegrasModelTest" time="0.0"/>
+    </testsuite>
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0">
+      <testcase name="testSetValor_1" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testSetValor_2" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testIsLongMethodRule" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testRegra" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testToString" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testGetNome" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testGetMetrica_1" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testGetMetrica_2" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testGetValor_1" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testGetValor_2" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testHashCode" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testSetLogico" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testGetLogico" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testIsFeatureEnvyRule" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testEquals" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testSetNome" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testSetMetrica_1" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+      <testcase name="testSetMetrica_2" classname="pt.iul.ista.ES1_2019_EIC1_42.RegraTest" time="0.0"/>
+    </testsuite>
+    <testsuite name="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0">
+      <testcase name="testResultadosIndicadoresModel" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testRemoveColumn" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testAddColumn" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testGetColumnNameInt" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testGetValueAt" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testExistsColumn" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testIsCellEditable" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testAddRow" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testGetRowCount" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testGetColumnCount" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+      <testcase name="testChangeColumnName" classname="pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModelTest" time="0.0"/>
+    </testsuite>
+  </testsuite>
+</testrun>

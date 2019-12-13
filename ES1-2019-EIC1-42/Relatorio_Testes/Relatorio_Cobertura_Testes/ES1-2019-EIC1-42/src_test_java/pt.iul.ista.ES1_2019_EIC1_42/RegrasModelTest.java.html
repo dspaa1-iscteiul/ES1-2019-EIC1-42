@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>RegrasModelTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42</a> &gt; <span class="el_source">RegrasModelTest.java</span></div><h1>RegrasModelTest.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.Test;
+
+<span class="fc" id="L8">public class RegrasModelTest {</span>
+	
+	private RegrasModel regras;
+<span class="fc" id="L11">	private Regra r = new Regra(&quot;regra&quot;, Metrica.ATFD, Metrica.LAA, 20, 30, Logic_And_Or.AND);</span>
+
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L15">		regras = new RegrasModel();</span>
+<span class="fc" id="L16">		regras.addRegra(r);</span>
+<span class="fc" id="L17">	}</span>
+
+	@Test
+	public void testGetElementAt() {
+<span class="fc" id="L21">		assertEquals(r,regras.getElementAt(0));</span>
+<span class="fc" id="L22">	}</span>
+
+	@Test
+	public void testGetSize() {
+<span class="fc" id="L26">		assertEquals(1,regras.getSize());</span>
+<span class="fc" id="L27">	}</span>
+
+	@Test
+	public void testAddRegra() {
+<span class="fc" id="L31">		assertFalse(regras.addRegra(r));</span>
+<span class="fc" id="L32">	}</span>
+
+	@Test
+	public void testRemoveRegra() {
+<span class="fc" id="L36">		assertTrue(regras.removeRegra(r));</span>
+<span class="fc" id="L37">		assertFalse(regras.removeRegra(r));</span>
+<span class="fc" id="L38">	}</span>
+
+	@Test
+	public void testAtualizar() {
+<span class="fc" id="L42">		r.setValor_1(40);</span>
+<span class="fc" id="L43">		regras.atualizar(r);</span>
+<span class="fc" id="L44">		assertEquals(40,regras.getElementAt(0).getValor_1());</span>
+		
+<span class="fc" id="L46">	}</span>
+
+	@Test
+	public void testGetRegras() {
+<span class="fc" id="L50">		assertNotNull(regras.getRegras());</span>
+<span class="fc" id="L51">	}</span>
+
+	
+	@Test
+	public void testGetInstance() {
+<span class="fc" id="L56">		assertNotNull(RegrasModel.getInstance());</span>
+<span class="fc" id="L57">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

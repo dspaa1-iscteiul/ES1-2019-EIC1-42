@@ -41,10 +41,6 @@ public class ExcelData extends JFrame {
 	public ExcelData() {
 		initContentPanel();
 		initTable();
-
-		info_panel = new JPanel();
-		contentPane.add(info_panel, BorderLayout.SOUTH);
-
 	}
 
 	/**
@@ -54,13 +50,13 @@ public class ExcelData extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(50, 100, 1300, 600);
 		initMenus();
-		contentPane = new JPanel();
+		contentPane = new JPanel(new BorderLayout());
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		excel_panel = new JPanel();
-		excel_panel.setLayout(new GridLayout(1, 1));
+		excel_panel = new JPanel(new GridLayout(1, 1));
 		contentPane.add(excel_panel, BorderLayout.CENTER);
+		info_panel = new JPanel();
+		contentPane.add(info_panel, BorderLayout.SOUTH);
 	}
 
 	/**

@@ -517,12 +517,44 @@ public class Comparador_de_Qualidade extends JDialog {
 		return INSTANCE;
 	}
 
-	public ArrayList<Regra> getRegras() {
-		return regras;
-	}
-
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
 	public HashMap<Regra, ArrayList<Integer>> getIndicadoresRegrasUtilizador() {
 		return indicadoresRegrasUtilizador;
 	}
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
+	public JTable getResultTable() {
+		return resultTable;
+	}
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
+	public JTable getIndicadoresTable() {
+		return indicadoresTable;
+	}
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
+	public ResultadosIndicadoresModel getTableModelResultados() {
+		return tableModelResultados;
+	}
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
+	public ResultadosIndicadoresModel getTableModelIndicadores() {
+		return tableModelIndicadores;
+	}
+	
+	
+	
+	
 
 }

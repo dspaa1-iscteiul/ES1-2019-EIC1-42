@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ExcelData.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42.gui</a> &gt; <span class="el_source">ExcelData.java</span></div><h1>ExcelData.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42.gui;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+
+/**
+ * Classe para visualizar um ficheiro Excel
+ * 
+ * @author dariop
+ *
+ */
+public class ExcelData extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5646410931104674210L;
+	private JPanel contentPane, excel_panel, info_panel;
+	private JTable table;
+	private JMenuBar menuBar;
+	private JMenu mnFicheiro;
+	private JMenuItem mImportarExcel, mNovaRegra, mComparador;
+
+	/**
+	 * Create the frame.
+	 */
+<span class="fc" id="L41">	public ExcelData() {</span>
+<span class="fc" id="L42">		initContentPanel();</span>
+<span class="fc" id="L43">		initTable();</span>
+<span class="fc" id="L44">	}</span>
+
+	/**
+	 * Inicializa o painel onde vão ficar os componentes.
+	 */
+	private void initContentPanel() {
+<span class="fc" id="L50">		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</span>
+<span class="fc" id="L51">		setBounds(50, 100, 1300, 600);</span>
+<span class="fc" id="L52">		initMenus();</span>
+<span class="fc" id="L53">		contentPane = new JPanel(new BorderLayout());</span>
+<span class="fc" id="L54">		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));</span>
+<span class="fc" id="L55">		setContentPane(contentPane);</span>
+<span class="fc" id="L56">		excel_panel = new JPanel(new GridLayout(1, 1));</span>
+<span class="fc" id="L57">		contentPane.add(excel_panel, BorderLayout.CENTER);</span>
+<span class="fc" id="L58">		info_panel = new JPanel();</span>
+<span class="fc" id="L59">		contentPane.add(info_panel, BorderLayout.SOUTH);</span>
+<span class="fc" id="L60">	}</span>
+
+	/**
+	 * Inicializa a tabela.
+	 */
+	private void initTable() {
+<span class="fc" id="L66">		table = new JTable() {</span>
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -1528885477774668184L;
+
+			public String getToolTipText(MouseEvent e) {
+<span class="fc" id="L73">				String tip = null;</span>
+<span class="fc" id="L74">				java.awt.Point p = e.getPoint();</span>
+<span class="fc" id="L75">				int rowIndex = rowAtPoint(p);</span>
+<span class="fc" id="L76">				int colIndex = columnAtPoint(p);</span>
+
+				try {
+<span class="nc" id="L79">					tip = getValueAt(rowIndex, colIndex).toString();</span>
+<span class="pc" id="L80">				} catch (RuntimeException e1) {</span>
+<span class="fc" id="L81">					tip = &quot;&quot;;</span>
+				}
+<span class="fc" id="L83">				return tip;</span>
+			}
+		};
+<span class="fc" id="L86">		table.getTableHeader().setReorderingAllowed(false);</span>
+<span class="fc" id="L87">		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);</span>
+
+<span class="fc" id="L89">		JScrollPane scrollPane = new JScrollPane();</span>
+<span class="fc" id="L90">		excel_panel.add(scrollPane);</span>
+<span class="fc" id="L91">		scrollPane.setViewportView(table);</span>
+<span class="fc" id="L92">	}</span>
+
+	/**
+	 * Inicializa a MenuBar e os menus
+	 */
+	private void initMenus() {
+<span class="fc" id="L98">		menuBar = new JMenuBar();</span>
+<span class="fc" id="L99">		setJMenuBar(menuBar);</span>
+
+<span class="fc" id="L101">		mnFicheiro = new JMenu(&quot;Ficheiro&quot;);</span>
+<span class="fc" id="L102">		menuBar.add(mnFicheiro);</span>
+
+<span class="fc" id="L104">		mImportarExcel = new JMenuItem(&quot;Importar Excel&quot;);</span>
+<span class="fc" id="L105">		mnFicheiro.add(mImportarExcel);</span>
+
+<span class="fc" id="L107">		mImportarExcel.addActionListener(new ActionListener() {</span>
+
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L110">				table.setModel(DataModel.newInstance());</span>
+<span class="nc" id="L111">			}</span>
+		});
+
+<span class="fc" id="L114">		mNovaRegra = new JMenuItem(&quot;Nova Regra / Gerir Regras&quot;);</span>
+<span class="fc" id="L115">		mnFicheiro.add(mNovaRegra);</span>
+
+<span class="fc" id="L117">		mNovaRegra.addActionListener(new ActionListener() {</span>
+
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L120">				new Nova_Regra().open();</span>
+<span class="nc" id="L121">			}</span>
+		});
+
+<span class="fc" id="L124">		mComparador = new JMenuItem(&quot;Comparador&quot;);</span>
+<span class="fc" id="L125">		mnFicheiro.add(mComparador);</span>
+
+<span class="fc" id="L127">		mComparador.addActionListener(new ActionListener() {</span>
+
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L130">				Comparador_de_Qualidade.getInstance().open();</span>
+<span class="nc" id="L131">			}</span>
+		});
+<span class="fc" id="L133">	}</span>
+	
+	public void openFile() {
+<span class="nc" id="L136">		DataModel.getInstance().addFile();</span>
+<span class="nc" id="L137">		table.setModel(DataModel.getInstance());</span>
+<span class="nc" id="L138">		info_panel.add(new JLabel(DataModel.getInstance().getRowCount() + &quot; métodos&quot;));</span>
+<span class="nc" id="L139">		setVisible(true);</span>
+<span class="nc" id="L140">		}</span>
+
+	/**
+	 * 
+	 * @return a JTable que guarda os dados do Excel
+	 */
+	public JTable getTable() {
+<span class="fc" id="L147">		return table;</span>
+
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

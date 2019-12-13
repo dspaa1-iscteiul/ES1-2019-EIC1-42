@@ -2,35 +2,18 @@ package pt.iul.ista.ES1_2019_EIC1_42;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class RegrasModelTest {
 	
-	RegrasModel regras;
-	Regra r = new Regra("regra", Metrica.ATFD, Metrica.LAA, 20, 30, Logic_And_Or.AND);
-
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
+	private RegrasModel regras;
+	private Regra r = new Regra("regra", Metrica.ATFD, Metrica.LAA, 20, 30, Logic_And_Or.AND);
 
 	@Before
 	public void setUp() throws Exception {
 		regras = new RegrasModel();
 		regras.addRegra(r);
-	}
-
-	@After
-	public void tearDown() throws Exception {
 	}
 
 	@Test

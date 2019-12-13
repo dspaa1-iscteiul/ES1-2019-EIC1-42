@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>MetodoTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42</a> &gt; <span class="el_source">MetodoTest.java</span></div><h1>MetodoTest.java</h1><pre class="source lang-java linenums">/**
+ * 
+ */
+package pt.iul.ista.ES1_2019_EIC1_42;
+
+import static org.junit.Assert.*;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+/**
+ * @author dariop
+ *
+ */
+<span class="fc" id="L16">public class MetodoTest {</span>
+	
+	private static Metodo metodo;
+	private static final int METHOD_ID = 1;
+	private static final String PACKAGE = &quot;fat&quot;;
+	private static final String CLASS = &quot;DocumentParseFixture&quot;;
+	private static final String METHOD = &quot;Output()&quot;;
+	private static final int LOC = 3;
+	private static final int CYCLO = 1;
+	private static final int ATFD = 0;
+	private static final int LAA = 1;
+<span class="fc" id="L27">	private static boolean is_long_method = false;</span>
+<span class="fc" id="L28">	private static boolean iPlasma = false;</span>
+<span class="fc" id="L29">	private static boolean pmd = false;</span>
+<span class="fc" id="L30">	private static boolean is_feature_envy = false;</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+<span class="fc" id="L37">		metodo = new Metodo(METHOD_ID, PACKAGE, CLASS, METHOD, LOC, CYCLO, ATFD, LAA, is_long_method, iPlasma, pmd, is_feature_envy);</span>
+<span class="fc" id="L38">	}</span>
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	public void setUp() throws Exception {
+<span class="fc" id="L45">		metodo = new Metodo(METHOD_ID, PACKAGE, CLASS, METHOD, LOC, CYCLO, ATFD, LAA, is_long_method, iPlasma, pmd, is_feature_envy);</span>
+<span class="fc" id="L46">	}</span>
+
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#isLongMethod()}.
+	 */
+	@Test
+	public void testIsLongMethod() {
+<span class="fc" id="L53">		assertEquals(is_long_method, metodo.isIs_long_method());</span>
+<span class="fc" id="L54">	}</span>
+
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#isFeatureEnvy()}.
+	 */
+	@Test
+	public void testIsFeatureEnvy() {
+<span class="fc" id="L61">		assertEquals(metodo.isIs_feature_envy(), is_feature_envy);</span>
+<span class="fc" id="L62">	}</span>
+
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#getMethodID()}.
+	 */
+	@Test
+	public void testGetMethodID() {
+<span class="fc" id="L69">		assertEquals(METHOD_ID, metodo.getMethodID());</span>
+<span class="fc" id="L70">	}</span>
+
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#getLoc()}.
+	 */
+	@Test
+	public void testGetLoc() {
+<span class="fc" id="L77">		assertEquals(metodo.getLoc(), LOC);</span>
+<span class="fc" id="L78">	}</span>
+
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#getCyclo()}.
+	 */
+	@Test
+	public void testGetCyclo() {
+<span class="fc" id="L85">		assertEquals(metodo.getCyclo(), CYCLO);</span>
+<span class="fc" id="L86">	}</span>
+
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#getAtfd()}.
+	 */
+	@Test
+	public void testGetAtfd() {
+<span class="fc" id="L93">		assertEquals(metodo.getAtfd(), ATFD);</span>
+<span class="fc" id="L94">	}</span>
+
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#getLaa()}.
+	 */
+	@Test
+	public void testGetLaa() {
+<span class="fc" id="L101">		assertEquals(metodo.getLaa(), LAA, 0.01);</span>
+<span class="fc" id="L102">	}</span>
+
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#isIplasma()}.
+	 */
+	@Test
+	public void testIsIplasma() {
+<span class="fc" id="L109">		assertEquals(metodo.isIplasma(), iPlasma);</span>
+<span class="fc" id="L110">	}</span>
+
+	/**
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#isPmd()}.
+	 */
+	@Test
+	public void testIsPmd() {
+<span class="fc" id="L117">		assertEquals(metodo.isPmd(),pmd);</span>
+<span class="fc" id="L118">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

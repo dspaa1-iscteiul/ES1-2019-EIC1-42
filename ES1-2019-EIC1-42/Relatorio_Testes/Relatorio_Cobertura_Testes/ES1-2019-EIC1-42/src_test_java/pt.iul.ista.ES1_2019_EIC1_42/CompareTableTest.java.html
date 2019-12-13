@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>CompareTableTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42</a> &gt; <span class="el_source">CompareTableTest.java</span></div><h1>CompareTableTest.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42;
+
+import static org.junit.Assert.*;
+
+import java.awt.event.MouseEvent;
+
+import javax.swing.table.AbstractTableModel;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+<span class="fc" id="L12">public class CompareTableTest {</span>
+	
+	private static CompareTable ct;
+	private static AbstractTableModel tableModel;
+	private static String[] col;
+	
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+<span class="fc" id="L21">		col = new String[]{&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;};</span>
+<span class="fc" id="L22">		tableModel = new ResultadosIndicadoresModel(col);</span>
+<span class="fc" id="L23">		ct = new CompareTable(col, tableModel);</span>
+<span class="fc" id="L24">	}</span>
+
+	@Test
+	public void testCompareTable() {
+<span class="fc" id="L28">		assertFalse(ct.getTableHeader().getReorderingAllowed());</span>
+<span class="fc" id="L29">		assertEquals(tableModel, ct.getModel());</span>
+<span class="fc" id="L30">	}</span>
+	
+	@Test
+	public void testGetToolTipText() {
+<span class="fc" id="L34">		MouseEvent e = new MouseEvent(ct, MouseEvent.MOUSE_MOVED,</span>
+<span class="fc" id="L35">				System.currentTimeMillis(), 0, 150, 150, 1, false);</span>
+<span class="fc" id="L36">		assertNull(ct.getToolTipText(e));</span>
+<span class="fc" id="L37">		assertEquals(ct.getTableHeader().getToolTipText(e), col[2] + &quot; - long_method&quot;);</span>
+<span class="fc" id="L38">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

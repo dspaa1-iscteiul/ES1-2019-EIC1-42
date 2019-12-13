@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pt"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Comparador_de_Qualidade.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">AllTests (13/dez/2019 0:03:23)</a> &gt; <a href="../../index.html" class="el_group">ES1-2019-EIC1-42</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">pt.iul.ista.ES1_2019_EIC1_42.gui</a> &gt; <span class="el_source">Comparador_de_Qualidade.java</span></div><h1>Comparador_de_Qualidade.java</h1><pre class="source lang-java linenums">package pt.iul.ista.ES1_2019_EIC1_42.gui;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+
+import pt.iul.ista.ES1_2019_EIC1_42.CompareTable;
+import pt.iul.ista.ES1_2019_EIC1_42.DataModel;
+import pt.iul.ista.ES1_2019_EIC1_42.Logic_And_Or;
+import pt.iul.ista.ES1_2019_EIC1_42.Metodo;
+import pt.iul.ista.ES1_2019_EIC1_42.Regra;
+import pt.iul.ista.ES1_2019_EIC1_42.RegrasModel;
+import pt.iul.ista.ES1_2019_EIC1_42.ResultadosIndicadoresModel;
+
+/**
+ * Classe para visualizar graficamente as regras comparativamente
+ * 
+ * @author dariop
+ * @author fmpts
+ * @author rmdca
+ * @author aaspo
+ */
+public class Comparador_de_Qualidade extends JDialog {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 489999421652308781L;
+	private static Comparador_de_Qualidade INSTANCE;
+	private ArrayList&lt;Regra&gt; regras;
+	private ArrayList&lt;Metodo&gt; metodos;
+<span class="fc" id="L45">	private final JPanel contentPanel = new JPanel();</span>
+	private JPanel resultados_panel, indicadores_panel;
+	private JTabbedPane tabbedPane;
+
+	private ResultadosIndicadoresModel tableModelResultados, tableModelIndicadores;
+	private JTable resultTable, indicadoresTable;
+
+	private HashMap&lt;Regra, ArrayList&lt;Boolean&gt;&gt; longMethodRegrasValues;
+	private HashMap&lt;Regra, ArrayList&lt;Boolean&gt;&gt; featureEnvyRegrasValues;
+	private HashMap&lt;Regra, ArrayList&lt;Integer&gt;&gt; indicadoresRegrasUtilizador;
+<span class="fc" id="L55">	private Integer[] indicadoresiPlasma = new Integer[4];</span>
+<span class="fc" id="L56">	private Integer[] indicadoresPMD = new Integer[4];</span>
+
+	/**
+	 * Create the dialog.
+	 */
+<span class="fc" id="L61">	private Comparador_de_Qualidade() {</span>
+
+<span class="fc" id="L63">		setBounds(100, 100, 600, 600);</span>
+<span class="fc" id="L64">		setModalityType(ModalityType.APPLICATION_MODAL);</span>
+<span class="fc" id="L65">		getContentPane().setLayout(new BorderLayout());</span>
+<span class="fc" id="L66">		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));</span>
+<span class="fc" id="L67">		contentPanel.setLayout(new BorderLayout());</span>
+<span class="fc" id="L68">		getContentPane().add(contentPanel, BorderLayout.CENTER);</span>
+<span class="fc" id="L69">		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);</span>
+
+<span class="fc" id="L71">		tabbedPane = new JTabbedPane(JTabbedPane.TOP);</span>
+<span class="fc" id="L72">		contentPanel.add(tabbedPane);</span>
+
+<span class="fc" id="L74">		resultados_panel = new JPanel(new BorderLayout());</span>
+<span class="fc" id="L75">		tabbedPane.addTab(&quot;Resultados&quot;, null, resultados_panel, &quot;Resultados da deteção dos defeitos&quot;);</span>
+
+<span class="fc" id="L77">		indicadores_panel = new JPanel(new BorderLayout());</span>
+<span class="fc" id="L78">		tabbedPane.addTab(&quot;Indicadores&quot;, null, indicadores_panel, &quot;Indicadores de qualidade&quot;);</span>
+
+<span class="fc" id="L80">		JPanel buttonPane = new JPanel();</span>
+<span class="fc" id="L81">		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));</span>
+<span class="fc" id="L82">		getContentPane().add(buttonPane, BorderLayout.SOUTH);</span>
+
+<span class="fc" id="L84">		JButton okButton = new JButton(&quot;OK&quot;);</span>
+<span class="fc" id="L85">		okButton.addActionListener(new ActionListener() {</span>
+
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L88">				dispose();</span>
+<span class="nc" id="L89">			}</span>
+		});
+<span class="fc" id="L91">		buttonPane.add(okButton);</span>
+
+		try {
+<span class="fc" id="L94">			metodos = DataModel.getInstance().getContent();</span>
+<span class="pc" id="L95">		} catch (EncryptedDocumentException | InvalidFormatException | IOException e1) {</span>
+<span class="nc" id="L96">			metodos = new ArrayList&lt;Metodo&gt;();</span>
+		}
+
+<span class="fc" id="L99">		inicializarRegrasHashMaps();</span>
+<span class="fc" id="L100">		regras = RegrasModel.getInstance().getRegras();</span>
+
+<span class="fc" id="L102">		createResultsTable();</span>
+<span class="fc" id="L103">		calculateIndicadoresPMDiPlasma();</span>
+<span class="fc" id="L104">		createIndicatorTable();</span>
+
+<span class="fc" id="L106">	}</span>
+
+	public void inicializarRegrasHashMaps() {
+<span class="fc" id="L109">		longMethodRegrasValues = new HashMap&lt;Regra, ArrayList&lt;Boolean&gt;&gt;();</span>
+<span class="fc" id="L110">		featureEnvyRegrasValues = new HashMap&lt;Regra, ArrayList&lt;Boolean&gt;&gt;();</span>
+<span class="fc" id="L111">		indicadoresRegrasUtilizador = new HashMap&lt;Regra, ArrayList&lt;Integer&gt;&gt;();</span>
+<span class="fc" id="L112">	}</span>
+
+	/**
+	 * Creates table with MethodID, iPlasma and PMD columns and respective results
+	 */
+	public void createResultsTable() {
+<span class="fc" id="L118">		String[] col = { &quot;MethodID&quot;, &quot;iPlasma&quot;, &quot;PMD&quot; };</span>
+
+<span class="fc" id="L120">		tableModelResultados = new ResultadosIndicadoresModel(col);</span>
+<span class="fc" id="L121">		resultTable = new CompareTable(col, tableModelResultados);</span>
+
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">		for (int i = 0; i != metodos.size(); i++) {</span>
+<span class="nc" id="L124">			int methodID = metodos.get(i).getMethodID();</span>
+<span class="nc" id="L125">			boolean iPlasma = metodos.get(i).isIplasma();</span>
+<span class="nc" id="L126">			boolean PMD = metodos.get(i).isPmd();</span>
+<span class="nc" id="L127">			Object[] data = { methodID, iPlasma, PMD };</span>
+<span class="nc" id="L128">			tableModelResultados.addRow(data);</span>
+		}
+<span class="fc" id="L130">		JScrollPane panel = new JScrollPane(resultTable);</span>
+<span class="fc" id="L131">		resultados_panel.add(panel);</span>
+<span class="fc" id="L132">	}</span>
+
+	/**
+	 * Creates a column for each rule created and fills it out with the results for
+	 * each methodID
+	 */
+	public void columnForEachRule() {
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">		if (!regras.isEmpty()) {</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">			for (int i = 0; i != regras.size(); i++) {</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">				if (tableModelResultados.existsColumn(regras.get(i).getNome()))</span>
+<span class="fc" id="L142">					tableModelResultados.removeColumn(regras.get(i).getNome());</span>
+<span class="fc" id="L143">				tableModelResultados.addColumn(regras.get(i).getNome(), ruleResultForEachMethod(regras.get(i)));</span>
+			}
+		}
+<span class="fc" id="L146">	}</span>
+
+	/**
+	 * Verifies the rule result for each method and stores it in an array
+	 * 
+	 * @param r rule that should be verified
+	 * @return an array that contains the full column with the results for the rule
+	 *         in the parameter
+	 */
+	public Object[] ruleResultForEachMethod(Regra r) {
+<span class="fc" id="L156">		Object[] resultados = null;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">		if (r.isLongMethodRule()) {</span>
+<span class="fc" id="L158">			resultados = longMethodRegrasValues.get(r).toArray();</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">		} else if (r.isFeautureEnvyRule()) {</span>
+<span class="fc" id="L160">			resultados = featureEnvyRegrasValues.get(r).toArray();</span>
+		}
+<span class="fc" id="L162">		return resultados;</span>
+	}
+
+	/**
+	 * creates Indicator Table
+	 */
+	public void createIndicatorTable() {
+<span class="fc" id="L169">		String[] col = { &quot;&quot;, &quot;iPlasma&quot;, &quot;PMD&quot; };</span>
+
+<span class="fc" id="L171">		tableModelIndicadores = new ResultadosIndicadoresModel(col);</span>
+<span class="fc" id="L172">		indicadoresTable = new CompareTable(col, tableModelIndicadores);</span>
+
+<span class="fc" id="L174">		String[] indicadores = { &quot;DCI&quot;, &quot;DII&quot;, &quot;ADCI&quot;, &quot;ADII&quot; };</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">		for (int i = 0; i != 4; i++) {</span>
+<span class="fc" id="L176">			Object[] data = { indicadores[i], indicadoresiPlasma[i], indicadoresPMD[i] };</span>
+<span class="fc" id="L177">			tableModelIndicadores.addRow(data);</span>
+		}
+<span class="fc" id="L179">		JScrollPane panel1 = new JScrollPane(indicadoresTable);</span>
+<span class="fc" id="L180">		indicadores_panel.add(panel1);</span>
+<span class="fc" id="L181">	}</span>
+
+	/**
+	 * Generates Columns for each User Rule at Indicators Table
+	 */
+	public void columnForEachRegra() {
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">		if (!regras.isEmpty()) {</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">			for (int i = 0; i != regras.size(); i++) {</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">				if (tableModelIndicadores.existsColumn(regras.get(i).getNome()))</span>
+<span class="fc" id="L190">					tableModelIndicadores.removeColumn(regras.get(i).getNome());</span>
+<span class="fc" id="L191">				tableModelIndicadores.addColumn(regras.get(i).getNome(), regraResultForEachMethod(regras.get(i)));</span>
+			}
+		}
+<span class="fc" id="L194">	}</span>
+
+	/**
+	 * Verifies the indicators for the rule and stores it in an array
+	 * 
+	 * @param r rule that should be verified
+	 * @return an array that contains the indicators for the rule
+	 */
+	public Object[] regraResultForEachMethod(Regra r) {
+<span class="fc" id="L203">		return indicadoresRegrasUtilizador.get(r).toArray();</span>
+	}
+
+	/**
+	 * Collects Rules results for each method - Boolean ArrayList
+	 */
+	public void getRegrasValues() {
+<span class="fc bfc" id="L210" title="All 2 branches covered.">		for (Regra regra : this.regras) {</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">			if (regra.isLongMethodRule()) {</span>
+<span class="fc" id="L212">				verifyLongMethodRegraLogicValue(regra);</span>
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">			} else if (regra.isFeautureEnvyRule()) {</span>
+<span class="fc" id="L214">				verifyFeatureEnvyRegraLogicValue(regra);</span>
+			}
+		}
+<span class="fc" id="L217">	}</span>
+
+	/**
+	 * Verifies LongMethod Rule Logic Condition. Adds Boolean Results to HashMap
+	 * 
+	 * @param regra - rule that should be verified
+	 * 
+	 */
+	public void verifyLongMethodRegraLogicValue(Regra regra) {
+<span class="fc" id="L226">		ArrayList&lt;Boolean&gt; longMethodRuleValues = new ArrayList&lt;Boolean&gt;();</span>
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">		if (regra.getLogico() == Logic_And_Or.AND) {</span>
+<span class="fc" id="L228">			generateLongMethodRegraValuesAnd(regra.getValor_1(), regra.getValor_2(), longMethodRuleValues);</span>
+<span class="pc bnc" id="L229" title="All 2 branches missed.">		} else if (regra.getLogico() == Logic_And_Or.OR) {</span>
+<span class="nc" id="L230">			generateLongMethodRegraValuesOr(regra.getValor_1(), regra.getValor_2(), longMethodRuleValues);</span>
+		}
+<span class="fc" id="L232">		this.longMethodRegrasValues.put(regra, longMethodRuleValues);</span>
+<span class="fc" id="L233">	}</span>
+
+	/**
+	 * Verifies FeatureEnvy Rule Logic Condition. Adds Boolean Results to HashMap
+	 * 
+	 * @param regra - rule that should be verified
+	 * 
+	 */
+	public void verifyFeatureEnvyRegraLogicValue(Regra regra) {
+<span class="fc" id="L242">		ArrayList&lt;Boolean&gt; featureEnvyRuleValues = new ArrayList&lt;Boolean&gt;();</span>
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">		if (regra.getLogico() == Logic_And_Or.AND) {</span>
+<span class="fc" id="L244">			generateFeatureEnvyRegraValuesAnd(regra.getValor_1(), regra.getValor_2(), featureEnvyRuleValues);</span>
+<span class="pc bnc" id="L245" title="All 2 branches missed.">		} else if (regra.getLogico() == Logic_And_Or.OR) {</span>
+<span class="nc" id="L246">			generateFeatureEnvyRegraValuesOr(regra.getValor_1(), regra.getValor_2(), featureEnvyRuleValues);</span>
+		}
+<span class="fc" id="L248">		this.featureEnvyRegrasValues.put(regra, featureEnvyRuleValues);</span>
+<span class="fc" id="L249">	}</span>
+
+	/**
+	 * Generates LongMethod Rule Values based on And Condition
+	 * 
+	 * @param locValue
+	 * @param cycloValue
+	 * @param longMethodRuleValues- - ArrayList that contains the actual longMethod
+	 *                              values for the rules
+	 * 
+	 */
+	public void generateLongMethodRegraValuesAnd(Number locValue, Number cycloValue,
+			ArrayList&lt;Boolean&gt; longMethodRuleValues) {
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">		for (int i = 0; i &lt; metodos.size(); i++) {</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">			longMethodRuleValues.add(((metodos.get(i).getLoc() &gt; (Integer) locValue)</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">					&amp;&amp; (metodos.get(i).getCyclo() &gt; (Integer) cycloValue)));</span>
+		}
+<span class="fc" id="L266">	}</span>
+
+	/**
+	 * Generates LongMethod Rule Values based on Or Condition
+	 * 
+	 * @param locValue
+	 * @param cycloValue
+	 * @param longMethodRuleValues- ArrayList that contains the actual longMethod
+	 *                              values for the rules
+	 */
+	public void generateLongMethodRegraValuesOr(Number locValue, Number cycloValue,
+			ArrayList&lt;Boolean&gt; longMethodRuleValues) {
+<span class="pc bpc" id="L278" title="1 of 2 branches missed.">		for (int i = 0; i &lt; metodos.size(); i++) {</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">			longMethodRuleValues.add(((metodos.get(i).getLoc() &gt; (Integer) locValue)</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">					|| (metodos.get(i).getCyclo() &gt; (Integer) cycloValue)));</span>
+		}
+<span class="fc" id="L282">	}</span>
+
+	/**
+	 * Generates FeatureEnvy Rule Values based on And Condition
+	 * 
+	 * @param atfdValue
+	 * @param laaValue
+	 * @param featureEnvyRuleValues - ArrayList that contains the actual feature
+	 *                              envy values for the rules
+	 * 
+	 */
+	public void generateFeatureEnvyRegraValuesAnd(Number atfdValue, Number laaValue,
+			ArrayList&lt;Boolean&gt; featureEnvyRuleValues) {
+<span class="pc bpc" id="L295" title="1 of 2 branches missed.">		for (int i = 0; i &lt; metodos.size(); i++) {</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">			featureEnvyRuleValues.add(((metodos.get(i).getAtfd() &gt; (Integer) atfdValue)</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">					&amp;&amp; (metodos.get(i).getLaa() &lt; (Double) laaValue)));</span>
+		}
+<span class="fc" id="L299">	}</span>
+
+	/**
+	 * Generates FeatureEnvy Rule Values based on Or Condition
+	 * 
+	 * @param atfdValue
+	 * @param laaValue
+	 * @param featureEnvyRuleValues - ArrayList that contains the actual feature
+	 *                              envy values for the rules
+	 * 
+	 */
+	public void generateFeatureEnvyRegraValuesOr(Number atfdValue, Number laaValue,
+			ArrayList&lt;Boolean&gt; featureEnvyRuleValues) {
+<span class="pc bpc" id="L312" title="1 of 2 branches missed.">		for (int i = 0; i &lt; metodos.size(); i++) {</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">			featureEnvyRuleValues.add(((metodos.get(i).getAtfd() &gt; (Integer) atfdValue)</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">					|| (metodos.get(i).getLaa() &lt; (Double) laaValue)));</span>
+		}
+<span class="fc" id="L316">	}</span>
+
+	/**
+	 * Starts collection of PMD and iPlasma quality Indicadores
+	 */
+	public void calculateIndicadoresPMDiPlasma() {
+//		for (int i = 0; i &lt; metodos.size(); i++) {
+<span class="fc" id="L323">		calculateIndicadoresiPlasma();</span>
+<span class="fc" id="L324">		calculateIndicadoresPMD();</span>
+//		}
+<span class="fc" id="L326">	}</span>
+
+	/**
+	 * Calcula indicadores de qualidade iPlasma
+	 * 
+	 */
+	public void calculateIndicadoresiPlasma() {
+<span class="fc" id="L333">		int dci = 0, dii = 0, adci = 0, adii = 0;</span>
+<span class="pc bpc" id="L334" title="1 of 2 branches missed.">		for (int i = 0; i &lt; metodos.size(); i++) {</span>
+<span class="nc bnc" id="L335" title="All 4 branches missed.">			if (metodos.get(i).isIplasma() &amp;&amp; metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L336">				dci++;</span>
+<span class="nc bnc" id="L337" title="All 4 branches missed.">			} else if (metodos.get(i).isIplasma() &amp;&amp; !metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L338">				dii++;</span>
+<span class="nc bnc" id="L339" title="All 4 branches missed.">			} else if (!metodos.get(i).isIplasma() &amp;&amp; !metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L340">				adci++;</span>
+<span class="nc bnc" id="L341" title="All 4 branches missed.">			} else if (!metodos.get(i).isIplasma() &amp;&amp; metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L342">				adii++;</span>
+			}
+		}
+<span class="fc" id="L345">		indicadoresiPlasma[0] = dci;</span>
+<span class="fc" id="L346">		indicadoresiPlasma[1] = dii;</span>
+<span class="fc" id="L347">		indicadoresiPlasma[2] = adci;</span>
+<span class="fc" id="L348">		indicadoresiPlasma[3] = adii;</span>
+<span class="fc" id="L349">	}</span>
+
+	/**
+	 * Calcula indicadores de qualidade PMD
+	 * 
+	 */
+	public void calculateIndicadoresPMD() {
+<span class="fc" id="L356">		int dci = 0, dii = 0, adci = 0, adii = 0;</span>
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">		for (int i = 0; i &lt; metodos.size(); i++) {</span>
+<span class="nc bnc" id="L358" title="All 4 branches missed.">			if (metodos.get(i).isPmd() &amp;&amp; metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L359">				dci++;</span>
+<span class="nc bnc" id="L360" title="All 4 branches missed.">			} else if (metodos.get(i).isPmd() &amp;&amp; !metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L361">				dii++;</span>
+<span class="nc bnc" id="L362" title="All 4 branches missed.">			} else if (!metodos.get(i).isPmd() &amp;&amp; !metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L363">				adci++;</span>
+<span class="nc bnc" id="L364" title="All 4 branches missed.">			} else if (!metodos.get(i).isPmd() &amp;&amp; metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L365">				adii++;</span>
+			}
+		}
+<span class="fc" id="L368">		indicadoresPMD[0] = dci;</span>
+<span class="fc" id="L369">		indicadoresPMD[1] = dii;</span>
+<span class="fc" id="L370">		indicadoresPMD[2] = adci;</span>
+<span class="fc" id="L371">		indicadoresPMD[3] = adii;</span>
+<span class="fc" id="L372">	}</span>
+
+	/**
+	 * Starts collection of Quality Indicators
+	 */
+
+	public void calculateIndicadoresRegras() {
+<span class="fc" id="L379">		indicadoresRegrasUtilizador = new HashMap&lt;Regra, ArrayList&lt;Integer&gt;&gt;();</span>
+<span class="fc" id="L380">		calculateIndicadoresFeatureEnvy();</span>
+<span class="fc" id="L381">		calculateIndicadoresLongMethod();</span>
+<span class="fc" id="L382">	}</span>
+
+	/**
+	 * Starts collection of Long Method User Rules quality Indicadores
+	 */
+	public void calculateIndicadoresLongMethod() {
+<span class="fc bfc" id="L388" title="All 2 branches covered.">		for (Regra regra : this.longMethodRegrasValues.keySet()) {</span>
+<span class="fc" id="L389">			this.indicadoresRegrasUtilizador.put(regra, calculateIndicadoresLongMethodRegras(regra));</span>
+		}
+<span class="fc" id="L391">	}</span>
+
+	/**
+	 * Calcula indicadores de qualidade Long Method Regras Utilizador
+	 * 
+	 * @param regra
+	 * @return indicadores
+	 */
+	public ArrayList&lt;Integer&gt; calculateIndicadoresLongMethodRegras(Regra regra) {
+<span class="fc" id="L400">		int dci = 0, dii = 0, adci = 0, adii = 0;</span>
+<span class="fc" id="L401">		ArrayList&lt;Integer&gt; indicadores = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L402">		ArrayList&lt;Boolean&gt; regraValues = this.longMethodRegrasValues.get(regra);</span>
+<span class="pc bpc" id="L403" title="1 of 2 branches missed.">		for (int i = 0; i &lt; metodos.size(); i++) {</span>
+<span class="nc bnc" id="L404" title="All 4 branches missed.">			if (regraValues.get(i) &amp;&amp; metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L405">				dci++;</span>
+<span class="nc bnc" id="L406" title="All 4 branches missed.">			} else if (regraValues.get(i) &amp;&amp; !metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L407">				dii++;</span>
+<span class="nc bnc" id="L408" title="All 4 branches missed.">			} else if (!regraValues.get(i) &amp;&amp; !metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L409">				adci++;</span>
+<span class="nc bnc" id="L410" title="All 4 branches missed.">			} else if (!regraValues.get(i) &amp;&amp; metodos.get(i).isIs_long_method()) {</span>
+<span class="nc" id="L411">				adii++;</span>
+			}
+		}
+<span class="fc" id="L414">		indicadores.add(dci);</span>
+<span class="fc" id="L415">		indicadores.add(dii);</span>
+<span class="fc" id="L416">		indicadores.add(adci);</span>
+<span class="fc" id="L417">		indicadores.add(adii);</span>
+<span class="fc" id="L418">		return indicadores;</span>
+	}
+
+	/**
+	 * Starts collection of Feature Envy Rules quality Indicadores
+	 */
+	public void calculateIndicadoresFeatureEnvy() {
+<span class="fc bfc" id="L425" title="All 2 branches covered.">		for (Regra regra : this.featureEnvyRegrasValues.keySet()) {</span>
+<span class="fc" id="L426">			this.indicadoresRegrasUtilizador.put(regra, calculateIndicadoresFeatureEnvyRegras(regra));</span>
+		}
+<span class="fc" id="L428">	}</span>
+
+	/**
+	 * Calcula indicadores de qualidade Feature Envy Regras Utilizador
+	 * 
+	 * @param regra
+	 * @return indicadores
+	 */
+	public ArrayList&lt;Integer&gt; calculateIndicadoresFeatureEnvyRegras(Regra regra) {
+<span class="fc" id="L437">		int dci = 0, dii = 0, adci = 0, adii = 0;</span>
+<span class="fc" id="L438">		ArrayList&lt;Integer&gt; indicadores = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L439">		ArrayList&lt;Boolean&gt; regraValues = this.featureEnvyRegrasValues.get(regra);</span>
+<span class="pc bpc" id="L440" title="1 of 2 branches missed.">		for (int j = 0; j &lt; metodos.size(); j++) {</span>
+<span class="nc bnc" id="L441" title="All 4 branches missed.">			if (regraValues.get(j) &amp;&amp; metodos.get(j).isIs_feature_envy()) {</span>
+<span class="nc" id="L442">				dci++;</span>
+<span class="nc bnc" id="L443" title="All 4 branches missed.">			} else if (regraValues.get(j) &amp;&amp; !metodos.get(j).isIs_feature_envy()) {</span>
+<span class="nc" id="L444">				dii++;</span>
+<span class="nc bnc" id="L445" title="All 4 branches missed.">			} else if (!regraValues.get(j) &amp;&amp; !metodos.get(j).isIs_feature_envy()) {</span>
+<span class="nc" id="L446">				adci++;</span>
+<span class="nc bnc" id="L447" title="All 4 branches missed.">			} else if (!regraValues.get(j) &amp;&amp; metodos.get(j).isIs_feature_envy()) {</span>
+<span class="nc" id="L448">				adii++;</span>
+			}
+		}
+<span class="fc" id="L451">		indicadores.add(dci);</span>
+<span class="fc" id="L452">		indicadores.add(dii);</span>
+<span class="fc" id="L453">		indicadores.add(adci);</span>
+<span class="fc" id="L454">		indicadores.add(adii);</span>
+<span class="fc" id="L455">		return indicadores;</span>
+	}
+
+	/**
+	 * Remove uma regra de ambas as tabelas
+	 * 
+	 * @param regra - regra que deve ser removida
+	 */
+	public void removeRegra(Regra regra) {
+<span class="pc bpc" id="L464" title="1 of 2 branches missed.">		if (regra != null) {</span>
+<span class="nc" id="L465">			tableModelResultados.removeColumn(regra.getNome());</span>
+<span class="nc" id="L466">			tableModelIndicadores.removeColumn(regra.getNome());</span>
+		}
+<span class="fc" id="L468">	}</span>
+
+	/**
+	 * Altera o nome da coluna correspondente à regra dada
+	 * 
+	 * @param regra    - regra que se pretende alterar o nome
+	 * @param novoNome - nome que se quer atribuir
+	 */
+	public void mudarNomedaRegra(Regra regra, String novoNome) {
+<span class="fc" id="L477">		tableModelResultados.changeColumnName(regra.getNome(), novoNome);</span>
+<span class="fc" id="L478">		tableModelIndicadores.changeColumnName(regra.getNome(), novoNome);</span>
+<span class="fc" id="L479">	}</span>
+
+	/**
+	 * Verifica se existe nas tabelas uma regra com o nome dado
+	 * 
+	 * @param name - nome da regra que se pretende verificar se existe
+	 * @return true - se foi encontrada uma coluna com o nome dado como parametro
+	 */
+	public boolean existsRuleWithName(String name) {
+<span class="fc" id="L488">		return tableModelResultados.existsColumn(name);</span>
+	}
+
+	/**
+	 * Sets the dialog visible
+	 */
+	public void open() {
+<span class="nc" id="L495">		atualizar();</span>
+<span class="nc" id="L496">		setVisible(true);</span>
+<span class="nc" id="L497">	}</span>
+
+	/**
+	 * Atualiza a informação presente nas tabelas.
+	 */
+	public void atualizar() {
+<span class="fc" id="L503">		inicializarRegrasHashMaps();</span>
+<span class="fc" id="L504">		getRegrasValues();</span>
+<span class="fc" id="L505">		columnForEachRule();</span>
+<span class="fc" id="L506">		calculateIndicadoresRegras();</span>
+<span class="fc" id="L507">		columnForEachRegra();</span>
+<span class="fc" id="L508">	}</span>
+
+	/**
+	 * 
+	 * @return uma instância dessa classe
+	 */
+	public static Comparador_de_Qualidade getInstance() {
+<span class="fc bfc" id="L515" title="All 2 branches covered.">		if (INSTANCE == null)</span>
+<span class="fc" id="L516">			INSTANCE = new Comparador_de_Qualidade();</span>
+<span class="fc" id="L517">		return INSTANCE;</span>
+	}
+
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
+	public HashMap&lt;Regra, ArrayList&lt;Integer&gt;&gt; getIndicadoresRegrasUtilizador() {
+<span class="fc" id="L525">		return indicadoresRegrasUtilizador;</span>
+	}
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
+	public JTable getResultTable() {
+<span class="fc" id="L532">		return resultTable;</span>
+	}
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
+	public JTable getIndicadoresTable() {
+<span class="fc" id="L539">		return indicadoresTable;</span>
+	}
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
+	public ResultadosIndicadoresModel getTableModelResultados() {
+<span class="fc" id="L546">		return tableModelResultados;</span>
+	}
+	/**
+	 * Usado para os testes JUnit
+	 * @return
+	 */
+	public ResultadosIndicadoresModel getTableModelIndicadores() {
+<span class="fc" id="L553">		return tableModelIndicadores;</span>
+	}
+	
+	
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>AllTests (13/dez/2019 0:03:23)</div></body></html>

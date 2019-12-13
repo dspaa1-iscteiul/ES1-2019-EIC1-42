@@ -6,8 +6,8 @@ import org.junit.Test;
 
 public class ResultadosIndicadoresModelTest {
 	
-	String[] columnNames= {"col1","col2","col3","col4","col5", "col6", "col7"};
-	ResultadosIndicadoresModel m=new ResultadosIndicadoresModel(columnNames);
+	private String[] columnNames= {"col1","col2","col3","col4","col5", "col6", "col7"};
+	private ResultadosIndicadoresModel m=new ResultadosIndicadoresModel(columnNames);
 	
 	@Test
 	public void testIsCellEditable() {

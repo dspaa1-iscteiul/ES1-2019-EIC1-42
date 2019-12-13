@@ -6,7 +6,7 @@ import org.junit.Test;
 
 public class RegraTest {
 
-	Regra r= new Regra("regra", Metrica.ATFD, Metrica.LAA, 20, 30, Logic_And_Or.AND);
+	private Regra r= new Regra("regra", Metrica.ATFD, Metrica.LAA, 20, 30, Logic_And_Or.AND);
 	@Test
 	public void testRegra() {
 		assertNotNull(r);

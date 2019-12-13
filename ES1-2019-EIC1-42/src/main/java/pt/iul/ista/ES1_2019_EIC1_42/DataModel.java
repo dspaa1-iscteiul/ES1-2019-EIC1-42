@@ -37,7 +37,6 @@ public class DataModel extends AbstractTableModel {
 	/**
 	 * Abre o filechooser para escolher o ficheiro Excel
 	 */
-
 	public void addFile() {
 		Workbook workbook;
 		try {
@@ -49,6 +48,13 @@ public class DataModel extends AbstractTableModel {
 		}
 	}
 
+	/**
+	 * 
+	 * @return um ArrayList que contém todos os metodos presentes no ficheiro excel
+	 * @throws EncryptedDocumentException
+	 * @throws InvalidFormatException
+	 * @throws IOException
+	 */
 	public ArrayList<Metodo> getContent() throws EncryptedDocumentException, InvalidFormatException, IOException {
 		ArrayList<Metodo> metodos = new ArrayList<Metodo>();
 		if (sheet != null) {

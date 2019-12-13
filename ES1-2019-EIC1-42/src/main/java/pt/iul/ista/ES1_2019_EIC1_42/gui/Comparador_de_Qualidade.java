@@ -105,6 +105,9 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	}
 
+	/**
+	 * Inicializa as estruturas de dados (HashMap) para as regras
+	 */
 	public void inicializarRegrasHashMaps() {
 		longMethodRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
 		featureEnvyRegrasValues = new HashMap<Regra, ArrayList<Boolean>>();
@@ -319,10 +322,8 @@ public class Comparador_de_Qualidade extends JDialog {
 	 * Starts collection of PMD and iPlasma quality Indicadores
 	 */
 	public void calculateIndicadoresPMDiPlasma() {
-//		for (int i = 0; i < metodos.size(); i++) {
 		calculateIndicadoresiPlasma();
 		calculateIndicadoresPMD();
-//		}
 	}
 
 	/**
@@ -519,35 +520,35 @@ public class Comparador_de_Qualidade extends JDialog {
 
 	/**
 	 * Usado para os testes JUnit
-	 * @return
+	 * @return getter para indicadoresRegrasUtilizador
 	 */
 	public HashMap<Regra, ArrayList<Integer>> getIndicadoresRegrasUtilizador() {
 		return indicadoresRegrasUtilizador;
 	}
 	/**
 	 * Usado para os testes JUnit
-	 * @return
+	 * @return getter para resultTable
 	 */
 	public JTable getResultTable() {
 		return resultTable;
 	}
 	/**
 	 * Usado para os testes JUnit
-	 * @return
+	 * @return getter para indicadoresTable
 	 */
 	public JTable getIndicadoresTable() {
 		return indicadoresTable;
 	}
 	/**
 	 * Usado para os testes JUnit
-	 * @return
+	 * @return getter para tableModelResultados
 	 */
 	public ResultadosIndicadoresModel getTableModelResultados() {
 		return tableModelResultados;
 	}
 	/**
 	 * Usado para os testes JUnit
-	 * @return
+	 * @return getter para tableModelIndicadores
 	 */
 	public ResultadosIndicadoresModel getTableModelIndicadores() {
 		return tableModelIndicadores;

@@ -12,6 +12,15 @@ public class Regra {
 	private Logic_And_Or logico;
 	private String nome;
 
+	/**
+	 * Construtor para a classe Regra
+	 * @param nome - nome da regra criada
+	 * @param metrica_1 - primeira métrica escolhida para a regra
+	 * @param metrica_2 - segunda métrica escolhida para a regra
+	 * @param valor_1 - valor para comparar de acordo com a primeira métrica
+	 * @param valor_2 - valor para comparar de acordo com a segunda métrica
+	 * @param logico - valor lógico (AND ou OR) para comparação das métricas
+	 */
 	public Regra(String nome, Metrica metrica_1, Metrica metrica_2, Number valor_1, Number valor_2,
 			Logic_And_Or logico) {
 		this.nome = nome;
@@ -22,50 +31,98 @@ public class Regra {
 		this.logico = logico;
 	}
 
+	/**
+	 * 
+	 * @return getter para metrica_1
+	 */
 	public Metrica getMetrica_1() {
 		return metrica_1;
 	}
 
+	/**
+	 * Setter para metrica_1
+	 * @param metrica_1 - nova métrica para substituir a metrica_1
+	 */
 	public void setMetrica_1(Metrica metrica_1) {
 		this.metrica_1 = metrica_1;
 	}
 
+	/**
+	 * 
+	 * @return getter para metrica_2
+	 */
 	public Metrica getMetrica_2() {
 		return metrica_2;
 	}
 
+	/**
+	 * Setter para metrica_2
+	 * @param metrica_2 - nova métrica para substituir a metrica_2
+	 */
 	public void setMetrica_2(Metrica metrica_2) {
 		this.metrica_2 = metrica_2;
 	}
 
+	/**
+	 * 
+	 * @return getter para valor_1
+	 */
 	public Number getValor_1() {
 		return valor_1;
 	}
 
+	/**
+	 * Setter para valor_1
+	 * @param valor_1 - novo valor numérico para substituir o valor_1
+	 */
 	public void setValor_1(Number valor_1) {
 		this.valor_1 = valor_1;
 	}
 
+	/**
+	 * 
+	 * @return getter para valor_2
+	 */
 	public Number getValor_2() {
 		return valor_2;
 	}
 
+	/**
+	 * Setter para valor_2
+	 * @param valor_2 - novo valor numérico para substituir o valor_2
+	 */
 	public void setValor_2(Number valor_2) {
 		this.valor_2 = valor_2;
 	}
 
+	/**
+	 * 
+	 * @return getter para o valor logico
+	 */
 	public Logic_And_Or getLogico() {
 		return logico;
 	}
 
+	/**
+	 * Setter para o valor logico.
+	 * @param logico - novo valor logico para substituir o valor logico atual
+	 */
 	public void setLogico(Logic_And_Or logico) {
 		this.logico = logico;
 	}
 
+	/**
+	 * Getter para o nome
+	 * @return o nome da regra
+	 */
 	public String getNome() {
 		return nome;
 	}
 
+	/**
+	 * Setter para o nome da regra
+	 * @param nome - novo nome para substituir o anterior
+	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}

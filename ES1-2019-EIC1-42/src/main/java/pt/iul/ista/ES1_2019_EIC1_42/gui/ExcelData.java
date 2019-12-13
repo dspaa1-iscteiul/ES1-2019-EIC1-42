@@ -107,7 +107,8 @@ public class ExcelData extends JFrame {
 		mImportarExcel.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				table.setModel(DataModel.newInstance());
+				DataModel.newInstance().addFile();
+				table.setModel(DataModel.getInstance());
 			}
 		});
 
@@ -132,6 +133,9 @@ public class ExcelData extends JFrame {
 		});
 	}
 	
+	/**
+	 * Torna visivel a janela e abre a o JFileChooser para escolher o ficheiro
+	 */
 	public void openFile() {
 		DataModel.getInstance().addFile();
 		table.setModel(DataModel.getInstance());

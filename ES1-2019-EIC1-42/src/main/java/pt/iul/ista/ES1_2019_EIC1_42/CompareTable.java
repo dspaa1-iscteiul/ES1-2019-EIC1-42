@@ -6,6 +6,11 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 
+/**
+ * Classe usada para a tabela de Resultados e Indicadores de Qualidade
+ * @author dariop
+ *
+ */
 public class CompareTable extends JTable {
 
 	/**
@@ -14,6 +19,11 @@ public class CompareTable extends JTable {
 	private static final long serialVersionUID = -4565688033152341695L;
 	private String[] col;
 
+	/**
+	 * Construtor da classe
+	 * @param col - colunas iniciais que vão ser usadas
+	 * @param tableModel - O tableModel que vai ser usado para inicializar a tabela
+	 */
 	public CompareTable(String[] col, AbstractTableModel tableModel) {
 		super(tableModel);
 		this.col = col;

@@ -118,7 +118,7 @@ public class ResultadosIndicadoresModel extends AbstractTableModel {
 	 *  Muda o nome de uma coluna
 	 * @param oldName - nome da coluna que se pretende alterar
 	 * @param newName - novo nome que quer dar à coluna
-	 * @return true - se o nome foi alterado </br>
+	 * @return true - se o nome foi alterado <br>
 	 * 		   false - se não existe a coluna que se quer mudar
 	 */
 	public boolean changeColumnName(String oldName, String newName) {

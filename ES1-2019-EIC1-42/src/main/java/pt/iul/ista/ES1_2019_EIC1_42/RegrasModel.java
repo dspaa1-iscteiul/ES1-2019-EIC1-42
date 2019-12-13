@@ -39,7 +39,7 @@ public class RegrasModel extends AbstractListModel<Regra> {
 	 * 
 	 * @param regra regra que se pretende adicionar na lista
 	 * @return <b>true</b> se ainda não existe na lista e foi adicionada com sucesso
-	 *         </br>
+	 *         <br>
 	 *         <b>false</b> se a regra já existe na lista
 	 */
 	public boolean addRegra(Regra regra) {
@@ -55,7 +55,7 @@ public class RegrasModel extends AbstractListModel<Regra> {
 	/**
 	 * @param regra regra que se pretende remvoer da lista
 	 * @return <b>true</b> se a regra existia na lista e foi removida com sucesso
-	 *         </br>
+	 *         <br>
 	 *         <b>false</b> se a regra não existe na lista
 	 */
 	public boolean removeRegra(Regra regra) {

@@ -129,7 +129,7 @@ public class Regra {
 	
 	/**
 	 * 
-	 * @return true se essa é uma regra do tipo Long_Method </br>
+	 * @return true se essa é uma regra do tipo Long_Method <br>
 	 * 		   false caso contrário
 	 */
 	public boolean isLongMethodRule() {
@@ -141,7 +141,7 @@ public class Regra {
 	
 	/**
 	 * 
-	 * @return true se essa é uma regra do tipo FeautureEnvy </br>
+	 * @return true se essa é uma regra do tipo FeautureEnvy <br>
 	 * 		   false caso contrário
 	 */
 	public boolean isFeautureEnvyRule() {

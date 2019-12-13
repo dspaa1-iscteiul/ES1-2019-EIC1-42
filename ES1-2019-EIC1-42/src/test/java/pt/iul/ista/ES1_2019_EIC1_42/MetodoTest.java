@@ -46,7 +46,7 @@ public class MetodoTest {
 	}
 
 	/**
-	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#isLongMethod()}.
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#isIs_long_method()}.
 	 */
 	@Test
 	public void testIsLongMethod() {
@@ -54,7 +54,7 @@ public class MetodoTest {
 	}
 
 	/**
-	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#isFeatureEnvy()}.
+	 * Test method for {@link pt.iul.ista.ES1_2019_EIC1_42.Metodo#isIs_feature_envy()}.
 	 */
 	@Test
 	public void testIsFeatureEnvy() {

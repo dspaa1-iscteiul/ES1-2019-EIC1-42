@@ -14,3 +14,4 @@ Afonso Pinto - nº 73103<br/>
 Filipe Santana - nº 73796<br/>
 
 
+De acordo com o que interpretamos do enunciado, todas as funcionalidades pedidas foram implementadas sem erros!

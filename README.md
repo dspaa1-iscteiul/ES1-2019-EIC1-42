@@ -17,4 +17,4 @@ Filipe Santana - nº 73796<br/>
 De acordo com o que interpretamos do enunciado, todas as funcionalidades pedidas foram implementadas sem erros!
 
 ------
-Project of Software Engineering I course. It was developed by a 6 people team, using Scrum methodoly. We made the project in 3 sprints of 2 weeks each. We used Trello as our board. The project was made in Java and the goal was the develop a GUI to show a CSV file that contains metrics of projects and to calculate some values defining thresholds.
+Project of Software Engineering I course. It was developed by a 6 people team, using Scrum methodoly. We made the project in 3 sprints of 2 weeks each. We used Trello as our board. The project was made in Java and the goal was the develop a GUI to show a Excel file selected by the user that contains metrics of projects and to calculate some values defining thresholds. Another goal of this project was to train the team in GitHub (repositories, branches, tags...)
